@@ -26,9 +26,8 @@ function SearchBox() {
   return (
     <div
       className="px-4 sm:px-6 lg:px-8 py-6 max-w-[1200px] mx-auto"
-      data-aos="fade-up"
-      data-aos-duration="1000"
-      data-aos-anchor-placement="center-bottom"
+     data-aos="fade-up"
+     data-aos-duration="1000"  
     >
       {/* Back link */}
       <div className="mb-4">

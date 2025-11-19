@@ -1,4 +1,4 @@
-import React , { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Tote from "./Tote-Bags/Tote";
 import Shoulder from "./Shulder-Bag/Shoulder";
@@ -8,9 +8,7 @@ import Mini from "./Mini-Bag/MIni";
 import AllBags from "./All-Bags/Allbags";
 
 function MiniNav({ page, setPage }) {
-   useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []);
+  
   // ------------------------------------------------------------------------
   // Mini Navigation for bag categories
   // - Clicking a category updates the 'page' state in MainBag

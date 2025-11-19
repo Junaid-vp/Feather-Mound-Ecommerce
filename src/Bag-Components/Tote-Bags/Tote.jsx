@@ -1,4 +1,4 @@
-import React , { useEffect } from "react";
+import React from "react";
 import useFetch from "../../Hooks/UseFetch";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../../Reusable Components/ProductCart";
@@ -11,9 +11,7 @@ export default function Tote() {
 
   // Filter Tote Bags and show only first 4
   const data = datas.filter((val) => val.type === "Tote Bag").slice(0, 4);
-   useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []);
+  
 
   return (
     <div

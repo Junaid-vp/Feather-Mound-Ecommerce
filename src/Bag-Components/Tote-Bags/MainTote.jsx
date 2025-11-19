@@ -1,4 +1,4 @@
-import React , { useEffect } from "react";
+import React from "react";
 import useFetch from "../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
 import ProductCard from "../../Reusable Components/ProductCart";
@@ -9,9 +9,7 @@ function MainTote() {
 
   // Filter only Tote Bags
   const data = datas.filter((val) => val.type === "Tote Bag")
-   useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []);;
+  ;
 
   return (
     <div

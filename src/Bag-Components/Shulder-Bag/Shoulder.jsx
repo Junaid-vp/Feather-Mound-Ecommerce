@@ -1,4 +1,4 @@
-import React   , { useEffect }from "react";
+import React from "react";
 import useFetch from "../../Hooks/UseFetch";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../../Reusable Components/ProductCart";
@@ -6,9 +6,7 @@ export default function Shoulder() {
   const Navigate = useNavigate();
   const { datas } = useFetch("/products");
   const data = datas.filter((val) => val.type === "Shoulder Bag").splice(0, 4);
-   useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []);
+  
   return (
     <div className="bg-white" data-aos="fade-right"
      data-aos-offset="300"

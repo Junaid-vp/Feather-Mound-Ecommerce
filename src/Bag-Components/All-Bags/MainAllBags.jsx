@@ -1,12 +1,10 @@
-import React , { useEffect }from "react";
+import React from "react";
 import useFetch from "../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
 import ProductCard from "../../Reusable Components/ProductCart";
 function MainAllBags() {
   const { datas } = useFetch("/products");
- useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []);
+
   return (
     <div className="bg-white" data-aos="fade-up"
      data-aos-duration="3000">

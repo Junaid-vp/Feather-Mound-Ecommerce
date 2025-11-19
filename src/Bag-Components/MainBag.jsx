@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState } from "react";
 import MiniNav from "./MiniNav";
 import Tote from "./Tote-Bags/Tote";
 
@@ -9,9 +9,7 @@ function MainBag() {
   // - Updated via MiniNav buttons
   // ------------------------------------------------------------------------
   const [page, setPage] = useState(<Tote />);
- useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []);
+
   return (
     <div data-aos="fade-up"
       data-aos-duration="1000">
