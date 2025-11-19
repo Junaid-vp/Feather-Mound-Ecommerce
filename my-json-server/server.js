@@ -4,7 +4,9 @@ const router = jsonServer.router("db.json");
 const middlewares = jsonServer.defaults();
 
 server.use(middlewares);
-const port = process.env.PORT || 3000; // Render sets PORT automatically
+
+const port = process.env.PORT || 10000;  // IMPORTANT for Render
+
 server.use(router);
 
 server.listen(port, () => {
