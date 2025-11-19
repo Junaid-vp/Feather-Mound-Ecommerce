@@ -6,20 +6,27 @@ export default function BagSlider() {
   const [mouseX, setMouseX] = useState("50%");
   const [isDragging, setIsDragging] = useState(false);
   const navigate = useNavigate();
-  const handleMouseDown = useCallback(() => {
+
+  const handleStart = useCallback((e) => {
     setIsDragging(true);
+    // Prevent default to avoid scrolling while dragging
+    e.preventDefault();
   }, []);
 
-  const handleMouseUp = useCallback(() => {
+  const handleEnd = useCallback(() => {
     setIsDragging(false);
   }, []);
 
-  const handleMouseMove = useCallback(
+  const handleMove = useCallback(
     (e) => {
       if (!isDragging) return;
 
       const rect = e.currentTarget.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      // Get X coordinate from either mouse or touch event
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      if (!clientX) return;
+
+      const x = ((clientX - rect.left) / rect.width) * 100;
       const clampedX = Math.max(0, Math.min(100, x));
 
       setMouseX(`${clampedX}%`);
@@ -33,14 +40,14 @@ export default function BagSlider() {
     [isDragging]
   );
 
-  const handleMouseLeave = useCallback(() => {
+  const handleLeave = useCallback(() => {
     setSide(null);
     setIsDragging(false);
     setMouseX("50%");
   }, []);
 
   return (
-    <div className="w-full  py-12 px-4 font-sans">
+    <div className="w-full py-12 px-4 font-sans">
       <div className="w-full mx-auto">
         <div className="text-left mb-6">
           <h2 className="text-2xl font-light text-gray-800 tracking-tight">
@@ -48,13 +55,17 @@ export default function BagSlider() {
           </h2>
         </div>
 
-        {/* Slider Container - Now 80% width */}
+        {/* Slider Container - Now with touch events */}
         <div
-          className="relative w-full mx-auto h-[500px] bg-white overflow-hidden select-none cursor-ew-resize rounded-xl  transition-shadow duration-300 hover:shadow-3xl"
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          className="relative w-full mx-auto h-[500px] bg-white overflow-hidden select-none cursor-ew-resize rounded-xl transition-shadow duration-300 hover:shadow-3xl touch-none"
+          onMouseDown={handleStart}
+          onMouseUp={handleEnd}
+          onMouseMove={handleMove}
+          onMouseLeave={handleLeave}
+          onTouchStart={handleStart}
+          onTouchEnd={handleEnd}
+          onTouchMove={handleMove}
+          onTouchCancel={handleLeave}
         >
           {/* RIGHT BAG IMAGE - The 'Wine' bag */}
           <div className="absolute inset-0 bg-red-800">
@@ -198,24 +209,6 @@ export default function BagSlider() {
           </div>
         </div>
       </div>
-
-      {/* Add custom animation */}
-      <style jsx>{`
-        @keyframes pulse {
-          0%,
-          100% {
-            opacity: 0.7;
-            transform: scale(1.1);
-          }
-          50% {
-            opacity: 0.9;
-            transform: scale(1.15);
-          }
-        }
-        .animate-pulse {
-          animation: pulse 1.5s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 }
