@@ -1,5 +1,5 @@
 // ============================================================================
-// 📌 ProductCard.jsx — Mobile-Friendly Luxury Product Card
+// 📌 ProductCard.jsx — Fixed Mobile Version
 // ============================================================================
 
 import React, { useContext, useState } from "react";
@@ -29,12 +29,12 @@ function ProductCard({ product }) {
 
   return (
     <div 
-      className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden"
+      className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden flex flex-col h-full"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
       {/* Image Section */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden flex-shrink-0">
         <button
           onClick={() => {
             navigate(`/Detailpage/${product.product_id}`);
@@ -51,16 +51,14 @@ function ProductCard({ product }) {
           />
         </button>
 
-        {/* Wishlist Button - Always visible on mobile */}
+        {/* Wishlist Button */}
         <button
           onClick={() => toggleWishlist(product)}
-          className="absolute top-2 right-2 p-1.5 bg-white bg-opacity-80 rounded-full backdrop-blur-sm"
+          className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm"
         >
           <Heart 
-            className={`w-4 h-4 transition-all ${
-              isInWishlist 
-                ? "fill-red-500 text-red-500" 
-                : "text-gray-600"
+            className={`w-5 h-5 md:w-4 md:h-4 ${
+              isInWishlist ? "fill-red-500 text-red-500" : "text-gray-600"
             }`} 
             strokeWidth={1.5}
           />
@@ -68,69 +66,65 @@ function ProductCard({ product }) {
 
         {/* Discount Badge */}
         {product.discount_percentage > 0 && (
-          <div className="absolute top-2 left-2 bg-black text-white px-2 py-1 rounded text-xs font-medium">
+          <div className="absolute top-3 left-3 bg-black text-white px-3 py-1 text-sm md:text-xs font-medium rounded">
             {product.discount_percentage}% OFF
           </div>
         )}
 
-        {/* Cart Action Button - Always visible on mobile, hover effect on desktop */}
-        <div className={`absolute bottom-2 left-2 right-2 md:left-1/2 md:transform md:-translate-x-1/2 md:bottom-3 transition-all duration-300 ${
-          hover ? "md:opacity-100 md:translate-y-0" : "md:opacity-0 md:translate-y-4"
+        {/* Desktop Hover Button */}
+        <div className={`hidden md:block absolute bottom-2 left-1/2 transform -translate-x-1/2 transition-all duration-300 ${
+          hover ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         }`}>
           <button
             onClick={() => isInCart ? navigate("/cart") : addCart(product)}
-            className={`w-full py-2 px-3 rounded text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+            className={`py-2 px-4 text-sm font-medium flex items-center gap-2 rounded-md whitespace-nowrap ${
               isInCart 
-                ? "bg-green-600 text-white hover:bg-green-700" 
-                : "bg-black text-white hover:bg-gray-800"
-            } md:bg-white md:border md:py-1.5 md:px-2 md:text-xs ${
-              isInCart 
-                ? "md:text-green-600 md:border-green-600 md:hover:bg-green-50" 
-                : "md:text-gray-900 md:border-gray-900 md:hover:bg-gray-900 md:hover:text-white"
+                ? "bg-white text-green-600 border border-green-600" 
+                : "bg-white text-gray-900 border border-gray-900"
             }`}
           >
-            <ShoppingBag className="w-3 h-3 md:w-3 md:h-3" />
-            <span className="md:hidden">
-              {isInCart ? "View Cart" : "Add to Cart"}
-            </span>
-            <span className="hidden md:inline">
-              {isInCart ? "VIEW CART" : "ADD TO CART"}
-            </span>
+            <ShoppingBag className="w-4 h-4" />
+            {isInCart ? "VIEW CART" : "ADD TO CART"}
           </button>
         </div>
       </div>
 
-      {/* Product Info */}
-      <div className="p-3 md:p-4 space-y-2 md:space-y-3">
-        <h3 className="font-medium text-gray-900 text-sm md:text-lg line-clamp-2 leading-tight">
+      {/* Product Info - Flex grow to push button to bottom */}
+      <div className="p-4 flex-grow">
+        <h3 className="font-medium text-gray-900 text-base md:text-sm line-clamp-2 mb-2 leading-tight">
           {product.name}
         </h3>
 
         {/* Product Meta */}
-        <p className="text-xs text-gray-500 uppercase tracking-wide">
+        <p className="text-sm md:text-xs text-gray-500 mb-3">
           {product.type} • {product.color}
         </p>
 
         {/* Price */}
-        <div className="flex items-center gap-2 md:gap-3 flex-wrap">
-          <p className="text-base md:text-xl font-semibold text-gray-900">₹{salePrice}</p>
+        <div className="flex items-center gap-2">
+          <p className="font-semibold text-gray-900 text-lg md:text-base">₹{salePrice}</p>
           {product.discount_percentage > 0 && (
-            <>
-              <p className="text-xs md:text-sm text-gray-500 line-through">
-                ₹{product.original_price}
-              </p>
-              <p className="text-xs text-green-600 font-medium">
-                Save ₹{product.original_price - salePrice}
-              </p>
-            </>
+            <p className="text-sm md:text-xs text-gray-500 line-through">
+              ₹{product.original_price}
+            </p>
           )}
         </div>
       </div>
-
-      {/* Luxury Border Effect - Desktop only */}
-      <div className={`hidden md:block absolute inset-0 border-2 border-transparent group-hover:border-gray-900 rounded-lg transition-all duration-300 pointer-events-none ${
-        hover ? "opacity-20" : "opacity-0"
-      }`}></div>
+      
+      {/* Mobile Cart Button - Fixed */}
+      <div className="px-4 pb-4 md:hidden">
+        <button
+          onClick={() => isInCart ? navigate("/cart") : addCart(product)}
+          className={`w-full py-2 text-base font-semibold flex justify-center items-center gap-2 rounded-lg transition-all active:scale-95 ${
+            isInCart 
+              ? "bg-white text-green-600 border border-green-600"
+              : "bg-white text-black border border-gray-900 shadow-md"
+          }`}
+        >
+          <ShoppingBag className="w-4 h-4" />
+          {isInCart ? "VIEW IN CART" : "ADD TO CART"}
+        </button>
+      </div>
     </div>
   );
 }

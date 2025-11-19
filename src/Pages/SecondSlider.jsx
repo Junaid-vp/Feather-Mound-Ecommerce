@@ -1,5 +1,5 @@
 // ============================================================================
-// 📌 SecondSlider.jsx — Dual image slider (react-slick)
+// 📌 SecondSlider.jsx — Mobile Optimized Dual Image Slider
 // - Two synced visual sliders side-by-side (independent settings)
 // - Uses autoplay, fade effect and responsive heights
 // ============================================================================
@@ -18,7 +18,7 @@ function SecondSlider() {
   // Slider configuration (shared)
   // ------------------------------------------------------------------------
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 1000,
     slidesToShow: 1,
@@ -29,6 +29,14 @@ function SecondSlider() {
     arrows: false,
     fade: true,
     cssEase: "ease-in-out",
+    adaptiveHeight: true,
+  };
+
+  // Mobile-specific settings
+  const mobileSettings = {
+    ...settings,
+    autoplaySpeed: 4000,
+    speed: 800,
   };
 
   // ------------------------------------------------------------------------
@@ -85,26 +93,33 @@ function SecondSlider() {
   // Render
   // ------------------------------------------------------------------------
   return (
-    <section className="w-full mt-10 mx-auto overflow-hidden cursor-pointer">
+    <section className="w-full mt-10 mx-auto overflow-hidden cursor-pointer px-4 md:px-0">
       {/* Title */}
-      <h3 className="text-2xl ml-5 font-light mb-7 bt-7">IN THE SPOTLIGHT</h3>
+      <h3 className="text-xl md:text-2xl font-light mb-5 md:mb-7 text-center md:text-left">
+        IN THE SPOTLIGHT
+      </h3>
 
-      {/* Two-column slider layout */}
-      <div className="flex gap-4">
+      {/* Two-column slider layout - Stack on mobile */}
+      <div className="flex flex-col md:flex-row gap-4 md:gap-4">
         {/* Left slider */}
-        <div className="w-1/2" data-aos="fade-right"
-     data-aos-offset="300"
-     data-aos-easing="ease-in-sine">
-          <Slider {...settings}>
+        <div 
+          className="w-full md:w-1/2" 
+          data-aos="fade-right"
+          data-aos-offset="200"
+          data-aos-easing="ease-in-sine"
+        >
+          <Slider {...mobileSettings}>
             {leftSlides.map((slide, index) => (
               <div 
                 key={index}
                 onClick={() => handleSlideClick(slide.id)}
+                className="px-1 md:px-0"
               >
                 <img
                   src={slide.src}
                   alt={slide.alt}
-                  className="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover"
+                  className="w-full h-[180px] xs:h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover rounded-lg md:rounded-none"
+                  loading="lazy"
                 />
               </div>
             ))}
@@ -112,24 +127,39 @@ function SecondSlider() {
         </div>
 
         {/* Right slider */}
-          <div className="w-1/2" data-aos="fade-left"
-     data-aos-offset="300"
-     data-aos-easing="ease-in-sine">
-          <Slider {...settings}>
+        <div 
+          className="w-full md:w-1/2" 
+          data-aos="fade-left"
+          data-aos-offset="200"
+          data-aos-easing="ease-in-sine"
+        >
+          <Slider {...mobileSettings}>
             {rightSlides.map((slide, index) => (
               <div 
                 key={index}
                 onClick={() => handleSlideClick(slide.id)}
+                className="px-1 md:px-0"
               >
                 <img
                   src={slide.src}
                   alt={slide.alt}
-                  className="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover"
+                  className="w-full h-[180px] xs:h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover rounded-lg md:rounded-none"
+                  loading="lazy"
                 />
               </div>
             ))}
           </Slider>
         </div>
+      </div>
+
+      {/* Mobile Indicators */}
+      <div className="flex justify-center items-center gap-2 mt-4 md:hidden">
+        <div className="flex gap-1">
+          <div className="h-1 w-1 bg-gray-400 rounded-full"></div>
+          <div className="h-1 w-1 bg-gray-400 rounded-full"></div>
+          <div className="h-1 w-1 bg-gray-400 rounded-full"></div>
+        </div>
+        <div className="text-xs text-gray-500 ml-2">Tap to view products</div>
       </div>
     </section>
   );

@@ -92,7 +92,7 @@ function VideoSlide() {
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
     if (container) {
-      const scrollAmount = 300;
+      const scrollAmount = container.clientWidth * 0.8; // Scroll 80% of container width
       container.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -104,84 +104,99 @@ function VideoSlide() {
     const container = scrollContainerRef.current;
     if (container) {
       const { scrollLeft, scrollWidth, clientWidth } = container;
-      setShowLeftArrow(scrollLeft > 0);
+      setShowLeftArrow(scrollLeft > 10);
       setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
     }
   };
 
-  // Initialize scroll state on mount
+  // Initialize scroll state on mount and on resize
   useEffect(() => {
     handleScroll();
+    window.addEventListener('resize', handleScroll);
+    return () => window.removeEventListener('resize', handleScroll);
   }, []);
 
   return (
     <div className="w-full" data-aos="fade-up" data-aos-duration="1000">
       {/* Section Header */}
-      <div className="text-left ml-3 py-8">
+      <div className="text-left px-4 py-8">
         <h2 className="text-2xl font-light text-black tracking-wide">
           THE STYLE EDIT
         </h2>
       </div>
 
-      {/* Always show 5 videos with arrows */}
+      {/* Video Slider Container */}
       <div className="relative">
-        {/* Left Arrow */}
+        {/* Left Arrow - Mobile Optimized */}
         {showLeftArrow && (
           <button
             onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white rounded-full p-3 transition-all duration-300 shadow-lg"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-black/80 hover:bg-black text-white rounded-full p-2 md:p-3 transition-all duration-300 shadow-lg backdrop-blur-sm"
+            aria-label="Scroll left"
           >
-            <FaChevronLeft size={20} />
+            <FaChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
           </button>
         )}
 
-        {/* Right Arrow */}
+        {/* Right Arrow - Mobile Optimized */}
         {showRightArrow && (
           <button
             onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white rounded-full p-3 transition-all duration-300 shadow-lg"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-black/80 hover:bg-black text-white rounded-full p-2 md:p-3 transition-all duration-300 shadow-lg backdrop-blur-sm"
+            aria-label="Scroll right"
           >
-            <FaChevronRight size={20} />
+            <FaChevronRight className="w-4 h-4 md:w-5 md:h-5" />
           </button>
         )}
 
+        {/* Scroll Container - Mobile Optimized */}
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="flex gap-4 overflow-x-auto pb-6 px-4 scrollbar-hide"
+          className="flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 pb-6"
+          style={{ 
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }}
         >
           {videoSlides.map((slide, index) => (
             <div
               key={index}
               data-aos={slide.aos}
               data-aos-duration={slide.duration}
-              className="flex-shrink-0 w-72 group cursor-pointer"
-              onClick={() => {
-                handleNavigation(slide.route);
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              }}
+              className="flex-shrink-0 w-[280px] md:w-72 snap-start group cursor-pointer"
+              onClick={() => handleNavigation(slide.route)}
             >
-              <div className="relative overflow-hidden rounded-lg bg-white">
+              <div className="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-300">
                 <video
                   src={slide.videoSrc}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  className="w-full h-[400px] object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-[320px] md:h-[400px] object-cover transition-transform duration-500 group-hover:scale-105"
+                  preload="metadata"
                 >
                   Your browser does not support the video tag.
                 </video>
 
                 {/* Hover Effect */}
-                <div className="absolute inset-0 border-2 border-transparent group-hover:border-gray-300 transition-all duration-300 rounded-lg"></div>
+                <div className="absolute inset-0 border-2 border-transparent group-hover:border-gray-300 transition-all duration-300 rounded-lg pointer-events-none"></div>
+                
+                {/* Loading State */}
+                <div className="absolute inset-0 bg-gray-100 animate-pulse hidden video-loading"></div>
               </div>
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Scroll Indicator for Mobile */}
+      <div className="flex justify-center items-center gap-1 mt-4 md:hidden">
+        <div className="h-1 w-1 bg-gray-300 rounded-full"></div>
+        <div className="h-1 w-1 bg-gray-300 rounded-full"></div>
+        <div className="h-1 w-1 bg-gray-300 rounded-full"></div>
+        <div className="text-xs text-gray-500 ml-2">Swipe to explore</div>
       </div>
     </div>
   );
