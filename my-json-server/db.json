@@ -88,6 +88,21 @@
           "cost_price": 2785,
           "isActive": true,
           "Quantity": 1
+        },
+        {
+          "product_id": "TOTE007",
+          "name": "Mini Tote Bag",
+          "type": "Tote Bag",
+          "color": "Red",
+          "original_price": 6199,
+          "sale_price": 4699,
+          "discount_percentage": 24,
+          "image_url": "https://miraggiolife.com/cdn/shop/files/denice-20-tote-bag-182539.jpg?v=1754914340&width=700",
+          "description": "The **Mini Tote Bag** in a bold red is a compact version of a classic shape.\nPerfect for those who love the tote structure but prefer a smaller, more manageable size.\nThis pop of red is guaranteed to turn heads and infuse energy into your ensemble.\nA great choice for bridging the gap between a handbag and a large tote.",
+          "id": "b7a8",
+          "cost_price": 2710,
+          "isActive": true,
+          "Quantity": 1
         }
       ],
       "wishList": [
