@@ -1,34 +1,5 @@
 {
-  "version": 2,
-  "name": "bagwebsite-project",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "my-json-server/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "src/**/*",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/my-json-server/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    },
-    {
-      "handle": "filesystem"
-    }
+  "rewrites":[
+    {"source": "/(.*)", "destination":"/"}
   ]
 }
