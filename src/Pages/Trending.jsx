@@ -52,47 +52,107 @@ function Trending() {
 
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
+      {/* Reduced padding for mobile */}
+      <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-12 lg:max-w-7xl lg:px-8 lg:py-16">
         {/* Title */}
-        <h2 className="text-2xl font-light tracking-wide text-gray-900 mb-8">
+        <h2 className="text-xl sm:text-2xl font-light tracking-wide text-gray-900 mb-4 sm:mb-6 lg:mb-8 text-center">
           TRENDING NOW
         </h2>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-          {categories.map(({ id, title, image, route, alt, aos, duration }) => (
-            <div
-              key={id}
-              className="group relative"
-              data-aos={aos}
-              data-aos-duration={duration}
-            >
+        {/* Container for responsive layout */}
+        <div className="space-y-6 sm:space-y-0">
+          {/* First Row - 2 cards on mobile, 3 cards on larger screens */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            {/* First two cards - always visible */}
+            {categories.slice(0, 2).map(({ id, title, image, route, alt, aos, duration }) => (
+              <div
+                key={id}
+                className="group relative"
+                data-aos={aos}
+                data-aos-duration={duration}
+              >
+                <Link
+                  to={route}
+                  onClick={handleClick}
+                  className="block overflow-hidden rounded-md"
+                >
+                  <div className="aspect-square overflow-hidden rounded-md bg-gray-100">
+                    <img
+                      src={image}
+                      alt={alt}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-90"
+                    />
+                  </div>
+                </Link>
+                <h3 className="mt-3 sm:mt-4 text-center">
+                  <Link
+                    to={route}
+                    onClick={handleClick}
+                    className="text-sm font-medium text-gray-700 transition-colors hover:text-gray-900"
+                  >
+                    {title}
+                  </Link>
+                </h3>
+              </div>
+            ))}
+            
+            {/* Third card - hidden on mobile, visible on tablet+ */}
+            <div className="hidden sm:block group relative" data-aos="fade-up" data-aos-duration={450}>
               <Link
-                to={route}
+                to={categories[2].route}
                 onClick={handleClick}
                 className="block overflow-hidden rounded-md"
               >
                 <div className="aspect-square overflow-hidden rounded-md bg-gray-100">
                   <img
-                    src={image}
-                    alt={alt}
+                    src={categories[2].image}
+                    alt={categories[2].alt}
                     loading="lazy"
                     className="h-full w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-90"
                   />
                 </div>
               </Link>
-
-              <h3 className="mt-4 text-center">
+              <h3 className="mt-3 sm:mt-4 text-center">
                 <Link
-                  to={route}
+                  to={categories[2].route}
                   onClick={handleClick}
                   className="text-sm font-medium text-gray-700 transition-colors hover:text-gray-900"
                 >
-                  {title}
+                  {categories[2].title}
                 </Link>
               </h3>
             </div>
-          ))}
+          </div>
+
+          {/* Second Row - Only shown on mobile for the third card */}
+          <div className="sm:hidden flex justify-center">
+            <div className="w-full max-w-xs group relative" data-aos="fade-up" data-aos-duration={450}>
+              <Link
+                to={categories[2].route}
+                onClick={handleClick}
+                className="block overflow-hidden rounded-md"
+              >
+                <div className="aspect-square overflow-hidden rounded-md bg-gray-100">
+                  <img
+                    src={categories[2].image}
+                    alt={categories[2].alt}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-90"
+                  />
+                </div>
+              </Link>
+              <h3 className="mt-3 text-center">
+                <Link
+                  to={categories[2].route}
+                  onClick={handleClick}
+                  className="text-sm font-medium text-gray-700 transition-colors hover:text-gray-900"
+                >
+                  {categories[2].title}
+                </Link>
+              </h3>
+            </div>
+          </div>
         </div>
       </div>
     </section>
