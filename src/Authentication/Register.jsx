@@ -45,7 +45,7 @@ function Register() {
         toast.error("User Already Exist");
         return;
       }
-      const Add = await api.post("/users", Data);
+       await api.post("/users", Data);
  
        toast.success("You're all set! Registration successful.", {
           position: "top-right",
