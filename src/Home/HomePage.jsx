@@ -7,6 +7,8 @@ import VideoSlide from "../Pages/VideoSlide";
 import BagSlider from "../Pages/BagSlider";
 import FooterSlider from "../Footer-Section/FooterSlider";
 import PremiumBagLoader from "../Loader Component/FullScreenLoader";
+import Trending from "../Pages/Trending";
+import Iconic from "../Pages/Iconic";
 
 function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +36,9 @@ function HomePage() {
       <SliderComponent />
       <SecondSection />
       <MainBag />
+     <Trending/>
       <SecondSlider />
+      <Iconic/>
       <VideoSlide />
       <BagSlider />
       <FooterSlider />

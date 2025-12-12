@@ -10,7 +10,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: "Mirragio",
+        name: "Miraggio",
         short_name: "Mirragio",
         start_url: "/",
         display: "standalone",
