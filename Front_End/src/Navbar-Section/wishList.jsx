@@ -10,7 +10,7 @@ import { X, ArrowLeft } from "lucide-react";
 
 function WishList() {
   const navigate = useNavigate();
-  const { wishList, RemoveWishList } = useContext(WishListContext);
+  const { wishList, toggleWishlist } = useContext(WishListContext);
   const { addCart, cart } = useContext(CartContext);
 
   return (
@@ -63,19 +63,18 @@ function WishList() {
           // Wishlist Items - Horizontal Layout
           <div className="space-y-4">
             {wishList.map((item) => {
-              const isInCart = cart.some(
-                (cartItem) => cartItem.product_id === item.product_id
-              );
-
+            const isInCart = cart.some(
+  (cartItem) => cartItem.product?._id === item.product._id
+);
               return (
                 <div
-                  key={item.product_id}
+                  key={item.product.product_id}
                   className="flex gap-4 p-4 border border-gray-200 rounded-lg bg-white"
                 >
                   {/* Product Image */}
                   <img
-                    src={item.image_url}
-                    alt={item.name}
+                    src={item.product.image_url}
+                    alt={item.product.name}
                     className="w-16 h-16 object-cover rounded border border-gray-200"
                   />
 
@@ -84,14 +83,14 @@ function WishList() {
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900 text-sm line-clamp-2">
-                          {item.name}
+                          {item.product.name}
                         </h3>
                         <p className="text-gray-500 text-xs mt-1">
-                          {item.type} • {item.color}
+                          {item.product.type} 
                         </p>
                       </div>
                       <button
-                        onClick={() => RemoveWishList(item)}
+                        onClick={() => toggleWishlist(item.product)}
                         className="ml-2 p-1 hover:bg-gray-100 rounded"
                       >
                         <X className="w-4 h-4 text-gray-400" />
@@ -101,13 +100,13 @@ function WishList() {
                     {/* Price and Action Button */}
                     <div className="flex items-center justify-between">
                       <p className="font-semibold text-gray-900">
-                        ₹{item.sale_price}
+                        ₹{item.product.sale_price}
                       </p>
 
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() =>
-                            isInCart ? navigate("/cart") : addCart(item)
+                            isInCart ? navigate("/cart") : addCart(item.product)
                           }
                           className={`px-4 py-2 rounded text-sm font-small border ${
                             isInCart
@@ -119,7 +118,7 @@ function WishList() {
                         </button>
                         <button
                           onClick={() =>
-                            navigate(`/buyproduct/${item.product_id}`)
+                            navigate(`/buyproduct/${item.product.product_id}`)
                           }
                           className="bg-black text-white py-2 px-4 rounded text-sm font-small hover:bg-gray-800 transition-colors"
                         >

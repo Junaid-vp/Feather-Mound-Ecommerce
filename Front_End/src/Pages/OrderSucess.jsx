@@ -74,7 +74,7 @@ export default function OrderSuccess() {
         {/* --------------------- Action Buttons --------------------- */}
         <div className="flex justify-center gap-4">
           <button
-            onClick={() => navigate(`/vieworder/${orderId}`)}
+            onClick={() => navigate(`/vieworder`)}
             className="bg-black text-white px-6 py-3 rounded-lg text-sm font-semibold shadow-md hover:opacity-95"
           >
             View Orders

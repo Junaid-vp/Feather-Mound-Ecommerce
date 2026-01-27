@@ -6,7 +6,7 @@ const [datas,setDatas]=useState([])
 
 useEffect(()=>{
       api.get(url)
-      .then((res)=>setDatas(res.data))
+      .then((res)=>setDatas(res?.data?.Products))
 },[url])
 
 

@@ -9,54 +9,62 @@ import { useState } from "react";
 import { createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../Api/Axios";
+import { toast } from "react-toastify";
+
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  // Local user state (null when not logged in)
+  
   const [user, setUser] = useState(null);
-  // toggle used to re-run the effect when needed by other components
+
   const [click, setClick] = useState(true);
 
-  // Sync: read saved user from localStorage and refresh from API
+  const [userData,setUserData]= useState(null)
+
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-
-    if (storedUser) {
-      // fetch latest user from API and overwrite local state + localStorage
-      const fetchUpdaedUser = async () => {
-        const updated = await api.get(`/users/${JSON.parse(storedUser).id}`);
-        setUser(updated.data);
-        localStorage.setItem("user", JSON.stringify(updated.data));
-      };
-      fetchUpdaedUser();
-    }
-
-    // set local user immediately from localStorage (fast fallback)
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const fetchMe = async () => {
+      try {
+        const res = await api.get("/auth/getUser");
+        setUser(res?.data?.User);
+        setUserData(res?.data?.UserData)
+      } catch (err) {
+        setUser(null);
+        setUserData(null);
+      }
+    };
+    fetchMe();
   }, [click]);
+console.log(userData);
 
   // Save user to localStorage and update state
-  const Login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+  const Login = async (userData) => {
+    await api.post("/auth/login", userData);
+    const res = await api.get("/auth/getUser");
+    setUser(res?.data?.User);
+    setUserData(res?.data?.UserData)
+    navigate("/");
   };
 
   // Logout: clear storage, reset state, navigate to login and reload
-  const Logout = useCallback(() => {
-    localStorage.clear();
-    setUser(null);
-    navigate("/login");
-    window.location.reload();
-  }, [navigate]);
+const Logout = async () => {
+  try {
+    await api.post("/auth/logout"); 
+    setUser(null);               
+    toast.success("Logged out successfully");
+    navigate("/login");             
+  } catch (e) {
+    toast.error("Logout failed");
+  }finally {
+    setUser(null); 
+  }
+};
 
   // Provide context values to children
   return (
-    <AuthContext.Provider value={{ user, Login, Logout, setUser, setClick }}>
+    <AuthContext.Provider value={{userData, user, Login, Logout, setUser, setClick }}>
       {children}
     </AuthContext.Provider>
   );

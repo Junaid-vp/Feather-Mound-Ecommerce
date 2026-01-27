@@ -3,8 +3,7 @@ import useFetch from "../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
 import ProductCard from "../../Reusable Components/ProductCart";
 function MainTopHandle() {
-  const { datas } = useFetch("/products");
-  const data = datas.filter((val) => val.type === "Top Handle");
+ const { datas } = useFetch(`products?type=Top Handle`);
   
   return (
     <div className="bg-white" data-aos="fade-up"
@@ -43,8 +42,8 @@ function MainTopHandle() {
       
 
         <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {data.map((product) => (
-         <ProductCard key={product.id} product={product}/>
+          {datas.map((product) => (
+         <ProductCard key={product._id} product={product}/>
           ))}
         </div>
       </div>

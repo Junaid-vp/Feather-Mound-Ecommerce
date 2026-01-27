@@ -5,4 +5,6 @@ const loginValidate = z.object({
   password: z.string().min(3)
 })
 
+
+
 module.exports = loginValidate

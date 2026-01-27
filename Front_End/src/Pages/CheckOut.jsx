@@ -1,13 +1,8 @@
-// ============================================================================
-// 📌 CheckOut.jsx — Checkout page to review cart items and place an order
-// - Builds order object from cart context
-// - Patches user's order array via API and clears cart on success
-// ============================================================================
 
 import React, { useContext } from "react";
 import { CartContext } from "../Context/CartContext";
 import Address from "../Authentication/Address";
-
+import { Plus, Minus ,Trash2} from "lucide-react";
 import { AuthContext } from "../Context/AuthContext";
 import { api } from "../Api/Axios";
 
@@ -15,102 +10,23 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function CheckOut() {
-  // ------------------------------------------------------------------------
-  // 📍 Navigation
-  // ------------------------------------------------------------------------
-  const navigate = useNavigate();
 
-  // ------------------------------------------------------------------------
-  // 🛒 Cart Context (items, helpers)
-  // ------------------------------------------------------------------------
-  const { cart, cartLength, HandleClearCart } = useContext(CartContext);
+  const { cart ,cartLength, addQuantity, lessQuantity,removeCart} =useContext(CartContext) 
+const totalQuantity = cart.reduce(
+  (sum, item) => sum + item?.quantity,
+  0
+);
 
-  // ------------------------------------------------------------------------
-  // 👤 Auth Context (user info)
-  // ------------------------------------------------------------------------
-  const { user, setUser } = useContext(AuthContext);
+  const totalAmount = cart.reduce(
+  (sum, item) => sum + item.product.sale_price * item.quantity,
+  0
+);
 
-  // ------------------------------------------------------------------------
-  // 🧾 BUILD ORDER ITEMS FROM CART
-  // - Add item_id, order date, and default status
-  // ------------------------------------------------------------------------
-  const OrderDatas = cart.map((item) => ({
-    ...item,
-    item_id: crypto.randomUUID(),
-    OrderDate: new Date().toLocaleDateString("en-IN"),
-    status: "Pending",
-    payment: user?.address[0]?.paymentMethod,
-  }));
-
-  // ------------------------------------------------------------------------
-  // 🔢 CALCULATIONS
-  // - totalAmount: sum of sale_price * Quantity
-  // - totalQuantity: sum of Quantity
-  // - totalCost: sum of cost_price * Quantity (fallback to 1)
-  // ------------------------------------------------------------------------
-  const totalAmount = OrderDatas.reduce(
-    (sum, item) => sum + item.sale_price * item.Quantity,
-    0
-  );
-
-  const totalQuantity = OrderDatas.reduce(
-    (sum, item) => sum + item.Quantity,
-    0
-  );
-
-  const totalCost = OrderDatas?.reduce(
-    (sum, item) => sum + item.cost_price * (item.Quantity || 1),
-    0
-  );
-
-  // ------------------------------------------------------------------------
-  // ✅ placeOrder — PATCH user orders, clear cart, navigate to success
-  // ------------------------------------------------------------------------
-  const placeOrder = async () => {
-    try {
-      const newOrder = {
-        id: new Date().getTime().toString(),
-        items: OrderDatas,
-        totalAmount,
-        totalCost,
-        totalQuantity,
-        date: new Date(),
-        // status: "Pending"
-      };
-
-      const UpdateData = [...(user.order || []), newOrder];
-
-      const res = await api.patch(`/users/${user.id}`, { order: UpdateData });
-
-      setUser(res.data);
-      console.log(res.data);
-
-      // Clear cart using provided handler
-      HandleClearCart(user.id);
-
-      // Navigate to order success page
-      navigate(`/order-success/${newOrder.id}`);
-    } catch (e) {
-      console.log("Something error", e);
-      // optional toast for failure (keeps original import)
-      // toast.error("Failed to place order. Try again.");
-    }
-  };
-
-const confirmOrder = () => {
-  if (user.address && user.address.length!== 0) {
-    placeOrder();
-  } else {
-    toast.warning("Write and save the address");
-  }
-};
+  const navigate  = useNavigate()
 
 
 
 
-  // ------------------------------------------------------------------------
-  // 🖥️ RENDER — Left: Cart Items / Right: Address & Place Order button
-  // ------------------------------------------------------------------------
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8">
@@ -118,22 +34,42 @@ const confirmOrder = () => {
         <div className="flex-1 bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
           <h2 className="text-2xl font-semibold text-gray-900 mb-6">Your Cart Items</h2>
           <div className="space-y-4">
-            {OrderDatas.map((item, index) => (
+            {cart.map((item, index) => (
               <div
-                key={index}
+                key={item.product._id}
                 className="flex items-center gap-4 border-b border-gray-200 pb-4"
               >
+                  <button
+                    onClick={() => removeCart(item.product)}
+                  >
+                    <Trash2 size={18} />
+                  </button>
                 <img
-                  src={item.image_url}
-                  alt={item.name}
+                  src={item.product.image_url}
+                  alt={item.product.name}
                   className="w-20 h-20 object-cover rounded-lg"
                 />
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900">{item.name}</p>
-                  <p className="text-gray-500">Quantity: {item.Quantity}</p>
-                  <p className="text-gray-500">Price: ₹{item.sale_price}</p>
+                  <p className="font-medium text-gray-900">{item.product.name}</p>
+                     <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => lessQuantity(item.product._id)}
+                          disabled={item.quantity <= 1}
+                        >
+                          <Minus size={14} />
+                        </button>
+
+                        <span>{item.quantity}</span>
+
+                        <button
+                          onClick={() => addQuantity(item.product._id)}
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+                  <p className="text-gray-500">Price: ₹{item.product.sale_price}</p>
                   <p className="text-gray-700 font-semibold">
-                    Subtotal: ₹{item.sale_price * item.Quantity}
+                    Subtotal: ₹{item.product.sale_price * item.quantity}
                   </p>
                 </div>
               </div>
@@ -153,10 +89,10 @@ const confirmOrder = () => {
           <Address />
 
           <button
-            onClick={confirmOrder}
+            onClick={()=>navigate('/paymentSection')}
             className="w-full bg-black text-white py-3 rounded-xl text-lg font-semibold hover:bg-gray-900 transition duration-200 active:scale-95"
           >
-            Place Order
+          Continue
           </button>
         </div>
       </div>

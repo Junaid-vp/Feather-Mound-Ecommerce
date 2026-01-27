@@ -4,17 +4,16 @@ import { useNavigate } from "react-router-dom";
 import ProductCard from "../../Reusable Components/ProductCart";
 export default function TopHandle() {
   const Navigate = useNavigate();
-  const { datas } = useFetch("/products");
-  const data = datas.filter((val) => val.type === "Top Handle").splice(0, 4);
-  
+      const { datas } = useFetch(`products?type=Top Handle`);
+const limitedProducts = datas?.slice(0, 4);
   return (
     <div className="bg-white" data-aos="fade-right"
      data-aos-offset="300"
      data-aos-easing="ease-in-sine">
      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-1 lg:max-w-7xl lg:px-8">
        <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {data.map((product) => (
-         <ProductCard key={product.id} product={product}/>
+          {limitedProducts.map((product) => (
+         <ProductCard key={product._id} product={product}/>
           ))}
         </div>
         <div className="flex justify-center mt-8">

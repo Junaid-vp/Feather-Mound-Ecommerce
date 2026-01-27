@@ -6,6 +6,7 @@ export default function AllBags() {
   const Navigate = useNavigate();
   const { datas } = useFetch("/products");
   const data = datas.splice(0, 4);
+ console.log(datas);
  
   return (
     <div
@@ -17,7 +18,7 @@ export default function AllBags() {
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-1 lg:max-w-7xl lg:px-8">
         <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {data.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
         <div className="flex justify-center mt-8">

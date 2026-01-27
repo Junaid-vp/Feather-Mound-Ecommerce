@@ -3,8 +3,10 @@ import useFetch from "../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
 import ProductCard from "../../Reusable Components/ProductCart";
 function MainCrossyBody() {
-  const { datas } = useFetch("/products");
-  const data = datas.filter((val) => val.type === "Crossbody Bag");
+const { datas } = useFetch(`products?type=Crossbody Bag`);
+const limitedProducts = datas?.slice(0, 4);
+
+ 
   
   return (
     <div className="bg-white" data-aos="fade-up"
@@ -46,8 +48,8 @@ function MainCrossyBody() {
         </h2>
 
         <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {data.map((product) => (
-         <ProductCard key={product.id} product={product}/>
+          {limitedProducts.map((product) => (
+         <ProductCard key={product._id} product={product}/>
           ))}
         </div>
       </div>

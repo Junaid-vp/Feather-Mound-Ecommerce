@@ -14,76 +14,29 @@ const initialValues2 = {
 
 function Login() {
   const navigate = useNavigate();
-  const {setUser} = useContext(CartContext)
   const {Login}= useContext(AuthContext)
 
   const HandleLogin = async (values, { setSubmitting, resetForm }) => {
     try {
       const loginData = {
-        Email: values.email.toLowerCase(),
-        Password: values.password,
+        email: values.email.toLowerCase(),
+        password: values.password,
       };
 
-      const userData = await api.get("/users");
-
-      const isExist = userData.data.find(
-        (data) =>
-          data.Email === loginData.Email && data.password === loginData.Password
-      );
-      // console.log("afafa", userData)
-      // fetchCart(userData?.id)
-      if (isExist) {
-  
-        // localStorage.setItem("loginData", JSON.stringify(isExist));
-        if(isExist.role ==="admin"){
-          navigate("/dashboard")
-          Login(isExist)
-                 toast.success(`You're in! Welcome ${isExist.name} `, {
-    position: "top-right",
-    autoClose: 1800,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: false,
-    draggable: false,
-    className: "premium-toast",
-  });
-        }else {
-        if(isExist.isBlock===true){
-                    toast.warning(`${isExist.FirstName} ${isExist.LastName} Your Account is Blocked`, {
-    position: "top-right",
-    autoClose: 1800,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: false,
-    draggable: false,
-    className: "premium-toast",
-  });
-          return
-        }else{Login(isExist)
-        resetForm();
-       navigate("/")
+     
+    Login(loginData)
+      resetForm();
+      navigate("/")
+     
+     toast.success("You're in! Welcome back 🎉");
       
-              toast.success(`You're in! Welcome ${isExist.FirstName} ${isExist.LastName}`, {
-    position: "top-right",
-    autoClose: 1800,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: false,
-    draggable: false,
-    className: "premium-toast",
-  });
-      }
+    }catch(e){
+   toast.error("Invalid email or password")
+    }finally{
+      setSubmitting(false)
     }
-      } else {
-         
-        toast.error("Account not found. Please register first.");
-      }
-      
-    } catch {
-      toast.error("Something went wrong. Try again..");
-    } finally {
-      setSubmitting(false);
-    }
+     
+ 
   };
 
   return (

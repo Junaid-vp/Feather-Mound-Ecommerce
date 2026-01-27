@@ -57,6 +57,7 @@ import AdminRouter from "./Router/AdminRouter.jsx";
 import DashboardLayout from "./Dashboard/DashnboardLayout.jsx";
 import MainBag from "./Bag-Components/MainBag.jsx";
 import VideoSlide from "./Pages/VideoSlide.jsx";
+import PaymentSection from "./Pages/PaymentSection.jsx";
 
 // ============================================================================
 // 🌍 MAIN ROUTER CONFIGURATION
@@ -92,19 +93,15 @@ const Router = createBrowserRouter([
       // ============================================================================
       // 🔐 USER PROTECTED ROUTES (REQUIRES USER LOGIN)
       // ============================================================================
-      {
-        element: <UserRouter />,
-        children: [
+      
           { path: "cart", element: <Cart /> },
           { path: "profile", element: <Profile /> },
           { path: "wishlist", element: <WishList /> },
           { path: "Checkout", element: <CheckOut /> },
           { path: "order-success/:orderId", element: <OrderSuccess /> },
-          { path: "vieworder/:orderId", element: <ViewOrder /> },
+          { path: "vieworder", element: <ViewOrder /> },
           { path: "buyproduct/:product_id", element: <BuyProduct /> },
-        ],
-      },
-
+          {path:'paymentSection', element:<PaymentSection/>},
       // ============================================================================
       // 🛠️ ADMIN PROTECTED ROUTES (ADMIN ONLY ACCESS)
       // ============================================================================

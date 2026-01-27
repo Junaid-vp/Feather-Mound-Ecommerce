@@ -11,15 +11,16 @@ import {
   ShoppingBagIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 import { CartContext } from "../Context/CartContext";
 
 function Icon() {
   // Contexts
   const { cartLength } = useContext(CartContext); // number of items in cart (badge)
-  const { user } = useContext(AuthContext); // logged-in user (truthy when logged in)
-
+  const { user,setClick } = useContext(AuthContext); // logged-in user (truthy when logged in)
+  const navigate = useNavigate()
+  
   return (
     <div className="flex items-center space-x-5">
       {/* Search: navigates to search page */}
@@ -49,7 +50,7 @@ function Icon() {
           (Icon is identical for both states; route differs)
       */}
       {user ? (
-        <Link to="/profile" className="text-gray-700 hover:text-black" aria-label="Profile">
+        <button  onClick={()=>{navigate("/profile")}} className="text-gray-700 hover:text-black" aria-label="Profile">
           <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
@@ -58,7 +59,7 @@ function Icon() {
               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
             />
           </svg>
-        </Link>
+        </button>
       ) : (
         <Link to="/login" className="text-gray-700 hover:text-black" aria-label="Login">
           <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

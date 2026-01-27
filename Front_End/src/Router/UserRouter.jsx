@@ -6,13 +6,14 @@
 // ===============================
 
 import React from "react";
+import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 
 function UserRouter() {
 
   // 🔹 Step 1: Fetch logged-in user info from localStorage
-  const user = JSON.parse(localStorage.getItem("user"));
-
+  const {user} = useContext(AuthContext)
   // 🔹 Step 2: Check if user is a normal user
   const isUser = user?.role === "user";
 

@@ -25,7 +25,7 @@ function App() {
   // 📍 Detect Current Route Path for Layout Logic
   // ------------------------------------------------------------------------
   const location = useLocation();
-  console.log(location);
+  
 
   const path = (location?.pathname || "").toLowerCase();
 

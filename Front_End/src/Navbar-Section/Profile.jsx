@@ -3,36 +3,40 @@ import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../Context/CartContext";
 import { AuthContext } from "../Context/AuthContext";
 
+
 function Profile() {
   const { cartLength } = useContext(CartContext);
   const navigate = useNavigate();
-  const { user, Logout } = useContext(AuthContext);
+  const {  Logout,userData } = useContext(AuthContext);
+  
+
+
 
   const handleLogout = async () => {
     try {
       await Logout();
-      navigate("/");
+      
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
 
   const formatAddress = (address) => {
-    if (!address || address.length === 0) return null;
+    if (!address) return null;
     
-    const primaryAddress = address[0];
+   
     return {
-      name: primaryAddress.name || "Not provided",
-      number: primaryAddress.number || "Not provided",
-      pinCode: primaryAddress.pinCode || "Not provided",
-      locality: primaryAddress.locality || "Not provided",
-      address: primaryAddress.address || "Not provided",
-      city: primaryAddress.city || "Not provided",
-      state: primaryAddress.state || "Not provided"
+      name: address?.name || "Not provided",
+      number: address?.number || "Not provided",
+      pinCode: address?.pinCode || "Not provided",
+      locality: address?.locality || "Not provided",
+      address: address?.address || "Not provided",
+      city: address?.city || "Not provided",
+      state: address?.state || "Not provided"
     };
   };
 
-  const formattedAddress = formatAddress(user?.address);
+  const formattedAddress = formatAddress(userData?.address);
 
   return (
     <div 
@@ -47,7 +51,7 @@ function Profile() {
             Your Account
           </h2>
           <p className="text-gray-600 font-light text-sm">
-            Welcome back, {user?.FirstName}
+            Welcome back, {userData?.firstName}  {userData?.lastName}
           </p>
         </div>
 
@@ -56,7 +60,7 @@ function Profile() {
           {/* Quick Actions - Minimal */}
           <div className="flex flex-col sm:flex-row gap-2 justify-center">
             <Link
-              to="/vieworder/:orderId"
+              to="/vieworder"
               className="px-6 py-2 bg-white text-black border border-black hover:bg-black hover:text-white transition-all duration-300 font-light text-center text-xs tracking-wide flex-1"
             >
               VIEW ORDERS
@@ -81,12 +85,12 @@ function Profile() {
                 <div className="flex justify-between items-center py-2 border-b border-gray-100">
                   <span className="font-light text-gray-600 tracking-wide">NAME</span>
                   <span className="text-black font-light text-right">
-                    {user?.FirstName} {user?.LastName}
+                    {userData?.firstName} {userData?.lastName}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-100">
                   <span className="font-light text-gray-600 tracking-wide">EMAIL</span>
-                  <span className="text-black font-light text-right">{user?.Email}</span>
+                  <span className="text-black font-light text-right">{userData?.email}</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <span className="font-light text-gray-600 tracking-wide">CART</span>
@@ -108,32 +112,32 @@ function Profile() {
                   <div className="space-y-2">
                     <div className="flex justify-between py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">NAME</span>
-                      <span className="text-black font-light text-right">{formattedAddress.name}</span>
+                      <span className="text-black font-light text-right">{formattedAddress?.name}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">PHONE</span>
-                      <span className="text-black font-light text-right">{formattedAddress.number}</span>
+                      <span className="text-black font-light text-right">{formattedAddress?.number}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">PINCODE</span>
-                      <span className="text-black font-light text-right">{formattedAddress.pinCode}</span>
+                      <span className="text-black font-light text-right">{formattedAddress?.pinCode}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">LOCALITY</span>
-                      <span className="text-black font-light text-right">{formattedAddress.locality}</span>
+                      <span className="text-black font-light text-right">{formattedAddress?.locality}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">CITY</span>
-                      <span className="text-black font-light text-right">{formattedAddress.city}</span>
+                      <span className="text-black font-light text-right">{formattedAddress?.city}</span>
                     </div>
                     <div className="flex justify-between py-1">
                       <span className="font-light text-gray-600 tracking-wide">STATE</span>
-                      <span className="text-black font-light text-right">{formattedAddress.state}</span>
+                      <span className="text-black font-light text-right">{formattedAddress?.state}</span>
                     </div>
                     <div className="mt-3 pt-2 border-t border-gray-200">
                       <span className="font-light text-gray-600 tracking-wide block mb-1 text-xs">ADDRESS</span>
                       <p className="text-black font-light text-xs leading-relaxed">
-                        {formattedAddress.address}
+                        {formattedAddress?.address}
                       </p>
                     </div>
                   </div>

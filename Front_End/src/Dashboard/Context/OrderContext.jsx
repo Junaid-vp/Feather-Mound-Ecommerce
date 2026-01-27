@@ -12,7 +12,7 @@ function OrderProvider({ children }) {
   useEffect(() => {
     const Users = datas?.filter((user) => user.role === "user");
 
-    const FlatOrder = Users.flatMap((user) =>
+    const FlatOrder = Users?.flatMap((user) =>
       user.order?.flatMap((ord) =>
         ord.items?.map((it) => ({
           ...it,

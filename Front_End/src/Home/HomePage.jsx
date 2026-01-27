@@ -38,9 +38,9 @@ function HomePage() {
       <MainBag />
      <Trending/>
       <SecondSlider />
-      /* <Iconic/> */
-      /* <VideoSlide />
-      <BagSlider /> */
+      <Iconic/> 
+      <VideoSlide />
+      <BagSlider /> 
       <FooterSlider />
     </div>
   );

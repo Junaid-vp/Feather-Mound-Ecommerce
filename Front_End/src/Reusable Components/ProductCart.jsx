@@ -16,11 +16,15 @@ function ProductCard({ product }) {
 
   if (!product?.isActive) return null;
 
-  const isInWishlist = wishList.some(
-    (item) => item.product_id === product.product_id
-  );
+ const isInWishlist = wishList.some(
+  (item) => item.product?._id === product._id
+);
 
-  const isInCart = cart.some((item) => item.product_id === product.product_id);
+
+  const isInCart = cart.some(
+  (item) => item.product?._id === product._id
+);
+
 
   const salePrice = Math.round(
     product.original_price -
@@ -30,7 +34,7 @@ function ProductCard({ product }) {
   const discountAmount = product.original_price - salePrice;
 
   const navigateToDetail = () => {
-    navigate(`/Detailpage/${product.product_id}`);
+    navigate(`/Detailpage/${product._id}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -111,7 +115,7 @@ function ProductCard({ product }) {
 
         {/* 📌 FIX: Product Meta - HIDDEN on mobile, SHOW on tablet/desktop */}
         <p className="text-xs text-gray-500 mb-2 sm:block hidden"> 
-          {product.type} • {product.color}
+          {product.type} 
         </p>
 
         {/* Price Section */}

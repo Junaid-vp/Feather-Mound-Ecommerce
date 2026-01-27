@@ -6,13 +6,11 @@ import ProductCard from "../../Reusable Components/ProductCart";
 export default function Tote() {
   const navigate = useNavigate();
 
-  // Fetch all products
-  const { datas } = useFetch("/products");
 
-  // Filter Tote Bags and show only first 4
-  const data = datas.filter((val) => val.type === "Tote Bag").slice(0, 4);
+      const { datas } = useFetch(`products?type=Tote Bag`);
   
-
+      
+const limitedProducts = datas?.slice(0, 4);
   return (
     <div
       className="bg-white"
@@ -24,8 +22,8 @@ export default function Tote() {
 
         {/* Products Grid */}
         <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {data.map((product) => (
-            <ProductCard key={product.product_id} product={product} />
+          {limitedProducts.map((product) => (
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
 

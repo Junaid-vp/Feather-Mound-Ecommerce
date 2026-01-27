@@ -26,26 +26,16 @@ function Register() {
   ) => {
     try {
       const Data = {
-        FirstName: values.Fname,
-        LastName: values.Lname,
-        Email: values.email.toLowerCase(),
+        firstName: values.Fname,
+        lastName: values.Lname,
+        email: values.email.toLowerCase(),
         password: values.password,
-        cart:[],
-        wishList:[],
-        address:[],
-        order:[],
         isBlock:false,
         role:"user",
-        createdAt: new Date().toISOString(),
       };
 
-      const users = await api.get("/users");
-      const isExist = users.data.find((value) => value.Email === Data.Email);
-      if (isExist) {
-        toast.error("User Already Exist");
-        return;
-      }
-       await api.post("/users", Data);
+    
+       await api.post("/auth/register", Data);
  
        toast.success("You're all set! Registration successful.", {
           position: "top-right",
