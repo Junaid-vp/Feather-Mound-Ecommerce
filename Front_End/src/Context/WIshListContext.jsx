@@ -9,16 +9,14 @@ export function WishListProvider({ children }) {
   const { user } = useContext(AuthContext);
   const [wishList, setWishlist] = useState([]);
 
-  // ------------------------------------------------------------------------
-  // Fetch wishlist from server when user logs in or changes
-  // ------------------------------------------------------------------------
+
   const fetchWishlist = async () => {
     try {
        const res = await api.get("/wishlist");
       
       setWishlist(res.data.WishlistDatas?.items || []);
     } catch (e) {
-   toast.error(e?.response?.data?.Message || "Failed to fetch wishlist")
+      toast.error(e?.response?.data?.Message || "Failed to fetch wishlist")
     
     }
   };
@@ -27,7 +25,7 @@ export function WishListProvider({ children }) {
      if (user) {
        fetchWishlist();
      }else{
-setWishlist([])
+      setWishlist([])
      }
    }, [user]);
 
@@ -41,8 +39,16 @@ setWishlist([])
     await api.patch(`/wishlist/${product._id}`)
 fetchWishlist(); 
    }catch(e){
-    console.error("addWish patch error:", e);
-    toast.error("❌ Error while adding to wishlist");
+    toast.error("Please log in to continue", {
+  position: "top-right",
+  autoClose: 2000,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: false,
+  draggable: false,
+  className: "premium-toast error",
+});
+
    }
    
 

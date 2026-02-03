@@ -16,12 +16,12 @@ function Footer() {
             {/* Brand - Hidden on small screens, shown on medium+ */}
             <div className="text-center sm:text-left">
               <h2 className="text-xl sm:text-2xl font-bold tracking-wider text-black hidden sm:block">
-                MIRAGGIO
+                FEATHER MOUND
               </h2>
               {/* Logo Icon - Only shown on small screens */}
               <div className="sm:hidden flex justify-center mb-2">
                 <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                  <span className="text-white text-sm font-bold">M</span>
+                  <span className="text-white text-sm font-bold">FM</span>
                 </div>
               </div>
               <p className="text-gray-600 text-xs sm:text-sm mt-1">
@@ -58,7 +58,7 @@ function Footer() {
                 </li>
                 <li>
                   <Link 
-                    to="/orders" 
+                    to="/vieworder" 
                     className="text-black hover:text-gray-700 transition-all duration-300 hover:translate-x-1 font-medium"
                   >
                     Orders
@@ -129,12 +129,12 @@ function Footer() {
         <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-200">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-center sm:text-left">
             <p className="text-gray-600 text-xs sm:text-sm">
-              © {new Date().getFullYear()} MIRAGGIO — All rights reserved.
+              © {new Date().getFullYear()}  FEATHER MOUND — All rights reserved.
             </p>
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs text-gray-600">
-              <span className="hover:text-black cursor-pointer transition-colors">Privacy Policy</span>
-              <span className="hover:text-black cursor-pointer transition-colors">Terms of Service</span>
-              <span className="hover:text-black cursor-pointer transition-colors">Returns & Exchanges</span>
+            <div  className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs text-gray-600">
+              <Link  to="AboutWeb" className="hover:text-black cursor-pointer transition-colors">Privacy Policy</Link>
+              <Link  to="AboutWeb" className="hover:text-black cursor-pointer transition-colors">Terms of Service</Link>
+              <Link  to="AboutWeb" className="hover:text-black cursor-pointer transition-colors">Returns & Exchanges</Link>
             </div>
           </div>
         </div>

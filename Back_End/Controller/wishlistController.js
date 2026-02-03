@@ -1,16 +1,15 @@
 const wishlistModule = require("../Models/wishlistModel");
 
-const getWishListData = async (req,res) => {
+const getWishListData = async (req, res) => {
   try {
     let userID = req.user.userId;
 
     const WishlistData = await wishlistModule
       .findOne({ user: userID })
-      .populate("items.product");
+      .populate("items.product")
+      .lean();
 
-  
-      
-   if (!WishlistData || WishlistData.items.length === 0) {
+    if (!WishlistData || WishlistData?.items?.length === 0) {
       return res.status(200).json({
         Message: "WishList is Empty",
       });
@@ -28,27 +27,17 @@ const getWishListData = async (req,res) => {
   }
 };
 
-const WishlistToggle = async (req,res) => {
+const WishlistToggle = async (req, res) => {
   try {
     let userID = req.user.userId;
     let { productID } = req.params;
 
-    let userHaveWishlistDB = await wishlistModule.find({ user: userID });
-    if (userHaveWishlistDB.length === 0) {
-      await wishlistModule.create({
-        user: userID,
-        items: [{ product: productID }],
-      });
-      return res.status(200).json({
-        Message: "Add to WishList Successfull",
-      });
-    }
+    let Exist = await wishlistModule.findOne({
+      user: userID,
+      "items.product": productID,
+    });
 
-    const WishListData = await wishlistModule.findOne(
-      { user: userID,"items.product": productID  }
-    );
-
-    if (WishListData) {
+    if (Exist) {
       await wishlistModule.updateOne(
         { user: userID, "items.product": productID },
         { $pull: { items: { product: productID } } },
@@ -58,7 +47,8 @@ const WishlistToggle = async (req,res) => {
 
     await wishlistModule.updateOne(
       { user: userID },
-      { $push: { items: { product: productID } } },
+      { $addToSet: { items: { product: productID } } },
+      { upsert: true },
     );
 
     return res.status(200).json({ Message: "Add to WishList Successfull" });

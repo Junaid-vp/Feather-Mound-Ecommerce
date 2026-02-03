@@ -6,10 +6,8 @@ function SetProduct() {
     const navigate = useNavigate()
     const { itemId } = useParams()
     const [Product, setProduct] = useState({
-        product_id: "",
         name: "",
         type: "",
-        color: "",
         original_price: "",
         sale_price: "",
         discount_percentage: "",
@@ -19,24 +17,37 @@ function SetProduct() {
         isActive: true
     })
 
-    useEffect(() => {
-        if (itemId) {
-            api.get(`/products/${itemId}`)
-                .then((res) => setProduct(res.data || res))
-                .catch(err => console.error("Failed loading product:", err))
-        }
-    }, [itemId])
+    
+   useEffect(() => {
+  const fetchProduct = async () => {
+    try {
+      if (itemId) {
+        const res = await api.get(
+          `/admin/product/productDetails/${itemId}`
+        );
+        setProduct(res.data.Product);
+      }
+    } catch (err) {
+      console.error("Failed loading product:", err);
+    }
+  };
+
+  fetchProduct();
+}, [itemId]);
+
+
 
     const HandleChange = (e) => {
         setProduct({ ...Product, [e.target.name]: e.target.value })
     }
 
+
     const HandleSubmit = (e) => {
         e.preventDefault()
         if (itemId) {
-            api.put(`/products/${itemId}`, Product)
+            api.post(`/admin/product/productEditORAdd?id=${itemId}`,{ product:Product})
         } else {
-            api.post("/products", Product)
+            api.post("/admin/product/productEditORAdd", {product:Product})
         }
         navigate("/dashboard/products")
     }
@@ -75,19 +86,6 @@ function SetProduct() {
                     )}
 
                     {/* Product ID */}
-                    <div>
-                        <label className="block text-[#4b3f2f] text-sm font-medium mb-2">Product ID *</label>
-                        <input
-                            type="text"
-                            name="product_id"
-                            value={Product.product_id}
-                            onChange={HandleChange}
-                            className="w-full px-3 py-2 lg:py-2.5 border border-[#e6dfd3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#bba17a] focus:border-[#bba17a] transition text-[#4b3f2f] placeholder:text-[#b9a98a]"
-                            placeholder="Enter unique product ID"
-                            required
-                        />
-                    </div>
-
                     {/* Name & Type */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div>
@@ -117,18 +115,6 @@ function SetProduct() {
                     </div>
 
                     {/* Color */}
-                    <div>
-                        <label className="block text-[#4b3f2f] text-sm font-medium mb-2">Color *</label>
-                        <input
-                            type="text"
-                            name="color"
-                            value={Product.color}
-                            onChange={HandleChange}
-                            className="w-full px-3 py-2 lg:py-2.5 border border-[#e6dfd3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#bba17a] focus:border-[#bba17a] transition text-[#4b3f2f] placeholder:text-[#b9a98a]"
-                            placeholder="Enter product color"
-                            required
-                        />
-                    </div>
 
                     {/* Prices */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -1,11 +1,3 @@
-// ============================================================================
-// NavBar.jsx — Main navigation bar (desktop + mobile)
-// - Left: logo & mobile menu button
-// - Center (desktop): navigation links
-// - Right: action icons (search, wishlist, cart, profile)
-// - Mobile: DisclosurePanel renders stacked links
-// ============================================================================
-
 import {
   Disclosure,
   DisclosureButton,
@@ -16,16 +8,15 @@ import Icon from "./Icon";
 import { Link } from "react-router-dom";
 
 const navigation = [
-  { name: "New Arrivals", to: "/MainAllbag" },
-  { name: "Best Sellers", to: "/MainTote" },
+  { name: "Best Sellers", to: "Tote Bag" },
   { name: "Shop by Category", to: "/catagory" },
-  { name: "Featured Collections", to: "/MainMini" },
+  { name: "Featured Collections", to: "Micro Bag" },
   { name: "Shop by Video", to: "/videoslide" },
 ];
 
 export default function NavBar() {
   return (
-  <Disclosure as="nav" className="bg-white border-b shadow-sm ">
+    <Disclosure as="nav" className="bg-white border-b shadow-sm">
       {({ open }) => (
         <>
           {/* Container */}
@@ -43,11 +34,23 @@ export default function NavBar() {
                   </DisclosureButton>
                 </div>
 
+                {/* Logo - Full text on desktop, FM on mobile */}
                 <Link
                   to="/"
-                  className="text-2xl font-bond tracking-wider text-gray-900"
+                  className="text-2xl font-light tracking-[0.3em] text-gray-800 hover:text-amber-700 transition-colors duration-500 relative group"
                 >
-                  MIRAGGIO
+                  {/* Full text for desktop */}
+                  <span className="hidden md:inline relative z-10">
+                    FEATHER MOUND
+                  </span>
+                  
+                  {/* FM for mobile */}
+                  <span className="md:hidden font-medium tracking-normal">
+                    FM
+                  </span>
+                  
+                  {/* Underline animation - desktop only */}
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-amber-600 transition-all duration-500 group-hover:w-3/4 hidden md:block"></span>
                 </Link>
               </div>
 
@@ -64,18 +67,18 @@ export default function NavBar() {
                 
                 {/* Other navigation links */}
                 {navigation.map((item) =>
-                  item.to.startsWith("#") ? (
-                    <a
-                      key={item.name}
-                      href={item.to}
-                      className="text-sm text-gray-700 hover:text-black"
-                    >
-                      {item.name}
-                    </a>
-                  ) : (
+                  item.to.startsWith("/") ? (
                     <Link
                       key={item.name}
                       to={item.to}
+                      className="text-sm text-gray-700 hover:text-black"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <Link
+                      key={item.name}
+                      to={`/MainBagComponent/${item.to}`}
                       className="text-sm text-gray-700 hover:text-black"
                     >
                       {item.name}

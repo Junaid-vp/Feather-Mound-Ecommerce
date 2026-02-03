@@ -2,27 +2,30 @@ const productsModel = require("../Models/productsModel");
 
 const getAllProductsORbytype = async (req, res) => {
   try {
-    const { type } = req.query;
+    const { type,name,limit } = req.query;
 
     const filter = {};
-
-    if (type) {
-      filter.type = type;
-    }
-    const productsData = await productsModel.find(filter);
-    if (productsData.length === 0) {
-      return res.status(404).json({ Message: " No Products " });
-    }
-    console.log("Product Get Successfully");
+    
+    if(type){
+        filter.type=type
+      }
+    if(name && name.trim() !== ""){
+        filter.name = {$regex:`^${name}`,$options:"i"}
+      }
+     
+    const productsData = await productsModel.find(filter).limit(limit ? Number(limit) : 0).lean()
+    const totalCount = await productsModel.countDocuments(filter);
+    console.log(totalCount);
+    
     res
       .status(200)
-      .json({ message: `Products Get Successfully`, Products: productsData });
+      .json({ message: `Products Get Successfully`, Products: productsData ,Count:totalCount});
   } catch (e) {
     res.status(500).json({ message: "Products Fetching Error In Server" ,Error : e.message});
   }
 };
 
-// const getProductsbyType = async (req, res) => {
+
 //   try {
 //     const { type } = req.query;
 //     const productsDatabytype = await productsModel.find({ type: type });
@@ -44,7 +47,7 @@ const getAllProductsORbytype = async (req, res) => {
 const getProductbyId = async (req, res) => {
   try {
     const { id } = req.params;
-    const productsDatabyid = await productsModel.findById({ _id: id });
+    const productsDatabyid = await productsModel.findById({ _id: id }).lean()
     if (!productsDatabyid) {
       return res
         .status(404)
@@ -62,5 +65,5 @@ const getProductbyId = async (req, res) => {
   }
 };
 
-// getProductsbyType
+
 module.exports = { getAllProductsORbytype, getProductbyId };

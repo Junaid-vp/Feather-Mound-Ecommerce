@@ -4,19 +4,24 @@
 // 📌 Logic: Checks user role from localStorage → if admin allow → else redirect
 // ===============================
 
-import React from "react";
+import React, { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 
 function AdminRouter() {
 
-  // 🔹 Step 1: Get logged-in user data from localStorage
-  const user = JSON.parse(localStorage.getItem("user"));
+// 🔹 Step 1: Fetch logged-in user info from localStorage
+  const {userData,authLoading} = useContext(AuthContext)
+  // 🔹 Step 2: Check if user is a normal user
+  
+  if (authLoading) {
+   return <div>Checking authentication...</div>;
+ }
+  const isAdmin = userData?.role === "Admin";
 
-  // 🔹 Step 2: Check if user role is 'admin'
-  const isAdmin = user?.role === "admin";
+  // 🔹 Step 3: Render page or redirect based on role
+  return isAdmin ? <Outlet /> : <Navigate to="/login" />;
 
-  // 🔹 Step 3: Conditional page rendering
-  return isAdmin ? <Outlet /> : <Navigate to="/" />;
 }
 
 export default AdminRouter;

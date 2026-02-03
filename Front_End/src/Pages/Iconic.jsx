@@ -13,9 +13,9 @@ const categories = [
   {
     id: 1,
     title: "THE MINIMALIST",
-    route: "/MainAllBag",
+    route: 0,
     image:
-      "https://miraggiolife.com/cdn/shop/files/Minimal_cedcc16e-10c8-43ed-9373-140f47e249fa.jpg?v=1760686830&width=400",
+      "Section-4/7ef3308c-0661-4f0d-be78-3a56910ae7fb.png",
     alt: "Everyday Tote Bags",
     aos: "fade-up",
     duration: 450,
@@ -23,9 +23,9 @@ const categories = [
   {
     id: 2,
     title: "LEE TWEED",
-    route: "/MainShoulder",
+    route: "Shoulder Bag",
     image:
-      "https://miraggiolife.com/cdn/shop/files/Collection_tiles-_Holiday.jpg?v=1759316781&width=400",
+      "/Section-4/80a33f46-9793-4ba1-8b8e-29ba0070a6a2.png",
     alt: "Party & Evening Bags",
     aos: "fade-down",
     duration: 450,
@@ -33,9 +33,9 @@ const categories = [
   {
     id: 3,
     title: "NYLON",
-    route: "/MainTopHandle",
+    route: "Top Handle",
     image:
-      "https://miraggiolife.com/cdn/shop/files/Collection_tiles-Nylon.jpg?v=1759316781&width=400",
+      "/Section-4/9cda5393-9578-4e89-a32b-812842a5f7b9.png",
     alt: "Office & Work Bags",
     aos: "fade-up",
     duration: 450,
@@ -43,9 +43,9 @@ const categories = [
   {
     id: 4,
     title: "FIERCE",
-    route: "/MainTote",
+    route: "Tote Bag",
     image:
-      "https://miraggiolife.com/cdn/shop/files/Collection_tiles-Fierce_c87a96c7-88c2-4700-8315-4bd8b0e19194.jpg?v=1759316781&width=400",
+      "/Section-4/90440378-ce69-4a83-a3ec-c9e00764c088.png",
     alt: "Trendy & Aesthetic Bags",
     aos: "fade-down",
     duration: 450,
@@ -69,7 +69,7 @@ function Iconic() {
           {categories.map(({ id, title, image, route, alt, aos, duration }) => (
             <div key={id} className="group" data-aos={aos} data-aos-duration={duration}>
               <Link
-                to={route}
+                to={`/MainBagComponent/${route}`}
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               >
                 <img
@@ -81,7 +81,7 @@ function Iconic() {
               </Link>
 
               <h3 className="mt-4 text-sm text-gray-700 text-center">
-                <Link to={route}>{title}</Link>
+                <Link to={`/MainBagComponent/${route}`}>{title}</Link>
               </h3>
             </div>
           ))}

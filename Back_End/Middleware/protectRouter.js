@@ -3,8 +3,6 @@ require("dotenv").config();
 
 const protectRoutes = (req, res, next) => {
   try {
-    console.log("Fgsdfg");
-    
     let token = req.cookies?.Access_Token;
 
     if (!token) {
@@ -14,7 +12,7 @@ const protectRoutes = (req, res, next) => {
     }
 
     let decode = jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
-    console.log(decode);
+  
     
     req.user = {
       Email: decode.Email,

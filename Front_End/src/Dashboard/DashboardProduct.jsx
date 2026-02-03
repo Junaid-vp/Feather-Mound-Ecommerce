@@ -1,80 +1,72 @@
 import React, { useEffect, useState } from "react";
-import useFetch from "../Hooks/UseFetch";
 import { api } from "../Api/Axios";
 import { useNavigate } from "react-router-dom";
 
 function DashboardProduct() {
-  const { datas } = useFetch("/products");
-  const [products, setProduct] = useState([]);
-  const [Search, setSearch] = useState("");
+  const [limit, setLimit] = useState(12);
+  const [count, setCount] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (datas) setProduct(datas);
-  }, [datas]);
-
-  const FilteredDatas = products?.filter((value) =>
-    (value.name?.toLowerCase() || value.type?.toLowerCase())?.includes(Search?.toLowerCase())
-  );
-
-  const types = [...new Set(datas?.map((p) => p.type) || [])];
-
-  const HandleActive = async (productId, status) => {
-    await api.patch(`/products/${productId}`, { isActive: !status });
-    setProduct((item) =>
-      item.map((product) =>
-        product.id === productId ? { ...product, isActive: !status } : product
-      )
-    );
+  const fetchProduct = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get(`/products?name=${search}&limit=${limit}`);
+      setProducts(res?.data?.Products || []);
+      setCount(res?.data?.Count || 0);
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => fetchProduct(), 500);
+    return () => clearTimeout(timer);
+  }, [search, limit]);
+
+  const handleActive = async (productId) => {
+    try {
+      await api.patch(`/admin/product/productUpdate/${productId}`);
+      fetchProduct();
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
   return (
     <div className="p-4 lg:p-6 bg-[#fbf8f4] min-h-[70vh]">
       {/* Header */}
-      <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl lg:text-3xl font-serif text-[#4b3f2f]">Products</h1>
-          <p className="text-sm text-[#7a6a55] mt-1">Manage your product catalog</p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-          <div className="relative flex-1">
-            <input
-              type="text"
-              value={Search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search products..."
-              className="w-full px-4 py-2 pr-10 rounded-lg border border-[#e6dfd3] bg-white/90 text-sm focus:outline-none focus:ring-2 focus:ring-[#d6b98d]"
-            />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#a8957b] bg-[#f7f3ee] px-1 rounded">
-              {FilteredDatas?.length || 0}
-            </span>
-          </div>
-
-          <select
-            value={Search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full sm:w-48 border border-[#e6dfd3] rounded-lg px-4 py-2 bg-white/90 text-sm focus:outline-none focus:ring-2 focus:ring-[#d6b98d]"
-          >
-            <option value="">All Types</option>
-            {types.map((type, i) => (
-              <option key={i} value={type}>{type}</option>
-            ))}
-          </select>
-        </div>
+      <div className="mb-6">
+        <h1 className="text-2xl lg:text-3xl font-serif text-[#4b3f2f]">Products</h1>
+        <p className="text-sm text-[#7a6a55] mt-1">Manage your product catalog</p>
       </div>
 
-      {/* Add Product Button */}
-      <div className="mb-6">
-        <button
-          onClick={() => navigate("/dashboard/setproduct")}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#4b3f2f] text-white text-sm hover:bg-[#3a3326] transition"
-        >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-          </svg>
-          Add New Product
-        </button>
+      {/* Search & Actions */}
+      <div className="mb-6 space-y-4">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search products..."
+          className="w-full px-4 py-2.5 rounded-lg border border-[#e6dfd3] bg-white/90 text-sm focus:outline-none focus:ring-2 focus:ring-[#d6b98d]"
+        />
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => navigate("/dashboard/setproduct")}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#4b3f2f] text-white text-sm hover:bg-[#3a3326] transition"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Product
+          </button>
+          <div className="text-sm text-[#7a6a55]">
+            {products.length} of {count} products
+          </div>
+        </div>
       </div>
 
       {/* Desktop Table */}
@@ -93,8 +85,8 @@ function DashboardProduct() {
             </tr>
           </thead>
           <tbody>
-            {FilteredDatas?.map((item) => (
-              <tr key={item.id} className="border-b border-[#f0e9dd] hover:bg-[#fcfbf9]">
+            {products.map((item) => (
+              <tr key={item._id} className="border-b border-[#f0e9dd] hover:bg-[#fcfbf9]">
                 <td className="px-4 py-3">
                   <div className="w-14 h-14 rounded-lg overflow-hidden bg-gray-100 border border-[#e6dfd3]">
                     <img
@@ -109,16 +101,14 @@ function DashboardProduct() {
                   <div className="text-[#4b3f2f] font-medium truncate max-w-[200px]">{item.name}</div>
                 </td>
                 <td className="px-4 py-3">
-                  <span className="px-2.5 py-0.5 rounded-full text-xs bg-[#f1e8dc] text-[#7a6a55]">
-                    {item.type}
-                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full text-xs bg-[#f1e8dc] text-[#7a6a55]">{item.type}</span>
                 </td>
                 <td className="px-4 py-3 text-right text-green-600 font-semibold">₹{item.sale_price}</td>
                 <td className="px-4 py-3 text-right text-red-500 line-through text-sm">₹{item.original_price}</td>
                 <td className="px-4 py-3 text-right text-blue-600 font-medium">₹{item.cost_price}</td>
                 <td className="px-4 py-3 text-center">
                   <button
-                    onClick={() => navigate(`/dashboard/setproduct/${item.id}`)}
+                    onClick={() => navigate(`/dashboard/setproduct/${item._id}`)}
                     className="flex items-center gap-1 px-3 py-1.5 rounded-md border border-[#e6dfd3] bg-white hover:bg-[#f6f3ef] text-[#6b5a43] text-xs"
                   >
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,12 +119,12 @@ function DashboardProduct() {
                 </td>
                 <td className="px-4 py-3 text-center">
                   <button
-                    onClick={() => HandleActive(item.id, item.isActive)}
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium ${
+                    onClick={() => handleActive(item._id)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 ${
                       item.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                     }`}
                   >
-                    <div className={`w-1.5 h-1.5 rounded-full ${item.isActive ? "bg-green-600" : "bg-red-600"}`}></div>
+                    <div className={`w-2 h-2 rounded-full ${item.isActive ? "bg-green-600" : "bg-red-600"}`}></div>
                     {item.isActive ? "Active" : "Inactive"}
                   </button>
                 </td>
@@ -142,16 +132,18 @@ function DashboardProduct() {
             ))}
           </tbody>
         </table>
-        <div className="px-4 py-3 bg-[#faf7f2] text-xs text-[#7a6a55] flex justify-between border-t border-[#e6dfd3]">
-          <div>Showing {FilteredDatas?.length || 0} products</div>
-          <div>Miraggio • Product Catalog</div>
-        </div>
+        {products.length > 0 && (
+          <div className="px-4 py-3 bg-[#faf7f2] text-xs text-[#7a6a55] flex justify-between border-t border-[#e6dfd3]">
+            <div>Showing {products.length} products</div>
+            <div>Miraggio • Product Catalog</div>
+          </div>
+        )}
       </div>
 
-      {/* Mobile & Tablet Cards */}
+      {/* Mobile Cards */}
       <div className="lg:hidden space-y-3">
-        {FilteredDatas?.map((item) => (
-          <div key={item.id} className="bg-white/90 border border-[#e9e0d4] rounded-lg p-3 shadow-sm">
+        {products.map((item) => (
+          <div key={item._id} className="bg-white/90 border border-[#e9e0d4] rounded-lg p-3 shadow-sm">
             <div className="flex items-start gap-3">
               <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 border border-[#e6dfd3]">
                 <img 
@@ -165,10 +157,10 @@ function DashboardProduct() {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-sm font-semibold text-[#4b3f2f]">{item.name}</h3>
-                    <span className="text-xs bg-[#f1e8dc] text-[#7a6a55] px-2 py-0.5 rounded-full">{item.type}</span>
+                    <span className="text-xs bg-[#f1e8dc] text-[#7a6a55] px-2 py-0.5 rounded-full mt-1">{item.type}</span>
                   </div>
                   <button
-                    onClick={() => HandleActive(item.id, item.isActive)}
+                    onClick={() => handleActive(item._id)}
                     className={`px-2 py-1 rounded-full text-xs ${
                       item.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                     }`}
@@ -191,9 +183,9 @@ function DashboardProduct() {
                   </div>
                 </div>
                 <div className="flex justify-between items-center mt-3 pt-3 border-t border-[#e6dfd3]">
-                  <div className="text-xs text-[#7a6a55]">ID: {item.id}</div>
+                  <div className="text-xs text-[#7a6a55]">ID: {item._id?.slice(-6)}</div>
                   <button
-                    onClick={() => navigate(`/dashboard/setproduct/${item.id}`)}
+                    onClick={() => navigate(`/dashboard/setproduct/${item._id}`)}
                     className="flex items-center gap-1 px-3 py-1.5 rounded-md border border-[#e6dfd3] bg-white text-[#6b5a43] text-xs"
                   >
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,9 +200,37 @@ function DashboardProduct() {
         ))}
       </div>
 
-      {(!FilteredDatas || FilteredDatas.length === 0) && (
+      {/* Pagination */}
+      <div className="flex justify-center gap-4 mt-6">
+        {limit < count && (
+          <button
+            onClick={() => setLimit(prev => prev + 12)}
+            className="px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition"
+          >
+            Show More
+          </button>
+        )}
+        {limit > 12 && (
+          <button
+            onClick={() => setLimit(prev => prev - 12)}
+            className="px-6 py-2 border border-black rounded hover:bg-gray-50 transition"
+          >
+            Show Less
+          </button>
+        )}
+      </div>
+
+      {/* Loading State */}
+      {loading && (
+        <div className="flex justify-center items-center p-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b6925e]"></div>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!loading && products.length === 0 && (
         <div className="text-center py-12 text-[#7a6a55]">
-          {Search ? "No products found" : "No products available"}
+          {search ? "No products found" : "No products available"}
         </div>
       )}
     </div>

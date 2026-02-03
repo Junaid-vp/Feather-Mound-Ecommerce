@@ -1,9 +1,3 @@
-// ============================================================================
-// AuthContext.jsx — Authentication provider (Login / Logout / user sync)
-// - Exposes: user, Login, Logout, setUser, setClick
-// - Reads user from localStorage and re-syncs with API on `click` changes
-// ============================================================================
-
 import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { createContext } from "react";
@@ -11,60 +5,81 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../Api/Axios";
 import { toast } from "react-toastify";
 
-
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  
   const [user, setUser] = useState(null);
 
   const [click, setClick] = useState(true);
 
-  const [userData,setUserData]= useState(null)
+  const [authLoading, setAuthLoading] = useState(true);
+
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchMe = async () => {
       try {
         const res = await api.get("/auth/getUser");
         setUser(res?.data?.User);
-        setUserData(res?.data?.UserData)
+        setUserData(res?.data?.UserData);
       } catch (err) {
         setUser(null);
         setUserData(null);
+      } finally {
+        setAuthLoading(false); // ⭐ VERY IMPORTANT
       }
     };
     fetchMe();
   }, [click]);
-console.log(userData);
 
-  // Save user to localStorage and update state
   const Login = async (userData) => {
-    await api.post("/auth/login", userData);
-    const res = await api.get("/auth/getUser");
-    setUser(res?.data?.User);
-    setUserData(res?.data?.UserData)
-    navigate("/");
+    try {
+      const loged = await api.post("/auth/login", userData);
+      const res = await api.get("/auth/getUser");
+      setUser(res?.data?.User);
+      setUserData(res?.data?.UserData);
+
+      return loged.data.Role;
+    } catch (error) {
+      const status = e?.response?.status;
+
+      if (status === 403) {
+        toast.error("Your account is blocked. Contact support.");
+      } else if (status === 401) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    }
   };
 
-  // Logout: clear storage, reset state, navigate to login and reload
-const Logout = async () => {
-  try {
-    await api.post("/auth/logout"); 
-    setUser(null);               
-    toast.success("Logged out successfully");
-    navigate("/login");             
-  } catch (e) {
-    toast.error("Logout failed");
-  }finally {
-    setUser(null); 
-  }
-};
+  const Logout = async () => {
+    try {
+      await api.post("/auth/logout");
+      setUser(null);
+      toast.success("You’ve been logged out safely.", {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        className: "premium-toast success",
+      });
 
-  // Provide context values to children
+      navigate("/login");
+    } catch (e) {
+      setUser(null);
+      toast.error("Logout failed");
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{userData, user, Login, Logout, setUser, setClick }}>
+    <AuthContext.Provider
+      value={{ userData, user, Login, Logout, setUser, setClick, authLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

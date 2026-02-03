@@ -12,70 +12,70 @@ function VideoSlide() {
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_6457fb2d-d5a7-4707-a79c-af433c8ceef0.mp4?v=1747742865",
-      route: `/Detailpage/${"SHOULDER008"}`,
+      route: `/Detailpage/${"6971b94a19d8fdeb91614087"}`,
       aos: "fade-up",
       duration: 1000,
     },
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_92746fcc-975e-415c-98ea-3356b9f156f8.mp4?v=1741258297",
-      route: `/Detailpage/${"TOTE001"}`,
+      route: `/Detailpage/${"6971b94a19d8fdeb9161408f"}`,
       aos: "fade-down",
       duration: 1000,
     },
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_d5727452-7d4a-423d-8b03-4d6ba11bbfa1.mp4?v=1741258165",
-      route: `/Detailpage/${"SHOULDER005"}`,
+      route: `/Detailpage/${"6971b94a19d8fdeb91614084"}`,
       aos: "fade-up",
       duration: 1000,
     },
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_f79de0e5-e7d1-464a-8459-569a46318e67.mp4?v=1713856523",
-      route: `/Detailpage/${"SHOULDER001"}`,
+      route: `/Detailpage/${"6971b94a19d8fdeb91614080"}`,
       aos: "fade-down",
       duration: 1000,
     },
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_103c768e-e451-4b3a-91a7-6412b73e3dca.mp4?v=1731916156",
-      route: `/Detailpage/${"HB003"}`,
+      route: `/Detailpage/${"6971b99f27cf496a4b8c9d25"}`,
       aos: "fade-up",
       duration: 1000,
     },
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_6c1ce8f7-a19b-4ae5-9a77-42cc28604abd.mp4?v=1747742852",
-      route: `/Detailpage/${"CROSS010"}`,
+      route: `/Detailpage/${"6971b94a19d8fdeb9161407a"}`,
       aos: "fade-down",
       duration: 1000,
     },
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_cbb18390-8c5b-4bb6-809d-053168af746b.mp4?v=1741339270",
-      route: `/Detailpage/${"LS003"}`,
+      route: `/Detailpage/${"6971b99f27cf496a4b8c9d16"}`,
       aos: "fade-up",
       duration: 1000,
     },
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_305a4ca5-6ae1-429f-8c6f-e1f8d8cd3b59.mp4?v=1756204675",
-      route: `/Detailpage/${"Tote02"}`,
+      route: `/Detailpage/${"6971b986cdd13d8d1119dbfd"}`,
       aos: "fade-down",
       duration: 1000,
     },
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_58fd33cb-07a5-4f23-ba74-4cebb8c095c6.mp4?v=1731916256",
-      route: `/Detailpage/${"MICRO005"}`,
+      route: `/Detailpage/${"6971b94a19d8fdeb91614093"}`,
       aos: "fade-up",
       duration: 1000,
     },
     {
       videoSrc:
         "https://cdn.shopify.com/s/files/1/0092/3831/5068/files/whatmore_tn_5c206ebb-0795-4f49-a910-ea11f28644cd.mp4?v=1747742844",
-      route: `/Detailpage/${"SHOULDER002"}`,
+      route: `/Detailpage/${"6971b94a19d8fdeb91614081"}`,
       aos: "fade-down",
       duration: 1000,
     },

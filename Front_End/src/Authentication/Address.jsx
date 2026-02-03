@@ -18,19 +18,26 @@ const initialvalueAdress = {
 };
 
 function Address() {
-  const { userData, setClick } = useContext(AuthContext)
+  const { userData, setClick } = useContext(AuthContext);
   const HandleSubmit = async (value, { resetForm }) => {
     try {
-       await api.post("/auth/address", value)
+      await api.post("/auth/address", value);
       resetForm();
       setClick((prev) => !prev);
-      toast.success("Address saved");
+      toast.success("Address saved successfully.", {
+        position: "top-right",
+        autoClose: 1600,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        className: "premium-toast success",
+      });
     } catch (err) {
       console.error("Something Error", err);
       toast.error("Failed to save address");
     }
   };
-
 
   return (
     <>
@@ -212,9 +219,17 @@ function Address() {
             <button
               onClick={async () => {
                 try {
-                 await api.post("/auth/address/clear")
-                  setClick(prev => !prev);
-                  toast.success("Address cleared");
+                  await api.post("/auth/address/clear");
+                  setClick((prev) => !prev);
+                  toast.success("Address cleared successfully.", {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    className: "premium-toast success",
+                  });
                 } catch (err) {
                   console.error("Error clearing address", err);
                   toast.error("Failed to clear address");
@@ -222,7 +237,7 @@ function Address() {
               }}
               className="w-full mt-6 bg-gray-800 text-white py-2 rounded-lg hover:bg-black transition-all"
             >
-              Change Address 
+              Change Address
             </button>
           </div>
         </section>

@@ -108,7 +108,7 @@ function WishList() {
                           onClick={() =>
                             isInCart ? navigate("/cart") : addCart(item.product)
                           }
-                          className={`px-4 py-2 rounded text-sm font-small border ${
+                          className={`px-2 py-2 rounded text-sm font-small border ${
                             isInCart
                               ? "border-gray-300 text-green-700 hover:bg-gray-50"
                               : "border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -118,9 +118,9 @@ function WishList() {
                         </button>
                         <button
                           onClick={() =>
-                            navigate(`/buyproduct/${item.product.product_id}`)
+                            navigate(`/buyproduct/${item.product._id}`)
                           }
-                          className="bg-black text-white py-2 px-4 rounded text-sm font-small hover:bg-gray-800 transition-colors"
+                          className="bg-black text-white py-2 px-2 rounded text-sm font-small hover:bg-gray-800 transition-colors"
                         >
                           Buy Now
                         </button>

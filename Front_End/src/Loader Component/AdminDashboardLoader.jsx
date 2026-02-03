@@ -22,16 +22,18 @@ export default function AdminDashboardLoader({ onLoadingComplete }) {
 
   return (
     <div className="fixed inset-0 bg-[#faf9f7] flex flex-col items-center justify-center z-50">
-      
       {/* Brand Logo */}
-      <div className="mb-8">
-        <img
-          src="https://miraggiolife.com/cdn/shop/files/logo_200x@2x.png?v=1690893751"
-          alt="Miraggio"
-          className="h-16 w-auto opacity-90"
-        />
+      {/* Brand Logo - Simple Version */}
+      <div className="mb-10">
+        <h3 className="text-4xl font-light text-[#4b3f2f] tracking-wider mb-2">
+          Feather Mound
+        </h3>
+        <div className="flex justify-center items-center">
+          <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-[#b6925e] to-transparent"></div>
+          <span className="mx-4 text-sm text-[#7a6a55] font-medium">ADMIN</span>
+          <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-[#b6925e] to-transparent"></div>
+        </div>
       </div>
-
       {/* Elegant Spinner */}
       <div className="relative mb-6">
         <div className="w-12 h-12 border-2 border-[#e6dfd3] rounded-full"></div>

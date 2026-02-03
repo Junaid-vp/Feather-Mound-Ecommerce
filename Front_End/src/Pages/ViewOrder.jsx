@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import { api } from "../Api/Axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Modal from "../utils/Modal";
 
 function ViewOrder() {
   const [orders, setOrder] = useState([]);
+  const [showModal,setShowModal] = useState(null)
+
 
   const fetchOrder = async () => {
     try {
@@ -27,6 +30,8 @@ function ViewOrder() {
     } catch (e) {
       console.log(e.message);
       toast.error("Cancel Fail");
+    }finally{
+      setShowModal(false)
     }
   };
 
@@ -79,8 +84,8 @@ function ViewOrder() {
                   </div>
 
                   <button
-                    disabled={order.orderStatus === "Cancelled"}
-                    onClick={() => HandleCancel(order._id)}
+                    disabled={order.orderStatus === "Cancelled" || order.orderStatus === "Shipped" || order.orderStatus === "Delivered" }
+                    onClick={() =>setShowModal(order._id)}
                     className="px-4 py-2 text-xs font-light tracking-wide transition
                               border border-black text-black
                               hover:bg-black hover:text-white
@@ -89,6 +94,7 @@ function ViewOrder() {
                   >
                     {order.orderStatus === "Cancelled" ? "Cancelled" : "Cancel"}
                   </button>
+  
                 </div>
               </div>
 
@@ -122,6 +128,7 @@ function ViewOrder() {
               </div>
             </div>
           ))}
+            { showModal && <Modal onClose={()=>setShowModal(null)} onConfirm={()=>HandleCancel(showModal)}/>}
         </div>
       </div>
     </div>

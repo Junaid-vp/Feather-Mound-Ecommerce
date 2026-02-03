@@ -24,7 +24,7 @@ export default function BagTypeChart() {
     try {
       setIsLoading(true);
       const res = await api.get("/products");
-      const products = Array.isArray(res.data) ? res.data : [];
+      const products = Array.isArray(res?.data?.Products) ? res?.data?.Products : [];
 
       const counts = {};
       products.forEach((p) => {

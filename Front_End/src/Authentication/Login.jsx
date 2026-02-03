@@ -14,29 +14,45 @@ const initialValues2 = {
 
 function Login() {
   const navigate = useNavigate();
-  const {Login}= useContext(AuthContext)
+  const { Login } = useContext(AuthContext);
 
   const HandleLogin = async (values, { setSubmitting, resetForm }) => {
     try {
-      const loginData = {
-        email: values.email.toLowerCase(),
-        password: values.password,
-      };
+    const loginData = {
+      email: values.email.toLowerCase(),
+      password: values.password,
+    };
 
-     
-    Login(loginData)
-      resetForm();
-      navigate("/")
-     
-     toast.success("You're in! Welcome back 🎉");
-      
-    }catch(e){
-   toast.error("Invalid email or password")
-    }finally{
-      setSubmitting(false)
+    const role = await Login(loginData);
+
+    resetForm();
+
+    if (role === "user") {
+      navigate("/");
+    } else if (role === "Admin") {
+      navigate("/dashboard");
     }
-     
- 
+
+    toast.success("Welcome back! You’re all set.", {
+      position: "top-right",
+      autoClose: 1800,
+      hideProgressBar: true,
+      className: "premium-toast success",
+    });
+
+  } catch (e) {
+      const status = e?.response?.status;
+
+      if (status === 403) {
+        toast.error("Your account is blocked. Contact support.");
+      } else if (status === 401) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

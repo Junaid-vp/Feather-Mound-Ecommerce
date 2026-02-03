@@ -16,9 +16,6 @@ const initialvalue = {
 function Register() {
   const Navigate = useNavigate();
 
-  {
-    /* HANDLE SUBMIT SECTION */
-  }
 
   const HandleSubmit = async (
     values,

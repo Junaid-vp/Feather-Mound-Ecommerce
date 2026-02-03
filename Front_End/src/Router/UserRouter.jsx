@@ -12,10 +12,15 @@ import { AuthContext } from "../Context/AuthContext";
 
 function UserRouter() {
 
+
   // 🔹 Step 1: Fetch logged-in user info from localStorage
-  const {user} = useContext(AuthContext)
+  const {userData,authLoading} = useContext(AuthContext)
   // 🔹 Step 2: Check if user is a normal user
-  const isUser = user?.role === "user";
+  
+  if (authLoading) {
+   return <div>Checking authentication...</div>;
+ }
+  const isUser = userData?.role === "user";
 
   // 🔹 Step 3: Render page or redirect based on role
   return isUser ? <Outlet /> : <Navigate to="/login" />;

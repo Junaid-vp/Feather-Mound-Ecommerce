@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { api } from '../Api/Axios'
+import { useEffect, useRef, useState } from "react";
+import { api } from "../Api/Axios";
+
 function useFetch(url) {
+  const [datas, setDatas] = useState([]);
+  useEffect(() => {
+    
 
-const [datas,setDatas]=useState([])
+    const fetchData = async () => {
+      try {
+        const res = await api.get(url);
+        setDatas(res?.data?.Products || []);
+      } catch (err) {
+        console.error( err);
+      }
+    };
 
-useEffect(()=>{
-      api.get(url)
-      .then((res)=>setDatas(res?.data?.Products))
-},[url])
+    fetchData();
+  }, [url]);
 
-
-  return {datas}
+  return { datas };
 }
 
-export default useFetch
+export default useFetch;
+

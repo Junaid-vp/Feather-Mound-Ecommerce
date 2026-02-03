@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const TokenRegenrator =  (req, res) => {
+const TokenRegenrator = (req, res) => {
   try {
     let token = req.cookies.Refresh_Token;
     if (!token) {
@@ -9,19 +9,19 @@ const TokenRegenrator =  (req, res) => {
 
     const decode = jwt.verify(token, process.env.REFRESH_TOKEN_KEY);
 
-    const AccessToken =  jwt.sign(
-      { Email: decode.Email, Id: decode.Id, user:decode.role },
+    const AccessToken = jwt.sign(
+      { Email: decode.Email, Id: decode.Id, user: decode.role },
       process.env.ACCESS_TOKEN_KEY,
       {
-        expiresIn: "5m",
+        expiresIn: "30m",
       },
     );
 
-    const RefreshToken =  jwt.sign(
+    const RefreshToken = jwt.sign(
       { Email: decode.Email, Id: decode.Id, user: decode.role },
       process.env.REFRESH_TOKEN_KEY,
       {
-        expiresIn: "10m",
+        expiresIn: "7d",
       },
     );
 
@@ -36,11 +36,10 @@ const TokenRegenrator =  (req, res) => {
         sameSite: "lax",
         secure: false,
       })
-      .json({ Message: "SuccessFuly Regenrator Access_Token"});
+      .json({ Message: "SuccessFuly Regenrator Access_Token" });
   } catch (e) {
     res.status(401).json({ Message: "Refresh token expired" });
   }
 };
 
-
-module.exports = TokenRegenrator
+module.exports = TokenRegenrator;

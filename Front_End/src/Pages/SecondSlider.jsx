@@ -44,36 +44,36 @@ function SecondSlider() {
   // ------------------------------------------------------------------------
   const leftSlides = [
     {
-      id: "MICRO001",
-      src: "https://miraggiolife.com/cdn/shop/files/IN_THE_SPOTLIGHT-1.jpg?v=1764420408&width=900",
+      id: "6971b94a19d8fdeb9161408f",
+      src: "/Section-3/afd39586-1d62-4b8a-9368-5306c7a6ab35.png",
       alt: "Colorful Micros"
     },
     {
-      id: "LS010",
-      src: "https://miraggiolife.com/cdn/shop/files/noel-laptop-bag-477712.jpg?v=1756802409&width=700",
+      id: "6971b99f27cf496a4b8c9d1d",
+      src: "/Section-3/85a0632b-26ef-4550-8097-eccdd18daeae.png",
       alt: "Minimalist Bags"
     },
     {
-      id: "MICRO010",
-      src: "https://miraggiolife.com/cdn/shop/files/2-Out-of-office.jpg?v=1760686192&width=600",
+      id: "6971b94a19d8fdeb9161407a",
+      src: "/Section-3/cf1246af-6f65-4893-9457-66d40a717b74.png",
       alt: "Minimalist Bags"
     }
   ];
 
   const rightSlides = [
     {
-      id: "MICRO011",
-      src: "https://miraggiolife.com/cdn/shop/files/2_9.jpg?v=1760689174&width=900",
+      id: "6971b94a19d8fdeb9161407b",
+      src: "/Section-3/e7a6e2fa-ebb0-4179-a91a-639a7fe0fef7.png",
       alt: "Colorful Micros"
     },
     {
-      id: "MICRO009",
-      src: "https://miraggiolife.com/cdn/shop/files/3_3_31ae00fe-797c-432d-98dd-0c79906df0ce.jpg?v=1760689174&width=900",
+      id: "6971b94a19d8fdeb91614097",
+      src: "/Section-3/d1be0d0c-d4ec-4164-bbd9-c7afb87e3070.png",
       alt: "Minimalist Bags"
     },
     {
-      id: "MICRO001",
-      src: "https://miraggiolife.com/cdn/shop/files/4_1_9c437fd0-1336-4a10-a79f-f3f1123c7a3d.jpg?v=1760689174&width=900",
+      id: "6971b94a19d8fdeb9161408f",
+      src: "/Section-3/1e6e15ab-ef8e-40f2-9f6e-a0f01637b522.png",
       alt: "Minimalist Bags"
     }
   ];
@@ -95,7 +95,7 @@ function SecondSlider() {
   return (
     <section className="w-full mt-10 mx-auto overflow-hidden cursor-pointer px-4 md:px-0">
       {/* Title */}
-      <h3 className="text-xl md:text-2xl font-light mb-5 md:mb-7 text-center md:text-left">
+      <h3 className="text-xl md:text-2xl font-light mb-5 ml-4 md:mb-7 text-center md:text-left">
         IN THE SPOTLIGHT
       </h3>
 

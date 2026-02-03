@@ -1,168 +1,130 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { api } from "../../Api/Axios";
 
 function SetWishList() {
-  const location = useLocation();
-  const { userWish } = location.state || {};
+  const { Id } = useParams();
+  const [wishList, setWishList] = useState([]);
+console.log(Id);
+
+  const fetchWishlist = async () => {
+    try {
+      const res = await api.get(`/admin/wishlist/userWishList/${Id}`);
+      setWishList(res?.data?.WishListData || []);
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to load wishlist");
+      setWishList([]);
+    }
+  };
+
+  useEffect(() => {
+    if (Id) fetchWishlist();
+  }, [Id]);
+
+  const totalValue = wishList.reduce(
+    (sum, item) => sum + item.product.sale_price,
+    0
+  );
 
   return (
-    <div className="min-h-screen bg-[#faf8f4] p-4 lg:p-6 flex justify-center items-start">
-      <div className="bg-white rounded-xl lg:rounded-2xl shadow-xl w-full max-w-5xl border border-[#e6dfd3] p-4 lg:p-8">
-        {/* Header */}
-        <div className="text-center mb-6 lg:mb-8">
-          <h1 className="text-2xl lg:text-3xl font-serif font-semibold text-[#4b3f2f] mb-3 lg:mb-4">
+    <div className="min-h-screen bg-[#faf8f4] p-4 lg:p-6 flex justify-center">
+      <div className="bg-white w-full max-w-5xl rounded-2xl shadow-xl border border-[#e6dfd3] p-4 lg:p-8">
+
+        {/* HEADER */}
+        <div className="text-center mb-8">
+          <h1 className="text-2xl lg:text-3xl font-serif font-semibold text-[#4b3f2f]">
             User Wishlist Collection
           </h1>
-          <div className="text-sm bg-[#4b3f2f] text-white px-4 py-2 rounded-full shadow inline-block">
-            Total Items: {userWish?.length || 0}
-          </div>
+          <span className="inline-block mt-3 px-4 py-1 rounded-full text-sm bg-[#4b3f2f] text-white">
+            Total Items: {wishList.length}
+          </span>
         </div>
 
-        {!userWish || userWish.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#f7f3ee] flex items-center justify-center">
-              <svg className="w-8 h-8 text-[#b9a98a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </div>
-            <p className="text-lg text-gray-500">Wishlist is Empty</p>
-            <p className="text-sm text-gray-400 mt-2">No items found in user's wishlist</p>
+        {/* EMPTY STATE */}
+        {wishList.length === 0 ? (
+          <div className="text-center py-16 text-gray-500">
+            <p className="text-lg">Wishlist is Empty</p>
+            <p className="text-sm mt-1">
+              No items found in user's wishlist
+            </p>
           </div>
         ) : (
           <>
-            {/* Desktop Table */}
-            <div className="hidden lg:block bg-white border border-[#e9e0d4] rounded-xl shadow-lg overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-[#f7f3ee] text-left">
-                    <tr>
-                      <th className="px-6 py-4 font-semibold text-[#4b3f2f]">Product</th>
-                      <th className="px-6 py-4 font-semibold text-[#4b3f2f]">Details</th>
-                      <th className="px-6 py-4 font-semibold text-[#4b3f2f] text-right">Original Price</th>
-                      <th className="px-6 py-4 font-semibold text-[#4b3f2f] text-right">Sale Price</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#f0e9dd]">
-                    {userWish.map((item, index) => (
-                      <tr key={index} className="hover:bg-[#fcfbf9] transition-colors">
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-4">
-                            <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 border border-[#e6dfd3] flex-shrink-0">
-                              <img 
-                                src={item.image_url} 
-                                alt={item.name} 
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.target.src = "https://via.placeholder.com/64?text=No+Image";
-                                }}
-                              />
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <div className="font-semibold text-[#4b3f2f] truncate">{item.name}</div>
-                              <div className="text-sm text-[#7a6a55] mt-1">{item.type}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="text-[#7a6a55]">
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium">Color:</span>
-                              <span className="px-2 py-1 bg-gray-100 rounded text-xs">{item.color}</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <div className="text-red-500 line-through font-semibold">₹{item.original_price}</div>
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <div className="text-green-600 font-semibold text-lg">₹{item.sale_price}</div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Tablet Cards */}
-            <div className="hidden md:block lg:hidden">
-              <div className="grid grid-cols-1 gap-4">
-                {userWish.map((item, index) => (
-                  <div key={index} className="bg-white border border-[#e9e0d4] rounded-xl p-4 shadow-sm">
-                    <div className="flex items-start gap-4">
-                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border border-[#e6dfd3] flex-shrink-0">
-                        <img 
-                          src={item.image_url} 
-                          alt={item.name} 
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.target.src = "https://via.placeholder.com/80?text=No+Image";
-                          }}
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-[#4b3f2f] text-lg truncate">{item.name}</h3>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className="text-sm text-[#7a6a55]">{item.type}</span>
-                              <span className="text-xs text-[#b9a98a]">•</span>
-                              <span className="text-sm text-[#7a6a55]">{item.color}</span>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4 text-center">
-                          <div>
-                            <div className="text-xs text-[#7a6a55]">Original Price</div>
-                            <div className="text-red-500 line-through font-semibold">₹{item.original_price}</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-[#7a6a55]">Sale Price</div>
-                            <div className="text-green-600 font-semibold text-lg">₹{item.sale_price}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+            {/* WISHLIST ITEMS */}
+            <div className="space-y-5">
+              {wishList.map((item) => (
+                <div
+                  key={item._id}
+                  className="flex flex-col md:flex-row gap-5 border border-[#e9e0d4] rounded-2xl p-5 bg-white hover:shadow-md transition"
+                >
+                  {/* IMAGE */}
+                  <div className="flex-shrink-0">
+                    <img
+                      src={item.product.image_url}
+                      alt={item.product.name}
+                      className="w-24 h-24 rounded-xl object-cover border"
+                      onError={(e) =>
+                        (e.target.src =
+                          "https://via.placeholder.com/96?text=No+Image")
+                      }
+                    />
                   </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Mobile Cards */}
-            <div className="md:hidden space-y-3">
-              {userWish.map((item, index) => (
-                <div key={index} className="bg-white border border-[#e9e0d4] rounded-lg p-3 shadow-sm">
-                  <div className="flex items-start gap-3">
-                    <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 border border-[#e6dfd3] flex-shrink-0">
-                      <img 
-                        src={item.image_url} 
-                        alt={item.name} 
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.src = "https://via.placeholder.com/64?text=No+Image";
-                        }}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-[#4b3f2f] text-sm line-clamp-2">{item.name}</h3>
-                          <div className="text-xs text-[#7a6a55] mt-1">
-                            {item.type} • {item.color}
-                          </div>
-                        </div>
+                  {/* DETAILS */}
+                  <div className="flex-1">
+                    {/* TOP ROW */}
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="text-lg font-semibold text-[#4b3f2f]">
+                          {item.product.name}
+                        </h3>
+                        <p className="text-sm text-[#7a6a55]">
+                          Type: {item.product.type}
+                        </p>
                       </div>
-                      
-                      <div className="grid grid-cols-2 gap-2 mt-3 text-center">
-                        <div>
-                          <div className="text-[10px] text-[#7a6a55]">Original</div>
-                          <div className="text-red-500 line-through font-semibold text-sm">₹{item.original_price}</div>
-                        </div>
-                        <div>
-                          <div className="text-[10px] text-[#7a6a55]">Sale</div>
-                          <div className="text-green-600 font-semibold text-sm">₹{item.sale_price}</div>
-                        </div>
+
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          item.product.isActive
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {item.product.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </div>
+
+                  
+                    {/* PRICE GRID */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 text-center">
+                      <div>
+                        <p className="text-xs text-[#7a6a55]">Original</p>
+                        <p className="text-red-600 line-through font-semibold">
+                          ₹{item.product.original_price}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-[#7a6a55]">Sale</p>
+                        <p className="text-green-600 font-semibold">
+                          ₹{item.product.sale_price}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-[#7a6a55]">Discount</p>
+                        <p className="font-semibold text-blue-600">
+                          {item.product.discount_percentage || 0}%
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-[#7a6a55]">Status</p>
+                        <p className="font-semibold text-[#4b3f2f]">
+                          {item.product.isActive ? "Available" : "Unavailable"}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -170,20 +132,15 @@ function SetWishList() {
               ))}
             </div>
 
-            {/* Summary Footer */}
-            <div className="mt-6 pt-6 border-t border-[#e6dfd3]">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm text-[#7a6a55]">
-                <div>
-                  Showing {userWish.length} item{userWish.length !== 1 ? 's' : ''} in wishlist
-                </div>
-                <div className="text-right">
-                  <div className="font-semibold text-[#4b3f2f]">
-                    Total Value: ₹{userWish.reduce((sum, item) => sum + parseFloat(item.sale_price), 0).toFixed(2)}
-                  </div>
-                  <div className="text-xs">
-                    Based on current sale prices
-                  </div>
-                </div>
+            {/* SUMMARY */}
+            <div className="mt-8 pt-6 border-t border-[#e6dfd3] flex justify-end">
+              <div className="text-right">
+                <p className="text-lg font-semibold text-[#4b3f2f]">
+                  Total Wishlist Value: ₹{totalValue}
+                </p>
+                <p className="text-xs text-[#7a6a55]">
+                  Based on sale prices
+                </p>
               </div>
             </div>
           </>

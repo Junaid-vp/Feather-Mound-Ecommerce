@@ -16,7 +16,8 @@ export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { Logout, user } = useContext(AuthContext);
+
+  const { Logout, userData } = useContext(AuthContext);
   const location = useLocation();
 
   const menuItems = [
@@ -46,13 +47,20 @@ export default function DashboardLayout() {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   if (isLoading) {
     return <AdminDashboardLoader onLoadingComplete={handleLoadingComplete} />;
   }
 
   return (
-
-<div className="flex h-screen overflow-hidden bg-[#faf9f7] text-gray-800 font-sans">
+    <div className="flex h-screen overflow-hidden bg-[#faf9f7] text-gray-800 font-sans">
       {/* Desktop Sidebar */}
       <aside
         className={`hidden lg:flex flex-col ${
@@ -65,7 +73,7 @@ export default function DashboardLayout() {
               !open && "hidden"
             }`}
           >
-            Miraggio
+            Feather Mound
           </h1>
           <button
             onClick={() => setOpen(!open)}
@@ -123,7 +131,7 @@ export default function DashboardLayout() {
       >
         <div className="flex items-center justify-between h-16 px-4 border-b border-[#e6dfd3]">
           <h1 className="text-[1.3rem] font-semibold tracking-[2px] text-[#4b3f2f] uppercase">
-            Miraggio
+            Feather Mound
           </h1>
           <button
             onClick={() => setMobileMenuOpen(false)}
@@ -156,6 +164,7 @@ export default function DashboardLayout() {
                   {item.icon}
                 </span>
                 <span>{item.label}</span>
+
                 <span className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#d6b98d] to-[#f1e8dc] opacity-0 group-hover:opacity-100 rounded-r-md transition-opacity duration-300"></span>
               </Link>
             );
@@ -189,10 +198,10 @@ export default function DashboardLayout() {
           </div>
           <div className="flex items-center gap-4">
             <span className="hidden sm:inline text-sm text-[#7a6a55] truncate max-w-[400px]">
-              Welcome, {user?.name}
+              Welcome, {userData?.lastName} 🤎
             </span>
             <img
-              src="https://miraggiolife.com/cdn/shop/files/logo_200x@2x.png?v=1690893751"
+              src="/icon/0a99da94-59ac-47ff-ad82-2d02fd674a40.png"
               alt="Miraggio"
               className="h-8 w-auto"
             />
@@ -206,5 +215,3 @@ export default function DashboardLayout() {
     </div>
   );
 }
-
-

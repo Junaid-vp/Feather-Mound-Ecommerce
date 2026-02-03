@@ -1,13 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Tote from "./Tote-Bags/Tote";
-import Shoulder from "./Shulder-Bag/Shoulder";
-import TopHandle from "./TopHandle-Bag/TopHandle";
-import CrossBody from "./CrossyBody-Bag/CrossyBody";
-import Mini from "./Mini-Bag/MIni";
-import AllBags from "./All-Bags/Allbags";
 
-function MiniNav({ page, setPage }) {
+function MiniNav({ setPage }) {
   
   // ------------------------------------------------------------------------
   // Mini Navigation for bag categories
@@ -27,42 +21,42 @@ function MiniNav({ page, setPage }) {
       <div className="mt-6">
         <nav className="flex justify-center gap-8 flex-wrap text-sm font-medium text-gray-700">
           <Link
-            onClick={() => setPage(<Tote />)}
+            onClick={() => setPage("Tote Bag")}
             className="pb-1 hover:text-black hover:border-b-2 hover:border-black cursor-pointer"
           >
             TOTE
           </Link>
 
           <Link
-            onClick={() => setPage(<Shoulder />)}
+            onClick={() => setPage("Shoulder Bag")}
             className="pb-1 hover:text-black hover:border-b-2 hover:border-black cursor-pointer"
           >
             SHOULDER
           </Link>
 
           <Link
-            onClick={() => setPage(<TopHandle />)}
+            onClick={() => setPage("Top Handle")}
             className="pb-1 hover:text-black hover:border-b-2 hover:border-black cursor-pointer"
           >
             TOP HANDLE
           </Link>
 
           <Link
-            onClick={() => setPage(<CrossBody />)}
+            onClick={() => setPage("Crossbody Bag")}
             className="pb-1 hover:text-black hover:border-b-2 hover:border-black cursor-pointer"
           >
             CROSSBODY
           </Link>
 
           <Link
-            onClick={() => setPage(<Mini />)}
+            onClick={() => setPage("Micro Bag")}
             className="pb-1 hover:text-black hover:border-b-2 hover:border-black cursor-pointer"
           >
             MINI & MICRO
           </Link>
 
           <Link
-            onClick={() => setPage(<AllBags />)}
+            onClick={() => setPage("")}
             className="pb-1 hover:text-black hover:border-b-2 hover:border-black cursor-pointer"
           >
             ALL BESTSELLERS
@@ -74,5 +68,3 @@ function MiniNav({ page, setPage }) {
 }
 
 export default MiniNav;
-
-

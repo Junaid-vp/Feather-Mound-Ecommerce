@@ -1,69 +1,56 @@
 import { User } from "lucide-react";
-import React, { useContext, useState } from "react";
-import { OrderContext } from "./Context/OrderContext";
+import React, { useEffect, useState } from "react";
+import { api } from "../Api/Axios";
 
 function DashboardOrder() {
+  const [orders, setOrders] = useState([]);
   const [search, setSearch] = useState("");
-  const { AllOrder, UpdateStatus } = useContext(OrderContext);
+  const [status, setStatus] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filteredData = AllOrder?.filter((item) =>
-    item.userName?.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const statusColors = {
-    Cancelled: "text-red-600 bg-red-50",
-    Delivered: "text-green-600 bg-green-50",
-    Shipped: "text-blue-600 bg-blue-50",
-    Pending: "text-amber-600 bg-amber-50",
+  const fetchOrder = async () => {
+    try {
+      const res = await api.get(`/admin/order?name=${search}&status=${status}`);
+      setOrders(res?.data?.orderData || []);
+    } catch (e) {
+      setOrders([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const StatusBadge = ({ status }) => (
-    <span
-      className={`font-semibold px-2 py-1 rounded-full text-xs ${
-        statusColors[status] || statusColors.Pending
-      }`}
-    >
-      {status || "Pending"}
-    </span>
-  );
+  const updateStatus = async (orderId, status) => {
+    await api.post(`/admin/order/orderStatus/${orderId}`, { status });
+    fetchOrder();
+  };
 
-  const StatusSelect = ({ item }) => (
-    <select
-      value={item?.status || "Pending"}
-      onChange={(e) =>
-        UpdateStatus(item.userId, item.orderId, item.item_id, e.target.value)
-      }
-      className="border border-gray-300 px-2 py-1 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#d6b98d]"
-    >
-      <option>Pending</option>
-      <option>Shipped</option>
-      <option>Delivered</option>
-      <option>Cancelled</option>
-    </select>
-  );
+  useEffect(() => {
+    const timer = setTimeout(() => fetchOrder(), 500);
+    return () => clearTimeout(timer);
+  }, [search, status]);
 
-  const ProductImage = ({ item }) => (
-    <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-      {item?.image_url ? (
-        <img
-          src={item.image_url}
-          alt={item.name}
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        <div className="text-xs text-gray-400">No Image</div>
-      )}
-    </div>
-  );
+  const statusColor = {
+    Pending: "bg-amber-100 text-amber-700",
+    Shipped: "bg-blue-100 text-blue-700",
+    Delivered: "bg-green-100 text-green-700",
+    Cancelled: "bg-red-100 text-red-700",
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b6925e]"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-4 lg:p-6 bg-[#faf8f4] min-h-[70vh]">
-      {/* Header */}
+    <div className="p-4 lg:p-6 bg-[#faf8f4] min-h-screen">
+      {/* HEADER */}
       <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <h1 className="text-2xl lg:text-3xl font-serif text-[#4b3f2f] flex items-center gap-2">
           <User size={24} /> Orders
         </h1>
-
         <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
           <input
             type="text"
@@ -72,173 +59,147 @@ function DashboardOrder() {
             placeholder="Search customer..."
             className="flex-1 px-4 py-2.5 rounded-lg border border-[#e6dfd3] bg-white/90 text-sm focus:outline-none focus:ring-2 focus:ring-[#d6b98d]"
           />
-          <div className="text-sm bg-[#4b3f2f] text-white px-4 py-2.5 rounded-lg shadow text-center">
-            Total: {filteredData?.length || 0}
+          <div className="flex gap-2">
+            <select
+              name="status"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="px-4 py-2.5 rounded-lg border border-[#e6dfd3] bg-white/90 text-sm focus:outline-none focus:ring-2 focus:ring-[#d6b98d]"
+            >
+              <option value="">All Status</option>
+              <option value="Pending">Pending</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+            <div className="text-sm bg-[#4b3f2f] text-white px-4 py-2.5 rounded-lg shadow text-center">
+              Total: {orders.length}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Desktop Table */}
-      <div className="hidden lg:block bg-white/90 border border-[#e9e0d4] rounded-2xl shadow-lg">
-        <table className="w-full text-sm text-[#4b3f2f]">
-          <thead className="bg-[#f7f3ee]">
-            <tr>
-              <th className="px-4 py-3 text-left">Product</th>
-              <th className="px-4 py-3 text-left">Customer</th>
-              <th className="px-4 py-3 text-left">Details</th>
-              <th className="px-4 py-3 text-right">Price</th>
-              <th className="px-4 py-3 text-center">Qty</th>
-              <th className="px-4 py-3 text-center">Date</th>
-              <th className="px-4 py-3 text-center">Payment Method</th>
-              <th className="px-4 py-3 text-center">Status</th>
-              <th className="px-4 py-3 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData?.map((item) => (
-              <tr
-                key={item.item_id}
-                className="border-t border-[#f0e9dd] hover:bg-[#fcfbf9]"
-              >
-                <td className="px-4 py-3">
-                  <ProductImage item={item} />
-                </td>
-                <td className="px-4 py-3">
-                  <div className="max-w-[150px]">
-                    <div className="font-medium truncate">{item.userName}</div>
-                    <div className="text-xs text-[#7a6a55]">
-                      ID: {item.userId}
+      {orders.length === 0 ? (
+        <div className="text-center text-[#7a6a55] py-16">
+          {search || status ? "No orders found" : "No orders available"}
+        </div>
+      ) : (
+        <div className="space-y-4 lg:space-y-6">
+          {orders.map((order) => (
+            <div
+              key={order._id}
+              className="bg-white border border-[#e6dfd3] rounded-xl shadow-sm p-4"
+            >
+              {/* ORDER HEADER - Responsive */}
+              <div className="flex flex-col lg:flex-row lg:justify-between gap-4 mb-4 pb-4 border-b border-[#f0e9dd]">
+                <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-2">
+                    <div>
+                      <p className="text-xs text-[#7a6a55]">Order ID</p>
+                      <p className="font-mono text-sm font-semibold truncate max-w-[200px]">
+                        {order._id.slice(-12)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-[#7a6a55]">Date</p>
+                      <p className="text-sm">
+                        {new Date(order.createdAt).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="max-w-[180px]">
-                    <div className="font-medium truncate">{item.name}</div>
-                    <div className="text-xs text-[#7a6a55]">
-                      {item.type} • {item.color}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <div className="text-green-600 font-semibold">
-                    ₹{item.sale_price}
-                  </div>
-                  <div className="text-xs text-red-500 line-through">
-                    ₹{item.original_price}
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-center font-medium">
-                  {item.Quantity || 1}
-                </td>
-                <td className="px-4 py-3 text-center text-sm">
-                  {item.OrderDate}
-                </td>
-                <td className="px-4 py-3 text-center text-sm">
-                  {item.payment}
-                </td>
-                <td className="px-4 py-3 text-center">
-                  <StatusBadge status={item.status} />
-                </td>
-                <td className="px-4 py-3 text-center">
-                  <StatusSelect item={item} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Tablet Cards */}
-      <div className="hidden md:block lg:hidden space-y-4">
-        {filteredData?.map((item) => (
-          <div
-            key={item.item_id}
-            className="bg-white/90 border border-[#e9e0d4] rounded-xl p-4 shadow-sm"
-          >
-            <div className="flex gap-4">
-              <ProductImage item={item} />
-              <div className="flex-1">
-                <div className="mb-2">
-                  <div className="font-semibold text-[#4b3f2f]">
-                    {item.userName}
-                  </div>
-                  <div className="text-sm text-[#7a6a55]">{item.name}</div>
-                  <div className="text-xs text-[#7a6a55]">
-                    {item.type} • {item.color}
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <div className="text-green-600 font-semibold">
-                      ₹{item.sale_price}
-                    </div>
-                    <div className="text-xs">Qty: {item.Quantity || 1}</div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-[#7a6a55]">
-                      {item.OrderDate}
+                  <p className="text-sm">
+                    Customer:{" "}
+                    <span className="font-semibold text-[#4b3f2f]">
+                      {order?.user?.firstName} {order?.user?.lastName}
                     </span>
-                    <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                      {item.payment}
-                    </span>
-                    <StatusBadge status={item.status} />
-                    <StatusSelect item={item} />
-                  </div>
+                  </p>
                 </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
 
-      {/* Mobile Cards */}
-      <div className="md:hidden space-y-3">
-        {filteredData?.map((item) => (
-          <div
-            key={item.item_id}
-            className="bg-white/90 border border-[#e9e0d4] rounded-lg p-3 shadow-sm"
-          >
-            <div className="mb-2">
-              <div className="font-semibold text-[#4b3f2f] text-sm">
-                {item.userName}
-              </div>
-              <div className="text-xs text-[#7a6a55]">ID: {item.userId}</div>
-            </div>
-            <div className="flex gap-3">
-              <ProductImage item={item} />
-              <div className="flex-1">
-                <div className="font-medium text-sm">{item.name}</div>
-                <div className="text-xs text-[#7a6a55]">
-                  {item.type} • {item.color}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                  <div className="text-sm">
+                    <p className="text-[#7a6a55]">Payment: {order.paymentMethod}</p>
+                    <p className="text-[#7a6a55]">
+                      Status:{" "}
+                      <span className="font-semibold">{order.paymentStatus}</span>
+                    </p>
+                  </div>
+                  <select
+                    value={order.orderStatus}
+                    onChange={(e) => updateStatus(order._id, e.target.value)}
+                    className="border border-[#e6dfd3] rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#d6b98d]"
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
                 </div>
-                <div className="flex justify-between items-center mt-2">
-                  <div>
-                    <div className="text-green-600 font-semibold text-sm">
-                      ₹{item.sale_price}
+              </div>
+
+              {/* ITEMS - Responsive */}
+              <div className="space-y-3">
+                {order.items.map((item) => (
+                  <div
+                    key={item._id}
+                    className="flex gap-3 p-3 bg-[#faf7f2] rounded-lg"
+                  >
+                    <img
+                      src={item.product.image_url}
+                      alt={item.product.name}
+                      className="w-12 h-12 lg:w-16 lg:h-16 rounded-lg object-cover border border-[#e6dfd3]"
+                    />
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm text-[#4b3f2f] truncate">
+                        {item.product.name}
+                      </p>
+                      <p className="text-xs text-[#7a6a55] mb-2">
+                        {item.product.type}
+                      </p>
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3 text-sm">
+                        <div className="text-center">
+                          <p className="text-xs text-[#7a6a55]">Price</p>
+                          <p className="text-green-600 font-semibold">
+                            ₹{item.product.sale_price}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-xs text-[#7a6a55]">Quantity</p>
+                          <p className="font-bold">{item.quantity}</p>
+                        </div>
+                        <div className="text-center lg:block hidden">
+                          <p className="text-xs text-[#7a6a55]">Original</p>
+                          <p className="line-through text-red-600 text-xs">
+                            ₹{item.product.original_price}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-xs text-[#7a6a55]">Total</p>
+                          <p className="font-bold">
+                            ₹{item.product.sale_price * item.quantity}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-xs">Qty: {item.Quantity || 1}</div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <StatusBadge status={item.status} />
-                    <StatusSelect item={item} />
-                  </div>
-                </div>
-                <div className="flex justify-between items-center mt-2">
-                  <div className="text-xs text-[#7a6a55]">
-                    {item.OrderDate}
-                  </div>
-                  <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                    {item.payment}
-                  </span>
-                </div>
+                ))}
+              </div>
+
+              {/* FOOTER */}
+              <div className="mt-4 pt-4 border-t border-[#e6dfd3] flex flex-col sm:flex-row justify-between items-center gap-3">
+                <span
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
+                    statusColor[order.orderStatus]
+                  }`}
+                >
+                  {order.orderStatus}
+                </span>
+                <p className="font-semibold text-lg text-[#4b3f2f]">
+                  Total: ₹{order.totalAmount}
+                </p>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {(!filteredData || filteredData.length === 0) && (
-        <div className="text-center text-[#7a6a55] py-8">No orders found</div>
+          ))}
+        </div>
       )}
     </div>
   );

@@ -185,7 +185,7 @@ export default function BagSlider() {
             </h3>
             <button
               onClick={() => {
-                navigate(`/Detailpage/${"SHOULDER011"}`);
+                navigate(`/Detailpage/${"6971b94a19d8fdeb9161408a"}`);
                 window.scrollTo({
                   top: 0,
                   behavior: "smooth",
@@ -210,7 +210,7 @@ export default function BagSlider() {
             </h3>
             <button
               onClick={() => {
-                navigate(`/Detailpage/${"SHOULDER015"}`);
+                navigate(`/Detailpage/${"6971b94a19d8fdeb9161408e"}`);
                 window.scrollTo({
                   top: 0,
                   behavior: "smooth",

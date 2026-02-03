@@ -16,7 +16,7 @@ import "aos/dist/aos.css";
 import CartProvider from "./Context/CartContext";
 import { AuthProvider } from "./Context/AuthContext";
 import { WishListProvider } from "./Context/WIshListContext";
-import OrderProvider from "./Dashboard/Context/OrderContext";
+
 
 
 function App() {
@@ -51,8 +51,8 @@ function App() {
   // - Navbar & Footer are hidden only for /dashboard routes
   // ------------------------------------------------------------------------
   return (
-    <OrderProvider>
       <AuthProvider>
+
         <CartProvider>
           <WishListProvider>
 
@@ -67,8 +67,8 @@ function App() {
 
           </WishListProvider>
         </CartProvider>
+
       </AuthProvider>
-    </OrderProvider>
   );
 }
 

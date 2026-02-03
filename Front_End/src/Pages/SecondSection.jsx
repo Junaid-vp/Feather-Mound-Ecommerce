@@ -8,14 +8,14 @@ import { Link } from "react-router-dom";
 
 // ---------------------------------------------------------------------------
 // 🗂 Category Data (Static)
+// NOTE: Best image size → 1000 × 1000 (1:1)
 // ---------------------------------------------------------------------------
 const categories = [
   {
     id: 1,
     title: "EVERY DAY",
-    route: "/MainTote",
-    image:
-      "https://miraggiolife.com/cdn/shop/files/Everyday_f45d6c96-003d-4220-a842-6547ce6bbfcc.jpg?v=1764764845&width=400",
+    route: "Tote Bag",
+    image: "/assets/0c8ea076-b67f-4ecd-84b2-bd4ebbd7cca4.png",
     alt: "Everyday Tote Bags",
     aos: "fade-up",
     duration: 450,
@@ -23,9 +23,8 @@ const categories = [
   {
     id: 2,
     title: "AFTER HOURS",
-    route: "/MainShoulder",
-    image:
-      "https://miraggiolife.com/cdn/shop/files/Work_06259620-8cad-4d0f-86c9-50cf5d7f34cd.jpg?v=1764572367&width=400",
+    route:  "Shoulder Bag",
+    image: "/assets/11bd14dd-a22c-42da-9d8f-31d73dbd7362.png",
     alt: "Party & Evening Bags",
     aos: "fade-down",
     duration: 450,
@@ -33,9 +32,9 @@ const categories = [
   {
     id: 3,
     title: "WORK",
-    route: "/MainTopHandle",
+    route: "Top Handle",
     image:
-      "https://miraggiolife.com/cdn/shop/files/Tweed_2.jpg?v=1765454713&width=400",
+      "/assets/ChatGPT Image Feb 3, 2026, 11_16_40 AM.png",
     alt: "Office & Work Bags",
     aos: "fade-up",
     duration: 450,
@@ -43,9 +42,9 @@ const categories = [
   {
     id: 4,
     title: "AESTHETIC",
-    route: "/MainAllBag",
+    route: 0,
     image:
-      "https://rukminim2.flixcart.com/image/480/640/xif0q/hand-messenger-bag/d/5/m/stylish-5-a006-shoulder-bag-aesthetic-14-original-imahg2n2nvq9fzn5.jpeg?q=90",
+      "/assets/1221c26d-1cd2-4a4e-9dca-ab13cead5894.png",
     alt: "Trendy & Aesthetic Bags",
     aos: "fade-down",
     duration: 450,
@@ -58,33 +57,48 @@ const categories = [
 function SecondSection() {
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:max-w-7xl lg:px-8">
         {/* Title */}
         <h2 className="text-2xl font-light tracking-wide text-gray-900">
           MADE FOR EVERY MOMENT
         </h2>
 
         {/* Cards */}
-        <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {categories.map(({ id, title, image, route, alt, aos, duration }) => (
-            <div key={id} className="group" data-aos={aos} data-aos-duration={duration}>
-              <Link
-                to={route}
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {categories.map(
+            ({ id, title, image, route, alt, aos, duration }) => (
+              <div
+                key={id}
+                className="group"
+                data-aos={aos}
+                data-aos-duration={duration}
               >
-                <img
-                  src={image}
-                  alt={alt}
-                  loading="lazy"
-                  className="aspect-square w-full rounded-md bg-gray-200 object-cover transition duration-300 group-hover:opacity-80 lg:aspect-auto lg:h-80"
-                />
-              </Link>
+                <Link
+                  to={`/MainBagComponent/${route}`}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
+                >
+                  {/* Image Wrapper (forces same size) */}
+                  <div className="relative w-full overflow-hidden rounded-md bg-gray-100 aspect-square">
+                    <img
+                      src={image}
+                      alt={alt}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                </Link>
 
-              <h3 className="mt-4 text-sm text-gray-700 text-center">
-                <Link to={route}>{title}</Link>
-              </h3>
-            </div>
-          ))}
+                {/* Title */}
+                <h3 className="mt-4 text-sm tracking-wide text-gray-700 text-center">
+                  <Link to={`/MainBagComponent/${route}`} className="hover:text-gray-900">
+                    {title}
+                  </Link>
+                </h3>
+              </div>
+            )
+          )}
         </div>
       </div>
     </section>

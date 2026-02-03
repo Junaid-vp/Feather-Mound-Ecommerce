@@ -89,7 +89,7 @@ const totalQuantity = cart.reduce(
           <Address />
 
           <button
-            onClick={()=>navigate('/paymentSection')}
+            onClick={()=>totalAmount === 0 ?  navigate('/'): navigate('/paymentSection')}
             className="w-full bg-black text-white py-3 rounded-xl text-lg font-semibold hover:bg-gray-900 transition duration-200 active:scale-95"
           >
           Continue
