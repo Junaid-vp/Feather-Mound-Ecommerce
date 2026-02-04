@@ -10,7 +10,7 @@ const RegisterContoller = async (req, res) => {
     const isExist = await userModel.findOne({ email: email });
 
     if (isExist) {
-      console.log("User Already Exist");
+     
       return res.status(409).json({ message: "User Already Exist" });
     }
 
@@ -24,7 +24,7 @@ const RegisterContoller = async (req, res) => {
     });
     res.status(201).json({ Message: "Registered Successfully" });
   } catch (e) {
-    console.log("Something Issue on RegisterController : ", e);
+   
     res.status(500).json({
       status: "something went wroung",
       message: e.message,

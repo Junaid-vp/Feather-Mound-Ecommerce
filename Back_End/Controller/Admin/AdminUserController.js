@@ -26,6 +26,7 @@ const AdminBlockTheUser = async (req, res) => {
 
     const user = await userModel.findById(_id);
 
+
     if (!user) {
       const err = new Error("No User Found");
       err.status = 404;
@@ -39,10 +40,10 @@ const AdminBlockTheUser = async (req, res) => {
     return res.status(200).json({
       Message: user.isBlock
         ? "User Blocked Successfully"
-        : "User UnBlocked Successfully",
+        : "User UnBlocked Successfully",userData:user
     });
   } catch (e) {
-    res.status(e.status || 500).json({ Message: e.message });
+    res.status(e.status || 500).json({ Message: e.message,  });
   }
 };
 

@@ -8,6 +8,7 @@ export default function DashboardHome() {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [amount,setAmount] = useState(null)
   // ---------------- FETCH DATA ----------------
   const getProducts = async () => {
     try {
@@ -35,6 +36,7 @@ export default function DashboardHome() {
     try {
       const res = await api.get("/admin/order");
       setOrders(res?.data?.orderData || []);
+      setAmount(res.data.AmountStatus[0])
     } catch (error) {
       console.error("Error fetching orders:", error);
     }finally{
@@ -49,30 +51,17 @@ export default function DashboardHome() {
   }, []);
 
 
-  console.log(orders);
-  
+ 
+
 
   // ---------------- DERIVED DATA ----------------
   const totalUsers = users.filter((u) => u.role === "user").length;
   const activeUsers = users.filter((u) => !u.isBlock).length;
+  const paidOrders = orders.filter((o) => o.paymentStatus === "Paid");
 
-  const paidOrders = orders.filter(
-    (o) => o.paymentStatus === "Paid"
-  );
 
-  const pendingOrders = orders.filter(
-    (o) => o.paymentStatus === "Pending"
-  );
 
-  const paidTotalAmount = paidOrders.reduce(
-    (sum, o) => sum + (o.totalAmount || 0),
-    0
-  );
 
-  const pendingTotalAmount = pendingOrders.reduce(
-    (sum, o) => sum + (o.totalAmount || 0),
-    0
-  );
 
   const orderStatusData = orders.reduce((acc, o) => {
     acc[o.orderStatus] = acc[o.orderStatus]
@@ -103,7 +92,7 @@ export default function DashboardHome() {
               Paid Revenue
             </h3>
             <p className="text-xl lg:text-2xl font-bold mt-2 text-green-700">
-              ₹{paidTotalAmount.toLocaleString()}
+              ₹{amount?.Paid?.toLocaleString()}
             </p>
             <div className="text-xs text-green-600 mt-1">
               Completed Payments
@@ -116,7 +105,7 @@ export default function DashboardHome() {
               Pending Amount
             </h3>
             <p className="text-xl lg:text-2xl font-bold mt-2 text-amber-600">
-              ₹{pendingTotalAmount.toLocaleString()}
+              ₹{amount?.Pending?.toLocaleString()}
             </p>
             <div className="text-xs text-amber-600 mt-1">
               Awaiting Payment

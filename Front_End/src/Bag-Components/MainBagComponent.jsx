@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import ProductCard from '../Reusable Components/ProductCart';
 import { api } from '../Api/Axios';
+import { toast } from 'react-toastify';
 
 export default function MainBagComponent() {
   const {type} = useParams()
@@ -21,7 +22,7 @@ export default function MainBagComponent() {
         setProduct(res?.data?.Products || []);
         setCount(res?.data?.Count || 0);
       } catch (e) {
-        console.log(e.message);
+        toast.error(e.message)
       }
     };
     fetchProduct();

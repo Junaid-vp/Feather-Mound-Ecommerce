@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
 import ProductCard from "../Reusable Components/ProductCart";
 import { api } from "../Api/Axios";
+import { toast } from "react-toastify";
 
 function SearchBox() {
   const [Search, setSearch] = useState("");
@@ -27,7 +28,7 @@ function SearchBox() {
       const res = await api.get(`/products?name=${Search}`);
       setSearchProduct(res?.data?.Products || []);
     } catch (e) {
-      console.log(e.message);
+      toast.error(e.message);
     } finally {
       setLoading(false);
     }

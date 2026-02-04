@@ -22,7 +22,7 @@ function CartProvider({ children }) {
 
       setCartLength(res?.data?.cartData?.items?.length);
     } catch (error) {
-      console.log("❌ CART FETCH ERROR:", error);
+  
       toast.error("Failed to load cart");
     }
   };
@@ -114,24 +114,7 @@ function CartProvider({ children }) {
     }
   };
 
-  // HandleClearCart(userId)
-  // - Clears server cart and local state
-  // ------------------------------------------------------------------------
-  // const HandleClearCart = async (userId) => {
-  //   try {
-  //     await api.patch(`/users/${userId}`, { cart: [] });
-  //     setCart([]);
-  //     setCartLength(0);
-  //     toast.success("Cart cleared successfully");
-  //   } catch (error) {
-  //     console.log("❌ SOMETHING ERROR :", error);
-  //     toast.error("Failed to clear cart");
-  //   }
-  // };
 
-  // ------------------------------------------------------------------------
-  // Provider value (exposed API for consumers)
-  // ------------------------------------------------------------------------
   return (
     <CartContext.Provider
       value={{

@@ -6,7 +6,7 @@ import { api } from "../../Api/Axios";
 function SetWishList() {
   const { Id } = useParams();
   const [wishList, setWishList] = useState([]);
-console.log(Id);
+
 
   const fetchWishlist = async () => {
     try {

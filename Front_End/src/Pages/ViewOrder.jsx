@@ -15,7 +15,7 @@ function ViewOrder() {
       setOrder(res?.data?.orderData || []);
     } catch (e) {
       setOrder([]);
-      console.log(e.message);
+      console.error(e.message)
     }
   };
   useEffect(() => {
@@ -28,7 +28,7 @@ function ViewOrder() {
       fetchOrder();
       toast.success("Cancel Succesfull");
     } catch (e) {
-      console.log(e.message);
+
       toast.error("Cancel Fail");
     }finally{
       setShowModal(false)

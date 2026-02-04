@@ -15,8 +15,7 @@ const getAllProductsORbytype = async (req, res) => {
      
     const productsData = await productsModel.find(filter).limit(limit ? Number(limit) : 0).lean()
     const totalCount = await productsModel.countDocuments(filter);
-    console.log(totalCount);
-    
+   
     res
       .status(200)
       .json({ message: `Products Get Successfully`, Products: productsData ,Count:totalCount});
@@ -26,23 +25,7 @@ const getAllProductsORbytype = async (req, res) => {
 };
 
 
-//   try {
-//     const { type } = req.query;
-//     const productsDatabytype = await productsModel.find({ type: type });
-//     if(productsDatabytype.length === 0){
-//         return res.status(404).json({Message : `${type} Not Available`})
-//     }
 
-//     console.log(`Type:${type} Products Successfully Got it`);
-//     res.status(200).json({
-//       message: `Product Type : ${type}`,
-//       Products: productsDatabytype,
-//     });
-
-//   } catch (e) {
-//     res.status(500).json({ message: "Type Products Fetching Error in Server" });
-//   }
-// };
 
 const getProductbyId = async (req, res) => {
   try {

@@ -49,7 +49,7 @@ export default function PaymentSection() {
       order_id: razorpayOrder.id,
       name: "Feather-Mound",
       handler: async function (response) {
-        console.log("Razorpay response:", response);
+        
         try {
           const verifyRes = await api.post("/order/verify-payment", {
             ...response,

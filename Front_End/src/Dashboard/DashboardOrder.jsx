@@ -12,6 +12,7 @@ function DashboardOrder() {
     try {
       const res = await api.get(`/admin/order?name=${search}&status=${status}`);
       setOrders(res?.data?.orderData || []);
+    
     } catch (e) {
       setOrders([]);
     } finally {

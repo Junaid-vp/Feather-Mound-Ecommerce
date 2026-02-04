@@ -19,7 +19,7 @@ function DetailsPage() {
     fetchProduct();
   }, [product_id]);
 
-  console.log(product);
+
 
   const isExist = cart.some((item) => item?.product?._id === product?._id);
 

@@ -45,6 +45,33 @@ const FetchAllordersList = async (req, res) => {
       .sort({ createdAt: -1 })
       .lean();
 
+   const AmountStatus = await orderModule.aggregate([
+  {
+    $group:{
+      _id:null,
+      Paid:{
+        $sum:{
+          $cond:[{$eq:["$paymentStatus","Paid"]},"$totalAmount",0]
+        }
+      },
+      Pending:{
+        $sum:{
+          $cond:[{$eq:["$paymentStatus","Pending"]},"$totalAmount",0]
+        }
+      },
+      Failed:{
+        $sum:{
+          $cond:[{$eq:["$paymentStatus","Failed"]},"$totalAmount",0]
+        }
+      }
+    }
+  }
+]);
+
+
+
+
+
     const filteredOrders = orders.filter((o) => o.user);
 
     if (filteredOrders.length === 0) {
@@ -53,6 +80,7 @@ const FetchAllordersList = async (req, res) => {
 
     res.status(200).json({
       orderData: filteredOrders,
+      AmountStatus:AmountStatus,
       status: "success",
     });
   } catch (e) {

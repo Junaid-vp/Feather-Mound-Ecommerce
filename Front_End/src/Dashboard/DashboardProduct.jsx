@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../Api/Axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function DashboardProduct() {
   const [limit, setLimit] = useState(12);
@@ -17,7 +18,7 @@ function DashboardProduct() {
       setProducts(res?.data?.Products || []);
       setCount(res?.data?.Count || 0);
     } catch (e) {
-      console.log(e.message);
+      toast.error(e.message);
     } finally {
       setLoading(false);
     }

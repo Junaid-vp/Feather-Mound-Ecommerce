@@ -268,7 +268,7 @@ function OrderStatusChart({ data = {} }) {
                   legend: { position: "none" },
                   pie: {
                     onClick: (event, pieItem, item) => {
-                      console.log('Pie segment clicked:', item);
+                      
                     },
                   },
                 }}
