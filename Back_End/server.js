@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: "https://feather-mound.vercel.app/api",
+    origin: "https://feather-mound.vercel.app",
     credentials: true,
   }),
 );

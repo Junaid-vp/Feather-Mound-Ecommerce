@@ -13,6 +13,7 @@ import SmallBagComponent from "../Bag-Components/SmallBagComponent";
 function HomePage() {
 
 
+
   return (
     <div data-aos="fade-up" data-aos-duration="900">
       <SliderComponent />
