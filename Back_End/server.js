@@ -14,7 +14,7 @@ const AdminCartRoutes = require("./Routes/Admin/AdminCartRoutes.js");
 const AdminOrderRoutes = require("./Routes/Admin/AdminOrderRoutes.js");
 const AdminProductRoute = require("./Routes/Admin/AdminProductRoutes.js");
 const  AdminWishListRoute = require("./Routes/Admin/AdminWishListRoutes.js");
-
+const PORT = process.env.PORT || 3000;
 
 
 
@@ -39,6 +39,6 @@ app.use('/api/admin/order',AdminOrderRoutes);
 app.use('/api/admin/product',AdminProductRoute);
 connectDB();
 
-app.listen(process.env.PORT, () => {
-  console.log("Server Running Sucessfully", process.env.PORT);
+app.listen(PORT, () => {
+  console.log("Server Running Sucessfully", PORT);
 });
