@@ -4,7 +4,6 @@ const { Validate } = require("../Middleware/Validate");
 const loginValidate = require("../Validator/loginValidate");
 const registerValidate = require("../Validator/registerValidate");
 const protectRoutes = require("../Middleware/protectRouter.js");
-const { LoginValidation } = require("../../Front_End/src/Authentication/Login-Validation.jsx");
 const TokenRegenrator = require("../service/TokenRegenrator.js");
 
 const route = Router();
