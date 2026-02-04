@@ -1,14 +1,14 @@
-const jsonServer = require("json-server");
-const server = jsonServer.create();
-const router = jsonServer.router("db.json");
-const middlewares = jsonServer.defaults();
+// const jsonServer = require("json-server");
+// const server = jsonServer.create();
+// const router = jsonServer.router("db.json");
+// const middlewares = jsonServer.defaults();
 
-server.use(middlewares);
+// server.use(middlewares);
 
-const port = process.env.PORT || 10000;  // IMPORTANT for Render
+// const port = process.env.PORT || 10000;  // IMPORTANT for Render
 
-server.use(router);
+// server.use(router);
 
-server.listen(port, () => {
-  console.log(`JSON Server is running on port ${port}`);
-});
+// server.listen(port, () => {
+//   console.log(`JSON Server is running on port ${port}`);
+// });
