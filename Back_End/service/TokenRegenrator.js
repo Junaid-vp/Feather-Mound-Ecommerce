@@ -28,13 +28,13 @@ const TokenRegenrator = (req, res) => {
     res
       .cookie("Access_Token", AccessToken, {
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        sameSite: "none", // allow cross-site
+        secure: true, // https only
       })
       .cookie("Refresh_Token", RefreshToken, {
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        sameSite: "none", // allow cross-site
+        secure: true, // https only
       })
       .json({ Message: "SuccessFuly Regenrator Access_Token" });
   } catch (e) {

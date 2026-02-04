@@ -68,13 +68,13 @@ const LoginController = async (req, res) => {
       .status(200)
       .cookie("Access_Token", AccessToken, {
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        sameSite: "none", // allow cross-site
+        secure: true, // https only
       })
       .cookie("Refresh_Token", RefreshToken, {
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        sameSite: "none", // allow cross-site
+        secure: true, // https only
       })
       .json({
         message: "Login successful",
