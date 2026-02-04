@@ -21,7 +21,7 @@ function HomePage() {
      <Trending/>
       <SecondSlider />
       <Iconic/> 
-      {/* <VideoSlide />  */}
+      <VideoSlide /> 
        <BagSlider /> 
       <FooterSlider />
     </div>
