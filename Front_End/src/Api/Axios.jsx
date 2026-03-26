@@ -27,7 +27,7 @@ const applyAuthToRequest = (config, token) => {
 let accessTokenMemory = window.ACCESS_TOKEN_MEMORY || readStoredToken("AccessToken");
 let refreshTokenMemory = window.REFRESH_TOKEN_MEMORY || readStoredToken("RefreshToken");
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL?.trim() || "http://localhost:3000/api";
+  import.meta.env.VITE_API_URL?.trim();
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
