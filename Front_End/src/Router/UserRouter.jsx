@@ -14,13 +14,14 @@ function UserRouter() {
 
 
   // 🔹 Step 1: Fetch logged-in user info from localStorage
-  const {userData,authLoading} = useContext(AuthContext)
+  const { userData, user, authLoading } = useContext(AuthContext);
   // 🔹 Step 2: Check if user is a normal user
   
   if (authLoading) {
    return <div>Checking authentication...</div>;
  }
-  const isUser = userData?.role === "user";
+  const role = userData?.role ?? user?.role;
+  const isUser = String(role || "").toLowerCase() === "user";
 
   // 🔹 Step 3: Render page or redirect based on role
   return isUser ? <Outlet /> : <Navigate to="/login" />;
