@@ -22,8 +22,10 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: "https://feather-mound.vercel.app",
+    origin: ["https://feather-mound.vercel.app", "http://localhost:5173", "http://localhost:3000"],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Auth-Memory", "Refresh_Token", "Access-Control-Allow-Credentials"],
   })
 );
 

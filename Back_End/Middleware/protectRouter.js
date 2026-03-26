@@ -12,7 +12,14 @@ const protectRoutes = (req, res, next) => {
       }
     }
 
+    // Add debug logging for Render logs if token is STILL missing
     if (!token) {
+      console.log(`[AUTH DEBUG] No token found. Headers:`, {
+        hasCookie: !!req.cookies?.Access_Token,
+        hasAuthHeader: !!req.headers.authorization,
+        headerPrefix: req.headers.authorization?.slice(0, 10),
+        userAgent: req.headers['user-agent']?.slice(0, 50)
+      });
       return res
         .status(401)
         .json({ Message: "Unauthorized,Please Login First" });

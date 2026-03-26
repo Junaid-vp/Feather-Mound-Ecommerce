@@ -40,11 +40,15 @@ export const clearAuthTokens = () => {
 
 api.interceptors.request.use(
   (config) => {
-    // Always attach token if present in memory.
-    config.headers = config.headers ?? {};
+    // Ensure headers object exists
+    config.headers = config.headers || {};
 
-    if (!config.headers.Authorization && accessTokenMemory) {
-      config.headers.Authorization = `Bearer ${accessTokenMemory}`;
+    // Force-inject token if present in memory.
+    // We don't check for existing Authorization here to ensure memory token ALWAYS wins.
+    if (accessTokenMemory) {
+      config.headers['Authorization'] = `Bearer ${accessTokenMemory}`;
+      // Add a debug header so the backend can verify the interceptor ran.
+      config.headers['X-Auth-Memory'] = 'active';
     }
 
     // Fallback: try localStorage (in case memory got cleared by reload).
