@@ -70,11 +70,7 @@ const LoginController = async (req, res) => {
       throw err;
     }
 
-    const { RefreshToken, AccessToken } = await GenrateToken(
-      isUser.email,
-      isUser._id,
-      isUser.role,
-    );
+    const { RefreshToken, AccessToken } = await GenrateToken(isUser.email,isUser._id, isUser.role,);
 
     const cookieOptions = getCookieOptions();
 
