@@ -1,7 +1,8 @@
 import axios from "axios";
 
-let accessTokenMemory = null;
-let refreshTokenMemory = null;
+// Initialize from window global if available (helps with module re-evaluations)
+let accessTokenMemory = window.ACCESS_TOKEN_MEMORY || null;
+let refreshTokenMemory = window.REFRESH_TOKEN_MEMORY || null;
 
 export const api = axios.create({
   baseURL: "https://feather-mound-ecommerce-1.onrender.com/api",
@@ -10,8 +11,14 @@ export const api = axios.create({
 
 export const setAuthTokens = (accessToken, refreshToken) => {
   // Only update if explicit values are provided (not undefined)
-  if (accessToken !== undefined) accessTokenMemory = accessToken ?? null;
-  if (refreshToken !== undefined) refreshTokenMemory = refreshToken ?? null;
+  if (accessToken !== undefined) {
+    accessTokenMemory = accessToken ?? null;
+    window.ACCESS_TOKEN_MEMORY = accessTokenMemory;
+  }
+  if (refreshToken !== undefined) {
+    refreshTokenMemory = refreshToken ?? null;
+    window.REFRESH_TOKEN_MEMORY = refreshTokenMemory;
+  }
 
   try {
     if (accessToken !== undefined) {
@@ -38,17 +45,25 @@ export const clearAuthTokens = () => {
   setAuthTokens(null, null);
 };
 
-api.interceptors.request.use(
+  api.interceptors.request.use(
   (config) => {
-    // Ensure headers object exists
     config.headers = config.headers || {};
 
-    // Force-inject token if present in memory.
-    // We don't check for existing Authorization here to ensure memory token ALWAYS wins.
     if (accessTokenMemory) {
+      // Channel 1: Standard Authorization header
       config.headers['Authorization'] = `Bearer ${accessTokenMemory}`;
-      // Add a debug header so the backend can verify the interceptor ran.
-      config.headers['X-Auth-Memory'] = 'active';
+      
+      // Channel 2: Custom header (Bypasses some standard-header stripping)
+      config.headers['x-access-token'] = accessTokenMemory;
+
+      // Channel 3: Query parameter fallback for GET/DELETE
+      // (Bypasses all header-stripping issues)
+      if (config.method === 'get' || config.method === 'delete') {
+        config.params = {
+          ...config.params,
+          token: accessTokenMemory
+        };
+      }
     }
 
     // Fallback: try localStorage (in case memory got cleared by reload).
@@ -98,7 +113,8 @@ api.interceptors.response.use(
       !requestUrl.includes("/auth/refresh")
     ) {
       if (!refreshToken) {
-        clearAuthTokens();
+        // If we have NO refresh token, we can't refresh. 
+        // But DON'T wipe memory tokens yet — it might be a race where they are about to be set.
         return Promise.reject(err);
       }
 

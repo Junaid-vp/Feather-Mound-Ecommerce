@@ -25,7 +25,7 @@ app.use(
     origin: ["https://feather-mound.vercel.app", "http://localhost:5173", "http://localhost:3000"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Auth-Memory", "Refresh_Token", "Access-Control-Allow-Credentials"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-access-token", "X-Auth-Memory", "Refresh_Token", "Access-Control-Allow-Credentials"],
   })
 );
 
