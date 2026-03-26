@@ -1,11 +1,36 @@
 import axios from "axios";
 
+const readStoredToken = (key) => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
+const applyAuthToRequest = (config, token) => {
+  if (!token) return;
+
+  config.headers = config.headers || {};
+  config.headers.Authorization = `Bearer ${token}`;
+  config.headers["x-access-token"] = token;
+
+  if (config.method === "get" || config.method === "delete") {
+    config.params = {
+      ...config.params,
+      token,
+    };
+  }
+};
+
 // Initialize from window global if available (helps with module re-evaluations)
-let accessTokenMemory = window.ACCESS_TOKEN_MEMORY || null;
-let refreshTokenMemory = window.REFRESH_TOKEN_MEMORY || null;
+let accessTokenMemory = window.ACCESS_TOKEN_MEMORY || readStoredToken("AccessToken");
+let refreshTokenMemory = window.REFRESH_TOKEN_MEMORY || readStoredToken("RefreshToken");
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL?.trim() || "http://localhost:3000/api";
 
 export const api = axios.create({
-  baseURL: "https://feather-mound-ecommerce-1.onrender.com/api",
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
@@ -36,8 +61,10 @@ export const setAuthTokens = (accessToken, refreshToken) => {
   // Always keep common defaults in sync with memory state
   if (accessTokenMemory) {
     api.defaults.headers.common.Authorization = `Bearer ${accessTokenMemory}`;
+    api.defaults.headers.common["x-access-token"] = accessTokenMemory;
   } else {
     delete api.defaults.headers.common.Authorization;
+    delete api.defaults.headers.common["x-access-token"];
   }
 };
 
@@ -45,38 +72,23 @@ export const clearAuthTokens = () => {
   setAuthTokens(null, null);
 };
 
-  api.interceptors.request.use(
+api.interceptors.request.use(
   (config) => {
     config.headers = config.headers || {};
 
     if (accessTokenMemory) {
-      // Channel 1: Standard Authorization header
-      config.headers['Authorization'] = `Bearer ${accessTokenMemory}`;
-      
-      // Channel 2: Custom header (Bypasses some standard-header stripping)
-      config.headers['x-access-token'] = accessTokenMemory;
-
-      // Channel 3: Query parameter fallback for GET/DELETE
-      // (Bypasses all header-stripping issues)
-      if (config.method === 'get' || config.method === 'delete') {
-        config.params = {
-          ...config.params,
-          token: accessTokenMemory
-        };
-      }
+      applyAuthToRequest(config, accessTokenMemory);
     }
 
-    // Fallback: try localStorage (in case memory got cleared by reload).
+    // Fallback: try persisted storage immediately if memory got cleared by reload/webview re-open.
     if (!config.headers.Authorization) {
-      try {
-        const token = localStorage.getItem("AccessToken");
-        if (token) {
-          accessTokenMemory = token;
-          config.headers.Authorization = `Bearer ${token}`;
-          api.defaults.headers.common.Authorization = `Bearer ${token}`;
-        }
-      } catch {
-        // ignore
+      const token = readStoredToken("AccessToken");
+      if (token) {
+        accessTokenMemory = token;
+        window.ACCESS_TOKEN_MEMORY = token;
+        api.defaults.headers.common.Authorization = `Bearer ${token}`;
+        api.defaults.headers.common["x-access-token"] = token;
+        applyAuthToRequest(config, token);
       }
     }
     return config;
@@ -96,15 +108,7 @@ api.interceptors.response.use(
   async (err) => {
     const failedRequest = err.config;
     const requestUrl = failedRequest?.url ?? "";
-    const refreshToken =
-      refreshTokenMemory ??
-      (() => {
-        try {
-          return localStorage.getItem("RefreshToken");
-        } catch {
-          return null;
-        }
-      })();
+    const refreshToken = refreshTokenMemory ?? readStoredToken("RefreshToken");
 
     if (
       err?.response?.status === 401 &&
@@ -131,7 +135,7 @@ api.interceptors.response.use(
         setAuthTokens(newAccessToken, res.data?.RefreshToken);
 
         failedRequest.headers = failedRequest.headers ?? {};
-        failedRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        applyAuthToRequest(failedRequest, newAccessToken);
         return api(failedRequest);
       } catch (error) {
         clearAuthTokens();

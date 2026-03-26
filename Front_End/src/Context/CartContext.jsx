@@ -18,10 +18,12 @@ function CartProvider({ children }) {
 
       setCart(res?.data?.cartData?.items || []);
       setCartLength(res?.data?.cartData?.items?.length || 0);
-    } catch {
+    } catch (error) {
       setCart([]);
       setCartLength(0);
-      toast.error("Failed to load cart");
+      if (error?.response?.status !== 401) {
+        toast.error("Failed to load cart");
+      }
     }
   };
 

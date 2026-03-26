@@ -46,7 +46,11 @@ function Login() {
       const serverMessage =
         e?.response?.data?.message || e?.response?.data?.Message;
 
-      if (status === 403) {
+      if (e?.code === "SESSION_VERIFY_FAILED") {
+        toast.error("Login succeeded, but this browser blocked the secure session. Open the site in Chrome or Safari and try again.");
+      } else if (e?.code === "MISSING_ACCESS_TOKEN") {
+        toast.error("Login response was incomplete. Please try again.");
+      } else if (status === 403) {
         toast.error("Your account is blocked. Contact support.");
       } else if (status === 401) {
         toast.error(serverMessage || "Invalid email or password");

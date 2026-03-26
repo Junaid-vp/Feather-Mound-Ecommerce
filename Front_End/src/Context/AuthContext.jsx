@@ -23,13 +23,30 @@ export const AuthProvider = ({ children }) => {
     clearAuthTokens();
   };
 
+  const fetchAuthenticatedUser = async (accessToken) => {
+    if (accessToken) {
+      return api.get("/auth/getUser", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "x-access-token": accessToken,
+        },
+        params: { token: accessToken },
+      });
+    }
+
+    return api.get("/auth/getUser");
+  };
+
   useEffect(() => {
     const fetchMe = async () => {
       try {
-        const res = await api.get("/auth/getUser");
+        const res = await fetchAuthenticatedUser();
         setUser(res?.data?.User);
         setUserData(res?.data?.UserData);
-      } catch {
+      } catch (error) {
+        if (error?.response?.status === 401) {
+          clearAuthTokens();
+        }
         setUser(null);
         setUserData(null);
       } finally {
@@ -48,18 +65,30 @@ export const AuthProvider = ({ children }) => {
     const refreshToken = loginData?.RefreshToken;
     setAuthTokens(accessToken, refreshToken);
 
+    if (!accessToken) {
+      clearAuthState();
+      const tokenError = new Error("No access token returned from login.");
+      tokenError.code = "MISSING_ACCESS_TOKEN";
+      throw tokenError;
+    }
+
     try {
-      const res = await api.get("/auth/getUser", accessToken
-        ? { headers: { Authorization: `Bearer ${accessToken}` } }
-        : undefined);
+      let res;
+
+      try {
+        res = await fetchAuthenticatedUser(accessToken);
+      } catch {
+        // Some in-app mobile browsers drop the first protected request; retry once.
+        res = await fetchAuthenticatedUser(accessToken);
+      }
+
       setUser(res?.data?.User);
       setUserData(res?.data?.UserData);
-    } catch (e) {
-      // Don't block a successful login just because /getUser failed.
-      // We set a minimal user with the role returned from the login response.
-      const fallbackUser = { role: loginData?.Role || "user" };
-      setUser(fallbackUser);
-      setUserData(fallbackUser);
+    } catch {
+      clearAuthState();
+      const sessionError = new Error("Session verification failed on this browser.");
+      sessionError.code = "SESSION_VERIFY_FAILED";
+      throw sessionError;
     }
 
     return loginData?.Role;
