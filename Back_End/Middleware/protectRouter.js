@@ -5,8 +5,11 @@ const protectRoutes = (req, res, next) => {
   try {
     let token = req.cookies?.Access_Token;
 
-    if (!token && req.headers.authorization?.startsWith("Bearer ")) {
-      token = req.headers.authorization.split(" ")[1];
+    if (!token && req.headers.authorization) {
+      const authHeader = req.headers.authorization;
+      if (authHeader.match(/^bearer\s+/i)) {
+        token = authHeader.split(/\s+/)[1];
+      }
     }
 
     if (!token) {

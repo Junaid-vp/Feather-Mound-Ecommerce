@@ -54,11 +54,12 @@ export const AuthProvider = ({ children }) => {
         : undefined);
       setUser(res?.data?.User);
       setUserData(res?.data?.UserData);
-    } catch {
+    } catch (e) {
       // Don't block a successful login just because /getUser failed.
-      // (Commonly caused by cookie/storage differences on some mobile browsers.)
-      setUser({ role: loginData?.Role });
-      setUserData({ role: loginData?.Role });
+      // We set a minimal user with the role returned from the login response.
+      const fallbackUser = { role: loginData?.Role || "user" };
+      setUser(fallbackUser);
+      setUserData(fallbackUser);
     }
 
     return loginData?.Role;

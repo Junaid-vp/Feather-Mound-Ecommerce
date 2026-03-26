@@ -9,21 +9,26 @@ export const api = axios.create({
 });
 
 export const setAuthTokens = (accessToken, refreshToken) => {
-  accessTokenMemory = accessToken ?? null;
-  refreshTokenMemory = refreshToken ?? null;
+  // Only update if explicit values are provided (not undefined)
+  if (accessToken !== undefined) accessTokenMemory = accessToken ?? null;
+  if (refreshToken !== undefined) refreshTokenMemory = refreshToken ?? null;
 
   try {
-    if (accessToken) localStorage.setItem("AccessToken", accessToken);
-    if (refreshToken) localStorage.setItem("RefreshToken", refreshToken);
-    if (!accessToken) localStorage.removeItem("AccessToken");
-    if (!refreshToken) localStorage.removeItem("RefreshToken");
+    if (accessToken !== undefined) {
+      if (accessToken) localStorage.setItem("AccessToken", accessToken);
+      else localStorage.removeItem("AccessToken");
+    }
+    if (refreshToken !== undefined) {
+      if (refreshToken) localStorage.setItem("RefreshToken", refreshToken);
+      else localStorage.removeItem("RefreshToken");
+    }
   } catch {
-    // ignore: localStorage may be blocked in some mobile browsers
+    // ignore: localStorage blocked in some mobile browsers
   }
 
-  // Ensure all future requests use the in-memory token too.
-  if (accessToken) {
-    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+  // Always keep common defaults in sync with memory state
+  if (accessTokenMemory) {
+    api.defaults.headers.common.Authorization = `Bearer ${accessTokenMemory}`;
   } else {
     delete api.defaults.headers.common.Authorization;
   }
