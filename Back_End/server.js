@@ -22,9 +22,7 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    // Allow the requesting origin dynamically (fixes mobile vs desktop origin differences).
-    // Still keep `credentials: true` so cookies can be used when allowed by the browser.
-    origin: true,
+    origin: "https://feather-mound.vercel.app",
     credentials: true,
   })
 );
