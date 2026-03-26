@@ -18,9 +18,8 @@ const RegisterContoller = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
     const normalizedEmail = email?.trim().toLowerCase();
-    const isExist = await userModel.findOne({ 
-      email: { $regex: new RegExp(`^${normalizedEmail}$`, "i") } 
-    });
+    // Use exact match against normalized email (avoids regex issues with special chars like '+').
+    const isExist = await userModel.findOne({ email: normalizedEmail });
 
     if (isExist) {
       return res.status(409).json({ message: "User Already Exist" });
@@ -48,9 +47,8 @@ const LoginController = async (req, res) => {
     const { password } = req.body;
     const email = req.body.email?.trim().toLowerCase();
 
-    const isUser = await userModel.findOne({ 
-      email: { $regex: new RegExp(`^${email}$`, "i") } 
-    }).select("+password");
+    // Use exact match against normalized email (avoids regex issues with special chars like '+').
+    const isUser = await userModel.findOne({ email }).select("+password");
 
     if (!isUser) {
       const err = new Error("Invalid email or password");

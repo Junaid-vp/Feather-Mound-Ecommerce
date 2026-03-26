@@ -137,7 +137,9 @@ function Register() {
                       id="SignUp-password"
                       name="password"
                       type="password"
-                      autoComplete="current-password"
+                      autoComplete="new-password"
+                      autoCapitalize="none"
+                      autoCorrect="off"
                       className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black sm:text-sm/6"
                     />
 
