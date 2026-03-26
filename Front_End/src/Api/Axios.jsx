@@ -1,22 +1,59 @@
 import axios from "axios";
 
+let accessTokenMemory = null;
+let refreshTokenMemory = null;
+
 export const api = axios.create({
   baseURL: "https://feather-mound-ecommerce-1.onrender.com/api",
   withCredentials: true,
 });
 
+export const setAuthTokens = (accessToken, refreshToken) => {
+  accessTokenMemory = accessToken ?? null;
+  refreshTokenMemory = refreshToken ?? null;
+
+  try {
+    if (accessToken) localStorage.setItem("AccessToken", accessToken);
+    if (refreshToken) localStorage.setItem("RefreshToken", refreshToken);
+    if (!accessToken) localStorage.removeItem("AccessToken");
+    if (!refreshToken) localStorage.removeItem("RefreshToken");
+  } catch {
+    // ignore: localStorage may be blocked in some mobile browsers
+  }
+
+  // Ensure all future requests use the in-memory token too.
+  if (accessToken) {
+    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+  } else {
+    delete api.defaults.headers.common.Authorization;
+  }
+};
+
+export const clearAuthTokens = () => {
+  setAuthTokens(null, null);
+};
+
 api.interceptors.request.use(
   (config) => {
-    // Some mobile browsers can block `localStorage` (privacy modes / tracking prevention).
-    // If that happens, just omit the header and rely on cookies/header passed explicitly.
-    try {
-      const token = localStorage.getItem("AccessToken");
-      if (token) {
-        config.headers = config.headers ?? {};
-        config.headers.Authorization = `Bearer ${token}`;
+    // Always attach token if present in memory.
+    config.headers = config.headers ?? {};
+
+    if (!config.headers.Authorization && accessTokenMemory) {
+      config.headers.Authorization = `Bearer ${accessTokenMemory}`;
+    }
+
+    // Fallback: try localStorage (in case memory got cleared by reload).
+    if (!config.headers.Authorization) {
+      try {
+        const token = localStorage.getItem("AccessToken");
+        if (token) {
+          accessTokenMemory = token;
+          config.headers.Authorization = `Bearer ${token}`;
+          api.defaults.headers.common.Authorization = `Bearer ${token}`;
+        }
+      } catch {
+        // ignore
       }
-    } catch {
-      // ignore
     }
     return config;
   },
@@ -26,25 +63,21 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (res) => {
     // Save tokens if they are returned in the response
-    try {
-      if (res.data?.AccessToken)
-        localStorage.setItem("AccessToken", res.data.AccessToken);
-      if (res.data?.RefreshToken)
-        localStorage.setItem("RefreshToken", res.data.RefreshToken);
-    } catch {
-      // ignore storage write errors
-    }
+    setAuthTokens(res.data?.AccessToken, res.data?.RefreshToken);
     return res;
   },
   async (err) => {
     const failedRequest = err.config;
     const requestUrl = failedRequest?.url ?? "";
-    let refreshToken = null;
-    try {
-      refreshToken = localStorage.getItem("RefreshToken");
-    } catch {
-      refreshToken = null;
-    }
+    const refreshToken =
+      refreshTokenMemory ??
+      (() => {
+        try {
+          return localStorage.getItem("RefreshToken");
+        } catch {
+          return null;
+        }
+      })();
 
     if (
       err?.response?.status === 401 &&
@@ -53,12 +86,7 @@ api.interceptors.response.use(
       !requestUrl.includes("/auth/refresh")
     ) {
       if (!refreshToken) {
-        try {
-          localStorage.removeItem("AccessToken");
-          localStorage.removeItem("RefreshToken");
-        } catch {
-          // ignore
-        }
+        clearAuthTokens();
         return Promise.reject(err);
       }
 
@@ -72,21 +100,13 @@ api.interceptors.response.use(
           throw new Error("Unable to refresh access token");
         }
 
-        localStorage.setItem("AccessToken", newAccessToken);
-        if (res.data?.RefreshToken) {
-          localStorage.setItem("RefreshToken", res.data.RefreshToken);
-        }
+        setAuthTokens(newAccessToken, res.data?.RefreshToken);
 
         failedRequest.headers = failedRequest.headers ?? {};
         failedRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(failedRequest);
       } catch (error) {
-        try {
-          localStorage.removeItem("AccessToken");
-          localStorage.removeItem("RefreshToken");
-        } catch {
-          // ignore
-        }
+        clearAuthTokens();
         return Promise.reject(error);
       }
     }

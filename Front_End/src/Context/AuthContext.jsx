@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../Api/Axios";
+import { api, setAuthTokens, clearAuthTokens } from "../Api/Axios";
 import { toast } from "react-toastify";
 
 export const AuthContext = createContext();
@@ -20,12 +20,7 @@ export const AuthProvider = ({ children }) => {
   const clearAuthState = () => {
     setUser(null);
     setUserData(null);
-    try {
-      localStorage.removeItem("AccessToken");
-      localStorage.removeItem("RefreshToken");
-    } catch {
-      // ignore storage write errors
-    }
+    clearAuthTokens();
   };
 
   useEffect(() => {
@@ -51,12 +46,7 @@ export const AuthProvider = ({ children }) => {
     // Ensure we can authenticate the immediate follow-up request.
     const accessToken = loginData?.AccessToken;
     const refreshToken = loginData?.RefreshToken;
-    try {
-      if (accessToken) localStorage.setItem("AccessToken", accessToken);
-      if (refreshToken) localStorage.setItem("RefreshToken", refreshToken);
-    } catch {
-      // ignore storage write errors; we'll still pass Authorization header below
-    }
+    setAuthTokens(accessToken, refreshToken);
 
     try {
       const res = await api.get("/auth/getUser", accessToken
