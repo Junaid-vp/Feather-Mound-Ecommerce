@@ -121,6 +121,8 @@ function Register() {
                       name="email"
                       type="email"
                       autoComplete="email"
+                      autoCorrect="off"
+                      autoCapitalize="none"
                       className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black sm:text-sm/6"
                     />
 
