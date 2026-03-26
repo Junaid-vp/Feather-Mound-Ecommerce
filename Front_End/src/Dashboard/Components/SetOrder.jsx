@@ -6,18 +6,20 @@ function SetOrder() {
   const { Id } = useParams();
   const [orders, setOrders] = useState([]);
 
-  const fetchOrders = async () => {
-    try {
-      const res = await api.get(`/admin/order/userOrder/${Id}`);
-      setOrders(res?.data?.orderData || []);
-    } catch (e) {
-      console.error(e.message);
-      setOrders([]);
-    }
-  };
-
   useEffect(() => {
-    if (Id) fetchOrders();
+    if (!Id) return;
+
+    const fetchOrders = async () => {
+      try {
+        const res = await api.get(`/admin/order/userOrder/${Id}`);
+        setOrders(res?.data?.orderData || []);
+      } catch (e) {
+        console.error(e.message);
+        setOrders([]);
+      }
+    };
+
+    fetchOrders();
   }, [Id]);
 
   return (

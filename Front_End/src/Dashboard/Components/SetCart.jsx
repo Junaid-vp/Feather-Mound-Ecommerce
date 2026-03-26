@@ -7,19 +7,21 @@ function SetCart() {
   const { Id } = useParams();
   const [cart, setCart] = useState([]);
 
-  const fetchCart = async () => {
-    try {
-      const res = await api.get(`/admin/cart/userCart/${Id}`);
-      setCart(res?.data?.CartData || []);
-    } catch (e) {
-      console.error(e);
-      toast.error("Failed to load cart");
-      setCart([]);
-    }
-  };
-
   useEffect(() => {
-    if (Id) fetchCart();
+    if (!Id) return;
+
+    const fetchCart = async () => {
+      try {
+        const res = await api.get(`/admin/cart/userCart/${Id}`);
+        setCart(res?.data?.CartData || []);
+      } catch (e) {
+        console.error(e);
+        toast.error("Failed to load cart");
+        setCart([]);
+      }
+    };
+
+    fetchCart();
   }, [Id]);
 
   const totalValue = cart.reduce(

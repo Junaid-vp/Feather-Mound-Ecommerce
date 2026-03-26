@@ -17,7 +17,7 @@ export default function Modal({ onClose, onConfirm }) {
         </p>
 
         {/* Action buttons */}
-        <div className="mt-8 flex justify-end gap-3">
+        <div className="mt-8 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
           <button
             onClick={onClose}
             className="px-4 py-2 text-xs font-light tracking-wide
@@ -42,4 +42,3 @@ export default function Modal({ onClose, onConfirm }) {
     </div>
   );
 };
-

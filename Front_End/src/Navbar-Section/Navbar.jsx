@@ -15,6 +15,9 @@ const navigation = [
 ];
 
 export default function NavBar() {
+  const getNavigationPath = (item) =>
+    item.to.startsWith("/") ? item.to : `/MainBagComponent/${item.to}`;
+
   return (
     <Disclosure as="nav" className="bg-white border-b shadow-sm">
       {({ open }) => (
@@ -67,18 +70,10 @@ export default function NavBar() {
                 
                 {/* Other navigation links */}
                 {navigation.map((item) =>
-                  item.to.startsWith("/") ? (
+                  (
                     <Link
                       key={item.name}
-                      to={item.to}
-                      className="text-sm text-gray-700 hover:text-black"
-                    >
-                      {item.name}
-                    </Link>
-                  ) : (
-                    <Link
-                      key={item.name}
-                      to={`/MainBagComponent/${item.to}`}
+                      to={getNavigationPath(item)}
                       className="text-sm text-gray-700 hover:text-black"
                     >
                       {item.name}
@@ -108,7 +103,7 @@ export default function NavBar() {
               {navigation.map((item) => (
                 <Link
                   key={item.name}
-                  to={item.to}
+                  to={getNavigationPath(item)}
                   className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
                 >
                   {item.name}

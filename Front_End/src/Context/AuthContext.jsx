@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../Api/Axios";
@@ -18,47 +17,41 @@ export const AuthProvider = ({ children }) => {
 
   const [userData, setUserData] = useState(null);
 
+  const clearAuthState = () => {
+    setUser(null);
+    setUserData(null);
+    localStorage.removeItem("AccessToken");
+    localStorage.removeItem("RefreshToken");
+  };
+
   useEffect(() => {
     const fetchMe = async () => {
       try {
         const res = await api.get("/auth/getUser");
         setUser(res?.data?.User);
         setUserData(res?.data?.UserData);
-      } catch (err) {
+      } catch {
         setUser(null);
         setUserData(null);
       } finally {
-        setAuthLoading(false); // ⭐ VERY IMPORTANT
+        setAuthLoading(false);
       }
     };
     fetchMe();
   }, [click]);
 
   const Login = async (userData) => {
-    try {
-      const loged = await api.post("/auth/login", userData);
-      const res = await api.get("/auth/getUser");
-      setUser(res?.data?.User);
-      setUserData(res?.data?.UserData);
+    const loged = await api.post("/auth/login", userData);
+    const res = await api.get("/auth/getUser");
+    setUser(res?.data?.User);
+    setUserData(res?.data?.UserData);
 
-      return loged.data.Role;
-    } catch (error) {
-      const status = e?.response?.status;
-
-      if (status === 403) {
-        toast.error("Your account is blocked. Contact support.");
-      } else if (status === 401) {
-        toast.error("Invalid email or password");
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
-    }
+    return loged.data.Role;
   };
 
   const Logout = async () => {
     try {
       await api.post("/auth/logout");
-      setUser(null);
       toast.success("You’ve been logged out safely.", {
         position: "top-right",
         autoClose: 1800,
@@ -68,11 +61,11 @@ export const AuthProvider = ({ children }) => {
         draggable: false,
         className: "premium-toast success",
       });
-
+    } catch {
+      toast.error("We couldn’t reach the server, so your local session was cleared.");
+    } finally {
+      clearAuthState();
       navigate("/login");
-    } catch (e) {
-      setUser(null);
-      toast.error("Logout failed");
     }
   };
 

@@ -1,30 +1,39 @@
 const userModel = require("../Models/userModel");
 const GenrateToken = require("../Utils/tokenGenrator");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
+
+const getCookieOptions = () => {
+  const isDevelopment = process.env.NODE_ENV === "development";
+
+  return {
+    httpOnly: true,
+    sameSite: isDevelopment ? "lax" : "none",
+    secure: !isDevelopment,
+    path: "/",
+  };
+};
 
 const RegisterContoller = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
-    const isExist = await userModel.findOne({ email: email });
+    const normalizedEmail = email?.trim().toLowerCase();
+    const isExist = await userModel.findOne({ email: normalizedEmail });
 
     if (isExist) {
-     
       return res.status(409).json({ message: "User Already Exist" });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
 
     await userModel.create({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
+      firstName,
+      lastName,
+      email: normalizedEmail,
       password: hashPassword,
     });
     res.status(201).json({ Message: "Registered Successfully" });
   } catch (e) {
-   
     res.status(500).json({
       status: "something went wroung",
       message: e.message,
@@ -34,7 +43,8 @@ const RegisterContoller = async (req, res) => {
 
 const LoginController = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const email = req.body.email?.trim().toLowerCase();
 
     const isUser = await userModel.findOne({ email }).select("+password");
 
@@ -64,21 +74,17 @@ const LoginController = async (req, res) => {
       isUser.role,
     );
 
+    const cookieOptions = getCookieOptions();
+
     return res
       .status(200)
-      .cookie("Access_Token", AccessToken, {
-        httpOnly: true,
-        sameSite: "none", // allow cross-site
-        secure: true, // https only
-      })
-      .cookie("Refresh_Token", RefreshToken, {
-        httpOnly: true,
-        sameSite: "none", // allow cross-site
-        secure: true, // https only
-      })
+      .cookie("Access_Token", AccessToken, cookieOptions)
+      .cookie("Refresh_Token", RefreshToken, cookieOptions)
       .json({
         message: "Login successful",
         Role: isUser.role,
+        AccessToken,
+        RefreshToken,
       });
   } catch (e) {
     console.error("LoginController error:", e.message);
@@ -91,13 +97,13 @@ const LoginController = async (req, res) => {
 
 const GetLoginUser = async (req, res) => {
   try {
-    const userData = await userModel.findOne({ _id: req.user.userId });
-
     if (!req.user) {
       return res.status(401).json({
         Message: "Unauthorized",
       });
     }
+
+    const userData = await userModel.findOne({ _id: req.user.userId });
 
     res.status(200).json({
       Message: "User found",
@@ -114,17 +120,11 @@ const GetLoginUser = async (req, res) => {
 
 const LogoutController = async (req, res) => {
   try {
+    const cookieOptions = getCookieOptions();
+
     res
-      .clearCookie("Access_Token", {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: false,
-      })
-      .clearCookie("Refresh_Token", {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: false,
-      })
+      .clearCookie("Access_Token", cookieOptions)
+      .clearCookie("Refresh_Token", cookieOptions)
       .status(200)
       .json({ Message: "Logout successful" });
   } catch (e) {

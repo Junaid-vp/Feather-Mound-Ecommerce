@@ -33,7 +33,7 @@ export default function OrderSuccess() {
     >
       <div
         className="w-full max-w-2xl text-center rounded-2xl border border-gray-100 bg-white shadow-lg"
-        style={{ padding: 32 }}
+        style={{ padding: "clamp(1.25rem, 4vw, 2rem)" }}
         role="main"
         aria-labelledby="os-title"
       >
@@ -72,7 +72,7 @@ export default function OrderSuccess() {
         </p>
 
         {/* --------------------- Action Buttons --------------------- */}
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
           <button
             onClick={() => navigate(`/vieworder`)}
             className="bg-black text-white px-6 py-3 rounded-lg text-sm font-semibold shadow-md hover:opacity-95"

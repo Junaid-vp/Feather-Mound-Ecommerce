@@ -12,9 +12,6 @@ export default function MainBagComponent() {
   const [product, setProduct] = useState([]);
   const url = Number(type) ===0  ? `/products?limit=${limit}` : `/products?type=${type}&limit=${limit}`
 
-  
-  
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -26,7 +23,7 @@ export default function MainBagComponent() {
       }
     };
     fetchProduct();
-  }, [limit,type]);
+  }, [url]);
 
 
 

@@ -5,19 +5,22 @@ const protectRoutes = (req, res, next) => {
   try {
     let token = req.cookies?.Access_Token;
 
+    if (!token && req.headers.authorization?.startsWith("Bearer ")) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+
     if (!token) {
       return res
         .status(401)
         .json({ Message: "Unauthorized,Please Login First" });
     }
 
-    let decode = jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
-  
-    
+    const decode = jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
+
     req.user = {
       Email: decode.Email,
       userId: decode.Id,
-      role:decode.user
+      role: decode.role ?? decode.user,
     };
 
     next();

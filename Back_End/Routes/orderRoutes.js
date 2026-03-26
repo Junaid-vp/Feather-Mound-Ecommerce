@@ -9,5 +9,5 @@ route.get('/',protectRoutes,showOrderList)
 route.post('/single',protectRoutes,orderSingleProduct)
 route.post('/cart',protectRoutes,orderCartProduct)
 route.patch('/cancel',protectRoutes,orderCancelController)
-route.post("/verify-payment",verifyPayment)
+route.post("/verify-payment",protectRoutes,verifyPayment)
 module.exports = route

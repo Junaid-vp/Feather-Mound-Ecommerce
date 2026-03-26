@@ -13,8 +13,7 @@ function Cart() {
     0
   );
 
-  const shippingFee = totalAmount > 5000 ? 0 : 199;
-  const finalTotal = totalAmount + shippingFee;
+  const finalTotal = totalAmount;
 
   return (
     <div className="min-h-screen bg-white" data-aos="fade-up" data-aos-duration="1000">
@@ -65,18 +64,18 @@ function Cart() {
               {cart.map((item) => (
                 <div
                   key={item.product._id}
-                  className="flex gap-4 p-4 border border-gray-200 rounded-lg bg-white"
+                  className="flex flex-col sm:flex-row gap-4 p-4 border border-gray-200 rounded-lg bg-white"
                 >
                   {/* Product Image */}
                   <img
                     src={item.product.image_url}
                     alt={item.product.name}
-                    className="w-16 h-16 object-cover rounded border border-gray-200"
+                    className="w-20 h-20 sm:w-16 sm:h-16 object-cover rounded border border-gray-200"
                   />
 
                   {/* Product Details */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-2">
+                    <div className="flex justify-between items-start mb-2 gap-3">
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900 text-sm line-clamp-2">
                           {item.product.name}
@@ -94,7 +93,7 @@ function Cart() {
                     </div>
 
                     {/* Price and Quantity */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
                       <p className="font-semibold text-gray-900">
                         ₹{item.product.sale_price * item.quantity}
                       </p>
@@ -139,15 +138,9 @@ function Cart() {
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Shipping</span>
                     <span className="font-medium text-green-600">
-                      {shippingFee === 0 ? "FREE" : "₹199"}
+                      Included
                     </span>
                   </div>
-
-                  {shippingFee > 0 && (
-                    <p className="text-xs text-gray-500 text-center">
-                      Free shipping on orders over ₹5,000
-                    </p>
-                  )}
                 </div>
 
                 <div className="border-t pt-3 mb-4">

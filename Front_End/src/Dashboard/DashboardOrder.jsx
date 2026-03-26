@@ -1,5 +1,5 @@
 import { User } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { api } from "../Api/Axios";
 
 function DashboardOrder() {
@@ -8,17 +8,16 @@ function DashboardOrder() {
   const [status, setStatus] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchOrder = async () => {
+  const fetchOrder = useCallback(async () => {
     try {
       const res = await api.get(`/admin/order?name=${search}&status=${status}`);
       setOrders(res?.data?.orderData || []);
-    
-    } catch (e) {
+    } catch {
       setOrders([]);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [search, status]);
 
   const updateStatus = async (orderId, status) => {
     await api.post(`/admin/order/orderStatus/${orderId}`, { status });
@@ -28,7 +27,7 @@ function DashboardOrder() {
   useEffect(() => {
     const timer = setTimeout(() => fetchOrder(), 500);
     return () => clearTimeout(timer);
-  }, [search, status]);
+  }, [fetchOrder]);
 
   const statusColor = {
     Pending: "bg-amber-100 text-amber-700",

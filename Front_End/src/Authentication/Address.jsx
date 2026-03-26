@@ -1,8 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import React from "react";
-
 import { AddressValidation } from "./Address-Validation";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { api } from "../Api/Axios";
 import { AuthContext } from "../Context/AuthContext";
 import { toast } from "react-toastify";
@@ -43,7 +42,7 @@ function Address() {
     <>
       {!userData?.address ? (
         <section className="flex justify-center items-center bg-gradient-to-b from-gray-50 to-white">
-          <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg px-8 py-10 border border-gray-200">
+          <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg px-5 py-6 sm:px-8 sm:py-10 border border-gray-200">
             <h2 className="text-2xl font-semibold text-gray-900 mb-6 tracking-wide">
               Add Delivery Address
             </h2>
@@ -88,7 +87,7 @@ function Address() {
                   </div>
 
                   {/* Pin code & Locality */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1">
                       <label className="text-sm font-medium text-gray-600">
                         Pin Code
@@ -140,7 +139,7 @@ function Address() {
                   </div>
 
                   {/* City & State */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1">
                       <label className="text-sm font-medium text-gray-600">
                         City

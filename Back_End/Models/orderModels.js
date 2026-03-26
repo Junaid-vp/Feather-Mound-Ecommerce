@@ -23,9 +23,25 @@ const orderSchema = new mongoose.Schema(
       },
     ],
 
+    shippingAddress: {
+      name: String,
+      number: Number,
+      pinCode: Number,
+      locality: String,
+      address: String,
+      city: String,
+      state: String,
+    },
+
     totalAmount: {
       type: Number,
       required: true,
+    },
+
+    orderSource: {
+      type: String,
+      enum: ["single", "cart"],
+      default: "single",
     },
 
     paymentMethod: {

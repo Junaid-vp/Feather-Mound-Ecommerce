@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CartContext } from "../Context/CartContext";
 import { AuthContext } from "../Context/AuthContext";
 
 
 function Profile() {
   const { cartLength } = useContext(CartContext);
-  const navigate = useNavigate();
   const {  Logout,userData } = useContext(AuthContext);
   
 
@@ -82,17 +81,17 @@ function Profile() {
               </h3>
               
               <div className="space-y-3 text-xs">
-                <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 py-2 border-b border-gray-100">
                   <span className="font-light text-gray-600 tracking-wide">NAME</span>
                   <span className="text-black font-light text-right">
                     {userData?.firstName} {userData?.lastName}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 py-2 border-b border-gray-100">
                   <span className="font-light text-gray-600 tracking-wide">EMAIL</span>
-                  <span className="text-black font-light text-right">{userData?.email}</span>
+                  <span className="text-black font-light text-right break-all">{userData?.email}</span>
                 </div>
-                <div className="flex justify-between items-center py-2">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 py-2">
                   <span className="font-light text-gray-600 tracking-wide">CART</span>
                   <span className={`font-light ${cartLength > 0 ? 'text-black' : 'text-gray-500'}`}>
                     {cartLength > 0 ? `${cartLength}` : "EMPTY"}
@@ -110,27 +109,27 @@ function Profile() {
               <div className="space-y-3 text-xs">
                 {formattedAddress ? (
                   <div className="space-y-2">
-                    <div className="flex justify-between py-1 border-b border-gray-100">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">NAME</span>
                       <span className="text-black font-light text-right">{formattedAddress?.name}</span>
                     </div>
-                    <div className="flex justify-between py-1 border-b border-gray-100">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">PHONE</span>
                       <span className="text-black font-light text-right">{formattedAddress?.number}</span>
                     </div>
-                    <div className="flex justify-between py-1 border-b border-gray-100">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">PINCODE</span>
                       <span className="text-black font-light text-right">{formattedAddress?.pinCode}</span>
                     </div>
-                    <div className="flex justify-between py-1 border-b border-gray-100">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">LOCALITY</span>
-                      <span className="text-black font-light text-right">{formattedAddress?.locality}</span>
+                      <span className="text-black font-light text-right break-words">{formattedAddress?.locality}</span>
                     </div>
-                    <div className="flex justify-between py-1 border-b border-gray-100">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1 border-b border-gray-100">
                       <span className="font-light text-gray-600 tracking-wide">CITY</span>
                       <span className="text-black font-light text-right">{formattedAddress?.city}</span>
                     </div>
-                    <div className="flex justify-between py-1">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1">
                       <span className="font-light text-gray-600 tracking-wide">STATE</span>
                       <span className="text-black font-light text-right">{formattedAddress?.state}</span>
                     </div>

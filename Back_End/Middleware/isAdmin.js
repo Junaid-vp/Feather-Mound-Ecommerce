@@ -3,7 +3,11 @@ const userModel = require("../Models/userModel");
 
 const isAdmin = async (req, res, next) => {
   try {
-    const token = req.cookies?.Access_Token;
+    let token = req.cookies?.Access_Token;
+
+    if (!token && req.headers.authorization?.startsWith("Bearer ")) {
+      token = req.headers.authorization.split(" ")[1];
+    }
 
     if (!token) {
       const err = new Error("Unauthorized, please login first")

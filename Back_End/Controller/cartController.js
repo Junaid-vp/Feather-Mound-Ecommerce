@@ -27,17 +27,22 @@ const addTocart = async (req, res) => {
     const userID = req.user.userId;
     const { productId } = req.params;
 
-    const result = await cartModule.updateOne(
-      { user: userID },
-      { $addToSet: { items: { product: productId } } },
-      { upsert: true },
-    );
+    const isAlreadyInCart = await cartModule.exists({
+      user: userID,
+      "items.product": productId,
+    });
 
-    if (result.modifiedCount === 0) {
+    if (isAlreadyInCart) {
       return res.status(409).json({
         Message: "Product Already In Cart",
       });
     }
+
+    await cartModule.updateOne(
+      { user: userID },
+      { $push: { items: { product: productId, quantity: 1 } } },
+      { upsert: true },
+    );
 
     res
       .status(200)

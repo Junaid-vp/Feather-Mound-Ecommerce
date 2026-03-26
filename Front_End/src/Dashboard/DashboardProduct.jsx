@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { api } from "../Api/Axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ function DashboardProduct() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       const res = await api.get(`/products?name=${search}&limit=${limit}`);
@@ -22,12 +22,12 @@ function DashboardProduct() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, limit]);
 
   useEffect(() => {
     const timer = setTimeout(() => fetchProduct(), 500);
     return () => clearTimeout(timer);
-  }, [search, limit]);
+  }, [fetchProduct]);
 
   const handleActive = async (productId) => {
     try {
@@ -37,6 +37,15 @@ function DashboardProduct() {
       console.error(e.message);
     }
   };
+
+  if (loading && products.length === 0) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b6925e]"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 lg:p-6 bg-[#fbf8f4] min-h-[70vh]">
       {/* Header */}
@@ -213,7 +222,7 @@ function DashboardProduct() {
         )}
         {limit > 12 && (
           <button
-            onClick={() => setLimit(prev => prev - 12)}
+            onClick={() => setLimit((prev) => Math.max(12, prev - 12))}
             className="px-6 py-2 border border-black rounded hover:bg-gray-50 transition"
           >
             Show Less

@@ -31,46 +31,45 @@ export default function PaymentSection() {
       });
       navigate(`/order-success/${res.data.orderId}`);
     } catch (e) {
-      toast.success(e?.response?.data?.message);
+      toast.error(e?.response?.data?.message || "Unable to place the order right now.");
     }
   };
 
   const handleRazorpay = async () => {
-    const url = itemId ? "/order/single" : "/order/cart";
-    const Data = itemId
-      ? { ItemId: itemId, quantity: quantity, paymentMethod: "Razorpay" }
-      : { paymentMethod: "Razorpay" };
-    const res = await api.post(url, Data);
-    const { razorpayOrder, orderId, key } = res.data;
-    const options = {
-      key,
-      amount: razorpayOrder.amount,
-      currency: "INR",
-      order_id: razorpayOrder.id,
-      name: "Feather-Mound",
-      handler: async function (response) {
-        
-        try {
-          const verifyRes = await api.post("/order/verify-payment", {
-            ...response,
-            orderId,
-          });
+    try {
+      const url = itemId ? "/order/single" : "/order/cart";
+      const Data = itemId
+        ? { ItemId: itemId, quantity: quantity, paymentMethod: "Razorpay" }
+        : { paymentMethod: "Razorpay" };
+      const res = await api.post(url, Data);
+      const { razorpayOrder, orderId, key } = res.data;
+      const options = {
+        key,
+        amount: razorpayOrder.amount,
+        currency: "INR",
+        order_id: razorpayOrder.id,
+        name: "Feather-Mound",
+        handler: async function (response) {
+          try {
+            const verifyRes = await api.post("/order/verify-payment", response);
 
-          if (verifyRes.data.success) {
-            toast.success("Payment successful");
-            fetchCart();
-            navigate(`/order-success/${orderId}`);
-          } else {
-            toast.error("Payment verification failed");
+            if (verifyRes.data.success) {
+              toast.success("Payment successful");
+              fetchCart();
+              navigate(`/order-success/${verifyRes.data.orderId || orderId}`);
+            } else {
+              toast.error("Payment verification failed");
+            }
+          } catch {
+            toast.error("Payment verification error");
           }
-        } catch (err) {
-    
-          toast.error("Payment verification error");
-        }
-      },
-    };
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+        },
+      };
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (e) {
+      toast.error(e?.response?.data?.message || "Unable to start Razorpay right now.");
+    }
   };
 
   return (

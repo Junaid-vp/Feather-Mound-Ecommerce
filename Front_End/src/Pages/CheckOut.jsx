@@ -1,21 +1,20 @@
 
 import React, { useContext } from "react";
 import { CartContext } from "../Context/CartContext";
+import { AuthContext } from "../Context/AuthContext";
 import Address from "../Authentication/Address";
 import { Plus, Minus ,Trash2} from "lucide-react";
-import { AuthContext } from "../Context/AuthContext";
-import { api } from "../Api/Axios";
-
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function CheckOut() {
 
   const { cart ,cartLength, addQuantity, lessQuantity,removeCart} =useContext(CartContext) 
-const totalQuantity = cart.reduce(
-  (sum, item) => sum + item?.quantity,
-  0
-);
+  const { userData } = useContext(AuthContext);
+  const totalQuantity = cart.reduce(
+    (sum, item) => sum + item?.quantity,
+    0
+  );
 
   const totalAmount = cart.reduce(
   (sum, item) => sum + item.product.sale_price * item.quantity,
@@ -24,49 +23,63 @@ const totalQuantity = cart.reduce(
 
   const navigate  = useNavigate()
 
+  const handleContinue = () => {
+    if (totalAmount === 0) {
+      navigate("/");
+      return;
+    }
 
+    if (!userData?.address?.address) {
+      toast.error("Save your delivery address before continuing.");
+      return;
+    }
 
+    navigate("/paymentSection");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8">
         {/* ----------------------- Cart Items Section ----------------------- */}
         <div className="flex-1 bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Your Cart Items</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-6">Your Cart Items</h2>
           <div className="space-y-4">
-            {cart.map((item, index) => (
+            {cart.map((item) => (
               <div
                 key={item.product._id}
-                className="flex items-center gap-4 border-b border-gray-200 pb-4"
+                className="flex flex-col sm:flex-row sm:items-center gap-4 border-b border-gray-200 pb-4"
               >
-                  <button
-                    onClick={() => removeCart(item.product)}
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                <button
+                  onClick={() => removeCart(item.product)}
+                  className="self-start rounded p-1 hover:bg-gray-100"
+                >
+                  <Trash2 size={18} />
+                </button>
                 <img
                   src={item.product.image_url}
                   alt={item.product.name}
                   className="w-20 h-20 object-cover rounded-lg"
                 />
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">{item.product.name}</p>
-                     <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => lessQuantity(item.product._id)}
-                          disabled={item.quantity <= 1}
-                        >
-                          <Minus size={14} />
-                        </button>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-gray-900 break-words">{item.product.name}</p>
+                  <div className="flex items-center gap-2 my-2">
+                    <button
+                      onClick={() => lessQuantity(item.product._id)}
+                      disabled={item.quantity <= 1}
+                      className="rounded border border-gray-300 p-1"
+                    >
+                      <Minus size={14} />
+                    </button>
 
-                        <span>{item.quantity}</span>
+                    <span>{item.quantity}</span>
 
-                        <button
-                          onClick={() => addQuantity(item.product._id)}
-                        >
-                          <Plus size={14} />
-                        </button>
-                      </div>
+                    <button
+                      onClick={() => addQuantity(item.product._id)}
+                      className="rounded border border-gray-300 p-1"
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
                   <p className="text-gray-500">Price: ₹{item.product.sale_price}</p>
                   <p className="text-gray-700 font-semibold">
                     Subtotal: ₹{item.product.sale_price * item.quantity}
@@ -89,8 +102,8 @@ const totalQuantity = cart.reduce(
           <Address />
 
           <button
-            onClick={()=>totalAmount === 0 ?  navigate('/'): navigate('/paymentSection')}
-            className="w-full bg-black text-white py-3 rounded-xl text-lg font-semibold hover:bg-gray-900 transition duration-200 active:scale-95"
+            onClick={handleContinue}
+            className="w-full bg-black text-white py-3 rounded-xl text-base sm:text-lg font-semibold hover:bg-gray-900 transition duration-200 active:scale-95"
           >
           Continue
           </button>

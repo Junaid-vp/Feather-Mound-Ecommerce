@@ -17,7 +17,7 @@ function FooterSlider() {
       src: "https://miraggiolife.com/cdn/shop/files/4_af8ad330-33b1-48ef-9b11-66e92e51f1e7.png?v=1747290792&width=180",
       alt: "Grazia"
     },
-    ,{
+    {
       src: "https://miraggiolife.com/cdn/shop/files/3_942ef080-047b-4b08-a75d-0fc2cccde136.png?v=1747291096&width=180",
       alt: "Cosmopolitan"
     },

@@ -9,56 +9,45 @@ export function WishListProvider({ children }) {
   const { user } = useContext(AuthContext);
   const [wishList, setWishlist] = useState([]);
 
-
   const fetchWishlist = async () => {
     try {
-       const res = await api.get("/wishlist");
-      
+      const res = await api.get("/wishlist");
       setWishlist(res.data.WishlistDatas?.items || []);
     } catch (e) {
-      toast.error(e?.response?.data?.Message || "Failed to fetch wishlist")
-    
+      toast.error(e?.response?.data?.Message || "Failed to fetch wishlist");
     }
   };
 
-   useEffect(() => {
-     if (user) {
-       fetchWishlist();
-     }else{
-      setWishlist([])
-     }
-   }, [user]);
-
+  useEffect(() => {
+    if (user) {
+      fetchWishlist();
+    } else {
+      setWishlist([]);
+    }
+  }, [user]);
 
   // ------------------------------------------------------------------------
   // Toggle wishlist: add if not exists, remove if exists
   // ------------------------------------------------------------------------
-  const toggleWishlist = async(product) => {
-   try{
-
-    await api.patch(`/wishlist/${product._id}`)
-fetchWishlist(); 
-   }catch(e){
-    toast.error("Please log in to continue", {
-  position: "top-right",
-  autoClose: 2000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: false,
-  draggable: false,
-  className: "premium-toast error",
-});
-
-   }
-   
-
+  const toggleWishlist = async (product) => {
+    try {
+      await api.patch(`/wishlist/${product._id}`);
+      fetchWishlist();
+    } catch {
+      toast.error("Please log in to continue", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        className: "premium-toast error",
+      });
+    }
   };
 
   return (
-    <WishListContext.Provider
-     value={{ wishList, toggleWishlist }}
-
-    >
+    <WishListContext.Provider value={{ wishList, toggleWishlist }}>
       {children}
     </WishListContext.Provider>
   );

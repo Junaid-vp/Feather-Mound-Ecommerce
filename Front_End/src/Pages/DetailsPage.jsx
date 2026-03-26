@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import useFetch from "../Hooks/UseFetch";
 import { CartContext } from "../Context/CartContext";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";

@@ -97,7 +97,7 @@ function DashboardUser() {
                     toggleMenu={toggleMenu}
                     navigate={navigate}
                     HandleActive={async () => {
-                      const res =  await api.patch(`/admin/blockORunblock/${u._id}`);
+                      await api.patch(`/admin/blockORunblock/${u._id}`);
                       setOpenMenu(null);
                       fetchUser();
                     }}

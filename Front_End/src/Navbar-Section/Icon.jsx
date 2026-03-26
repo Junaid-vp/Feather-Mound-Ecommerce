@@ -18,7 +18,7 @@ import { CartContext } from "../Context/CartContext";
 function Icon() {
   // Contexts
   const { cartLength } = useContext(CartContext); // number of items in cart (badge)
-  const { user,setClick } = useContext(AuthContext); // logged-in user (truthy when logged in)
+  const { user } = useContext(AuthContext); // logged-in user (truthy when logged in)
   const navigate = useNavigate()
   
   return (

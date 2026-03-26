@@ -1,18 +1,24 @@
-const jwt =require("jsonwebtoken")
-require('dotenv').config()
-const GenrateToken = async(email,userID,role)=>{
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
-const RefreshToken = await jwt.sign({Email:email,Id:userID,user:role},process.env.REFRESH_TOKEN_KEY,{
-    expiresIn: "7d"
-})
+const buildTokenPayload = (email, userID, role) => ({
+  Email: email,
+  Id: userID,
+  role,
+});
 
-const AccessToken = await jwt.sign({Email:email,Id:userID,user:role},process.env.ACCESS_TOKEN_KEY,{
-    expiresIn: "30m"
-})
+const GenrateToken = async (email, userID, role) => {
+  const payload = buildTokenPayload(email, userID, role);
 
- return {RefreshToken,AccessToken}
+  const RefreshToken = await jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, {
+    expiresIn: "7d",
+  });
 
-}
+  const AccessToken = await jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, {
+    expiresIn: "30m",
+  });
 
+  return { RefreshToken, AccessToken };
+};
 
-module.exports = GenrateToken
+module.exports = GenrateToken;

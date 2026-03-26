@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { PieChart } from "@mui/x-charts/PieChart";
 
 function OrderStatusChart({ data = {} }) {
@@ -58,16 +58,12 @@ function OrderStatusChart({ data = {} }) {
     { id: 3, value: values.Cancelled, label: "Cancelled", color: solidColors.Cancelled, gradient: palette.Cancelled },
   ];
 
-  const legend = useMemo(
-    () =>
-      chartData.map((d) => ({
-        ...d,
-        percent: total > 0 ? ((d.value / total) * 100).toFixed(0) : "0",
-      })),
-    [total]
-  );
+  const legend = chartData.map((d) => ({
+    ...d,
+    percent: total > 0 ? ((d.value / total) * 100).toFixed(0) : "0",
+  }));
 
-  const LegendItem = ({ color, gradient, label, value, percent }) => (
+  const LegendItem = ({ gradient, label, value, percent }) => (
     <div 
       className={`flex items-center justify-between gap-3 p-3 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg ${
         isMobile ? 'py-2' : ''
@@ -121,7 +117,7 @@ function OrderStatusChart({ data = {} }) {
             boxShadow: "0 20px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
           }}
         >
-          {chartData.map((item, index) => {
+          {chartData.map((item) => {
             if (item.value === 0) return null;
             
             const percent = (item.value / totalValue) * 100;
@@ -221,7 +217,6 @@ function OrderStatusChart({ data = {} }) {
           {legend.map((l) => (
             <LegendItem
               key={l.id}
-              color={l.color}
               gradient={l.gradient}
               label={l.label}
               value={l.value}
@@ -266,11 +261,6 @@ function OrderStatusChart({ data = {} }) {
                 height={chartSize}
                 slotProps={{
                   legend: { position: "none" },
-                  pie: {
-                    onClick: (event, pieItem, item) => {
-                      
-                    },
-                  },
                 }}
               />
 

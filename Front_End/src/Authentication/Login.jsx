@@ -3,8 +3,6 @@ import { Formik, Form, Field } from "formik";
 import { LoginValidation } from "./Login-Validation";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { api } from "../Api/Axios";
-import { CartContext } from "../Context/CartContext";
 import { AuthContext } from "../Context/AuthContext";
 
 const initialValues2 = {
@@ -18,29 +16,32 @@ function Login() {
 
   const HandleLogin = async (values, { setSubmitting, resetForm }) => {
     try {
-    const loginData = {
-      email: values.email.toLowerCase(),
-      password: values.password,
-    };
+      const loginData = {
+        email: values.email.toLowerCase(),
+        password: values.password,
+      };
 
-    const role = await Login(loginData);
+      const role = await Login(loginData);
 
-    resetForm();
+      if (!role) {
+        return;
+      }
 
-    if (role === "user") {
-      navigate("/");
-    } else if (role === "Admin") {
-      navigate("/dashboard");
-    }
+      resetForm();
 
-    toast.success("Welcome back! You’re all set.", {
-      position: "top-right",
-      autoClose: 1800,
-      hideProgressBar: true,
-      className: "premium-toast success",
-    });
+      if (role === "user") {
+        navigate("/");
+      } else if (role === "Admin") {
+        navigate("/dashboard");
+      }
 
-  } catch (e) {
+      toast.success("Welcome back! You’re all set.", {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: true,
+        className: "premium-toast success",
+      });
+    } catch (e) {
       const status = e?.response?.status;
 
       if (status === 403) {
@@ -61,7 +62,7 @@ function Login() {
 
       <div className=" font-sarif flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-25 text-center text-2xl font-light tracking-wider text-dark">
+          <h2 className="mt-10 text-center text-2xl font-light tracking-wider text-dark">
             Login
           </h2>
           <p className="mt-5 text-center text-sm font-light tracking-wider text-dark">
@@ -86,7 +87,7 @@ function Login() {
                       type="email"
                       required
                       autoComplete="email"
-                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black-500 sm:text-sm/6"
+                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black sm:text-sm/6"
                     />
                   </div>
                   {errors.email && <small>{errors.email}</small>}
@@ -101,7 +102,7 @@ function Login() {
                       type="password"
                       required
                       autoComplete="current-password"
-                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black-500 sm:text-sm/6"
+                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black sm:text-sm/6"
                     />
                   </div>
                   {errors.password && <small>{errors.password}</small>}

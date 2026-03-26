@@ -22,34 +22,33 @@ function SearchBox() {
     return () => clearTimeout(timer);
   }, []);
 
-  const fetchProduct = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get(`/products?name=${Search}`);
-      setSearchProduct(res?.data?.Products || []);
-    } catch (e) {
-      toast.error(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (!Search.trim()) {
       setSearchProduct([]);
+      setLoading(false);
       return;
     }
 
     const timer = setTimeout(() => {
+      const fetchProduct = async () => {
+        try {
+          setLoading(true);
+          const res = await api.get(`/products?name=${Search}`);
+          setSearchProduct(res?.data?.Products || []);
+        } catch (e) {
+          toast.error(e.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
       fetchProduct();
     }, 500);
 
     return () => clearTimeout(timer);
   }, [Search]);
 
-
-
-      if (pageLoading) {
+  if (pageLoading) {
     return (
       <div className="flex justify-center items-center p-8" >
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b6925e]"></div>
@@ -116,7 +115,7 @@ function SearchBox() {
             </h3>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {datas?.slice(40, 48).map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product._id || product.id} product={product} />
               ))}
             </div>
           </div>

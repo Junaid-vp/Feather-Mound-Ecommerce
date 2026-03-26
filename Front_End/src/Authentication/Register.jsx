@@ -2,7 +2,6 @@ import React from "react";
 import { Formik, Form, Field } from "formik";
 import { RegValidation } from "./Reg-Validation";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { api } from "../Api/Axios";
 
@@ -14,43 +13,48 @@ const initialvalue = {
 };
 
 function Register() {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
-
-  const HandleSubmit = async (
-    values,
-    { setSubmitting, resetForm,  }
-  ) => {
+  const HandleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      const Data = {
+      const data = {
         firstName: values.Fname,
         lastName: values.Lname,
         email: values.email.toLowerCase(),
         password: values.password,
-        isBlock:false,
-        role:"user",
+        isBlock: false,
+        role: "user",
       };
 
-    
-       await api.post("/auth/register", Data);
- 
-       toast.success("You're all set! Registration successful.", {
-          position: "top-right",
-          autoClose: 1800,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          className: "premium-toast",
-        });
-      resetForm();
-      Navigate("/login");
-    } catch (error) {
-      toast.error("⚠️ Something went wrong. Please try again.", {
-        position: "top-center",
-        autoClose: 2000,
+      await api.post("/auth/register", data);
+
+      toast.success("You're all set! Registration successful.", {
+        position: "top-right",
+        autoClose: 1800,
         hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        className: "premium-toast",
       });
+      resetForm();
+      navigate("/login");
+    } catch (error) {
+      const status = error?.response?.status;
+
+      if (status === 409) {
+        toast.error("An account with this email already exists.", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      } else {
+        toast.error("Something went wrong. Please try again.", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      }
     } finally {
       setSubmitting(false);
     }
@@ -62,7 +66,7 @@ function Register() {
 
       <div className=" font-sarif flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-25 text-center text-2xl font-light tracking-wider text-dark">
+          <h2 className="mt-10 text-center text-2xl font-light tracking-wider text-dark">
             Sign up
           </h2>
           <p className="mt-5 text-center text-sm font-light tracking-wider text-dark">
@@ -79,7 +83,7 @@ function Register() {
             className="space-y-6"
             onSubmit={HandleSubmit}
           >
-            {({ errors, isSubmitting, status }) => (
+            {({ errors, isSubmitting }) => (
               <Form method="POST" className="space-y-6">
                 <div>
                   <div className="mt-2">
@@ -89,7 +93,7 @@ function Register() {
                       name="Fname"
                       type="text"
                       autoComplete="Fname"
-                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black-500 sm:text-sm/6"
+                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black sm:text-sm/6"
                     />
 
                     {errors.Fname && <small>{errors.Fname}</small>}
@@ -103,7 +107,7 @@ function Register() {
                       name="Lname"
                       type="text"
                       autoComplete="Lname"
-                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black-500 sm:text-sm/6"
+                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black sm:text-sm/6"
                     />
 
                     {errors.Lname && <small>{errors.Lname}</small>}
@@ -117,7 +121,7 @@ function Register() {
                       name="email"
                       type="email"
                       autoComplete="email"
-                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black-500 sm:text-sm/6"
+                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black sm:text-sm/6"
                     />
 
                     {errors.email && <small>{errors.email}</small>}
@@ -132,7 +136,7 @@ function Register() {
                       name="password"
                       type="password"
                       autoComplete="current-password"
-                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black-500 sm:text-sm/6"
+                      className="block w-full  bg-white/5 px-4 py-2 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-black sm:text-sm/6"
                     />
 
                     {errors.password && <small>{errors.password}</small>}

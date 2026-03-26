@@ -82,7 +82,7 @@ function Footer() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center transition-all duration-300">
                     <FaWhatsapp size={16} className="sm:w-18 text-black" />
                   </div>
-                  <span className="font-medium text-black text-xs sm:text-sm hidden xs:block">
+                  <span className="font-medium text-black text-xs sm:text-sm hidden sm:block">
                     WhatsApp
                   </span>
                 </a>
@@ -99,7 +99,7 @@ function Footer() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center transition-all duration-300">
                     <FaInstagram size={16} className="sm:w-18 text-black" />
                   </div>
-                  <span className="font-medium text-black text-xs sm:text-sm hidden xs:block">
+                  <span className="font-medium text-black text-xs sm:text-sm hidden sm:block">
                     Instagram
                   </span>
                 </a>
@@ -116,7 +116,7 @@ function Footer() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center transition-all duration-300">
                     <FaFacebookF size={16} className="sm:w-18 text-black" />
                   </div>
-                  <span className="font-medium text-black text-xs sm:text-sm hidden xs:block">
+                  <span className="font-medium text-black text-xs sm:text-sm hidden sm:block">
                     Facebook
                   </span>
                 </a>
@@ -132,9 +132,9 @@ function Footer() {
               © {new Date().getFullYear()}  FEATHER MOUND — All rights reserved.
             </p>
             <div  className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs text-gray-600">
-              <Link  to="AboutWeb" className="hover:text-black cursor-pointer transition-colors">Privacy Policy</Link>
-              <Link  to="AboutWeb" className="hover:text-black cursor-pointer transition-colors">Terms of Service</Link>
-              <Link  to="AboutWeb" className="hover:text-black cursor-pointer transition-colors">Returns & Exchanges</Link>
+              <Link  to="/AboutWeb" className="hover:text-black cursor-pointer transition-colors">Privacy Policy</Link>
+              <Link  to="/AboutWeb" className="hover:text-black cursor-pointer transition-colors">Terms of Service</Link>
+              <Link  to="/AboutWeb" className="hover:text-black cursor-pointer transition-colors">Returns & Exchanges</Link>
             </div>
           </div>
         </div>

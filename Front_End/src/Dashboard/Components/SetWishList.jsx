@@ -7,20 +7,21 @@ function SetWishList() {
   const { Id } = useParams();
   const [wishList, setWishList] = useState([]);
 
-
-  const fetchWishlist = async () => {
-    try {
-      const res = await api.get(`/admin/wishlist/userWishList/${Id}`);
-      setWishList(res?.data?.WishListData || []);
-    } catch (e) {
-      console.error(e);
-      toast.error("Failed to load wishlist");
-      setWishList([]);
-    }
-  };
-
   useEffect(() => {
-    if (Id) fetchWishlist();
+    if (!Id) return;
+
+    const fetchWishlist = async () => {
+      try {
+        const res = await api.get(`/admin/wishlist/userWishList/${Id}`);
+        setWishList(res?.data?.WishListData || []);
+      } catch (e) {
+        console.error(e);
+        toast.error("Failed to load wishlist");
+        setWishList([]);
+      }
+    };
+
+    fetchWishlist();
   }, [Id]);
 
   const totalValue = wishList.reduce(

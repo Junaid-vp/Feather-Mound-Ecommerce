@@ -2,7 +2,6 @@ import React, { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function BagSlider() {
-  const [side, setSide] = useState(null);
   const [mouseX, setMouseX] = useState("50%");
   const [isDragging, setIsDragging] = useState(false);
   const navigate = useNavigate();
@@ -41,12 +40,6 @@ export default function BagSlider() {
 
       setMouseX(`${clampedX}%`);
 
-      if (clampedX < 50) {
-        setSide("left");
-      } else {
-        setSide("right");
-      }
-
       // Prevent scrolling when dragging
       e.preventDefault();
       e.stopPropagation();
@@ -55,7 +48,6 @@ export default function BagSlider() {
   );
 
   const handleLeave = useCallback(() => {
-    setSide(null);
     setIsDragging(false);
     setMouseX("50%");
     

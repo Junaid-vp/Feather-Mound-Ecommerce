@@ -118,7 +118,7 @@ function SecondSlider() {
                 <img
                   src={slide.src}
                   alt={slide.alt}
-                  className="w-full h-[180px] xs:h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover rounded-lg md:rounded-none"
+                  className="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover rounded-lg md:rounded-none"
                   loading="lazy"
                 />
               </div>
@@ -143,7 +143,7 @@ function SecondSlider() {
                 <img
                   src={slide.src}
                   alt={slide.alt}
-                  className="w-full h-[180px] xs:h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover rounded-lg md:rounded-none"
+                  className="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] object-cover rounded-lg md:rounded-none"
                   loading="lazy"
                 />
               </div>

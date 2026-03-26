@@ -40,8 +40,13 @@ app.use('/api/admin/cart',AdminCartRoutes);
 app.use('/api/admin/wishlist',AdminWishListRoute)
 app.use('/api/admin/order',AdminOrderRoutes);
 app.use('/api/admin/product',AdminProductRoute);
-connectDB();
 
-app.listen(PORT, () => {
-  console.log("Server Running Sucessfully", PORT);
-});
+const startServer = async () => {
+  await connectDB();
+
+  app.listen(PORT, () => {
+    console.log("Server Running Sucessfully", PORT);
+  });
+};
+
+startServer();

@@ -42,19 +42,19 @@ function BuyProduct() {
 
         {/* ---------------- Cart Items ---------------- */}
         <div className="flex-1 bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-6">
             Your Items
           </h2>
 
-          <div className="flex items-center gap-4 border-b border-gray-200 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 border-b border-gray-200 pb-4">
             <img
               src={product?.image_url}
               alt={product?.name}
               className="w-20 h-20 object-cover rounded-lg"
             />
 
-            <div className="flex-1">
-              <p className="font-medium text-gray-900">{product?.name}</p>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-gray-900 break-words">{product?.name}</p>
 
               {/* Quantity Controls */}
               <div className="flex items-center gap-3 my-2">
@@ -99,7 +99,7 @@ function BuyProduct() {
         <div className="flex-1 flex flex-col gap-6">
           <Address />
 
-          <button onClick={HandleContinue}className="w-full bg-black text-white py-3 rounded-xl text-lg font-semibold hover:bg-gray-900">
+          <button onClick={HandleContinue}className="w-full bg-black text-white py-3 rounded-xl text-base sm:text-lg font-semibold hover:bg-gray-900">
             Continue
           </button>
         </div>
@@ -109,4 +109,3 @@ function BuyProduct() {
 }
 
 export default BuyProduct;
-

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import SliderComponent from "../Pages/SliderComponent";
 import SecondSection from "../Pages/SecondSection";
 import SecondSlider from "../Pages/SecondSlider";

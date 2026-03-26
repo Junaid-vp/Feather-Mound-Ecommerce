@@ -27,8 +27,7 @@ function ViewOrder() {
       await api.patch(`/order/cancel`, { id: orderID });
       fetchOrder();
       toast.success("Cancel Succesfull");
-    } catch (e) {
-
+    } catch {
       toast.error("Cancel Fail");
     }finally{
       setShowModal(false)

@@ -115,8 +115,11 @@ const UpdateOrderStatus = async (req, res) => {
       orderData.paymentStatus = "Failed";
     } 
     else if (status === "Shipped" || status === "Pending") {
-      orderData.paymentStatus =
-        orderData.paymentMethod === "Razorpay" ? "Paid" : "Pending";
+      // For Razorpay, we NEVER auto-mark as Paid from here. 
+      // It must be verified through the payment flow.
+      if (orderData.paymentMethod === "COD") {
+        orderData.paymentStatus = "Pending";
+      }
     }
 
     await orderData.save();

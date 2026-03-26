@@ -1,5 +1,3 @@
-
-
 import React, { createContext, useEffect, useState, useContext } from "react";
 import { api } from "../Api/Axios";
 import { toast } from "react-toastify";
@@ -19,10 +17,10 @@ function CartProvider({ children }) {
       const res = await api.get("/cart");
 
       setCart(res?.data?.cartData?.items || []);
-
-      setCartLength(res?.data?.cartData?.items?.length);
-    } catch (error) {
-  
+      setCartLength(res?.data?.cartData?.items?.length || 0);
+    } catch {
+      setCart([]);
+      setCartLength(0);
       toast.error("Failed to load cart");
     }
   };
@@ -53,7 +51,10 @@ function CartProvider({ children }) {
 
       fetchCart();
     } catch (e) {
-      toast.error("Please log in to continue.", {
+      const message = e.response?.data?.Message || "Something went wrong. Please try again.";
+      const isAuthError = e.response?.status === 401;
+
+      toast.error(isAuthError ? "Please log in to continue." : message, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: true,
@@ -109,7 +110,7 @@ function CartProvider({ children }) {
     try {
       await api.patch(`/cart/decrease/${productId}`);
       fetchCart();
-    } catch (e) {
+    } catch {
       toast.warning("MiniMum Limit Is 0");
     }
   };

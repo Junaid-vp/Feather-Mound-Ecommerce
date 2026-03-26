@@ -60,6 +60,7 @@ const Router = createBrowserRouter([
       { path: "Detailpage/:product_id", element: <DetailsPage /> },
       { path: "videoslide", element: <VideoSlide /> },
       { path: "MainBagComponent/:type", element: <MainBagComponent /> },
+      { path: "catagory", element: <SearchBox /> },
       { path: "AboutWeb", element: <PolicyAccordion /> },
       // ============================================================================
       // 🔐 USER PROTECTED ROUTES (REQUIRES USER LOGIN)
@@ -74,7 +75,6 @@ const Router = createBrowserRouter([
           { path: "Checkout", element: <CheckOut /> },
           { path: "order-success/:orderId", element: <OrderSuccess /> },
           { path: "vieworder", element: <ViewOrder /> },
-          {path:"/catagory",element:<SearchBox/>},
           { path: "buyproduct/:product_id", element: <BuyProduct /> },
           { path: "paymentSection", element: <PaymentSection /> },
         ],
