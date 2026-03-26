@@ -20,8 +20,12 @@ export const AuthProvider = ({ children }) => {
   const clearAuthState = () => {
     setUser(null);
     setUserData(null);
-    localStorage.removeItem("AccessToken");
-    localStorage.removeItem("RefreshToken");
+    try {
+      localStorage.removeItem("AccessToken");
+      localStorage.removeItem("RefreshToken");
+    } catch {
+      // ignore storage write errors
+    }
   };
 
   useEffect(() => {
@@ -42,11 +46,32 @@ export const AuthProvider = ({ children }) => {
 
   const Login = async (userData) => {
     const loged = await api.post("/auth/login", userData);
-    const res = await api.get("/auth/getUser");
-    setUser(res?.data?.User);
-    setUserData(res?.data?.UserData);
+    const loginData = loged?.data;
 
-    return loged.data.Role;
+    // Ensure we can authenticate the immediate follow-up request.
+    const accessToken = loginData?.AccessToken;
+    const refreshToken = loginData?.RefreshToken;
+    try {
+      if (accessToken) localStorage.setItem("AccessToken", accessToken);
+      if (refreshToken) localStorage.setItem("RefreshToken", refreshToken);
+    } catch {
+      // ignore storage write errors; we'll still pass Authorization header below
+    }
+
+    try {
+      const res = await api.get("/auth/getUser", accessToken
+        ? { headers: { Authorization: `Bearer ${accessToken}` } }
+        : undefined);
+      setUser(res?.data?.User);
+      setUserData(res?.data?.UserData);
+    } catch {
+      // Don't block a successful login just because /getUser failed.
+      // (Commonly caused by cookie/storage differences on some mobile browsers.)
+      setUser(null);
+      setUserData(null);
+    }
+
+    return loginData?.Role;
   };
 
   const Logout = async () => {

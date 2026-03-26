@@ -43,11 +43,13 @@ function Login() {
       });
     } catch (e) {
       const status = e?.response?.status;
+      const serverMessage =
+        e?.response?.data?.message || e?.response?.data?.Message;
 
       if (status === 403) {
         toast.error("Your account is blocked. Contact support.");
       } else if (status === 401) {
-        toast.error("Invalid email or password");
+        toast.error(serverMessage || "Invalid email or password");
       } else {
         toast.error("Something went wrong. Please try again.");
       }
