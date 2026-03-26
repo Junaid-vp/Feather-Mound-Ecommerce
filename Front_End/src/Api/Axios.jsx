@@ -62,8 +62,11 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (res) => {
-    // Save tokens if they are returned in the response
-    setAuthTokens(res.data?.AccessToken, res.data?.RefreshToken);
+    // Only update tokens when backend actually returns them.
+    // Otherwise we'd clear the in-memory token on normal responses.
+    if (res.data?.AccessToken || res.data?.RefreshToken) {
+      setAuthTokens(res.data?.AccessToken, res.data?.RefreshToken);
+    }
     return res;
   },
   async (err) => {
