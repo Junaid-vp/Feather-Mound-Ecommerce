@@ -57,8 +57,8 @@ export const AuthProvider = ({ children }) => {
     } catch {
       // Don't block a successful login just because /getUser failed.
       // (Commonly caused by cookie/storage differences on some mobile browsers.)
-      setUser(null);
-      setUserData(null);
+      setUser({ role: loginData?.Role });
+      setUserData({ role: loginData?.Role });
     }
 
     return loginData?.Role;
