@@ -84,7 +84,7 @@ export default function DashboardHome() {
       <div className="max-w-screen-2xl mx-auto">
 
         {/* ================= SUMMARY CARDS ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 lg:gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-4 lg:gap-6 mb-8">
 
           {/* Paid Revenue */}
           <div className="flex flex-col justify-between p-5 bg-white rounded-2xl border border-[#e9e0d4] shadow-sm hover:shadow-md transition-all duration-300 min-h-[140px]">
@@ -92,7 +92,7 @@ export default function DashboardHome() {
               <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
                 Paid Revenue
               </h3>
-              <p className="text-2xl font-bold mt-3 text-green-700">
+              <p className="text-xl lg:text-2xl font-bold mt-3 text-green-700 whitespace-nowrap">
                 ₹{amount?.Paid?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
@@ -107,7 +107,7 @@ export default function DashboardHome() {
               <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
                 Pending Amount
               </h3>
-              <p className="text-2xl font-bold mt-3 text-amber-600">
+              <p className="text-xl lg:text-2xl font-bold mt-3 text-amber-600 whitespace-nowrap">
                 ₹{amount?.Pending?.toLocaleString()}
               </p>
             </div>
@@ -122,7 +122,7 @@ export default function DashboardHome() {
               <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
                 Total Users
               </h3>
-              <p className="text-2xl font-bold mt-3 text-[#4b3f2f]">
+              <p className="text-xl lg:text-2xl font-bold mt-3 text-[#4b3f2f]">
                 {totalUsers}
               </p>
             </div>
@@ -137,7 +137,7 @@ export default function DashboardHome() {
               <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
                 Total Products
               </h3>
-              <p className="text-2xl font-bold mt-3 text-[#4b3f2f]">
+              <p className="text-xl lg:text-2xl font-bold mt-3 text-[#4b3f2f]">
                 {products.length}
               </p>
             </div>
@@ -152,7 +152,7 @@ export default function DashboardHome() {
               <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
                 Active Users
               </h3>
-              <p className="text-2xl font-bold mt-3 text-[#4b3f2f]">
+              <p className="text-xl lg:text-2xl font-bold mt-3 text-[#4b3f2f]">
                 {activeUsers}
               </p>
             </div>
@@ -167,7 +167,7 @@ export default function DashboardHome() {
               <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
                 Paid Orders
               </h3>
-              <p className="text-2xl font-bold mt-3 text-[#4b3f2f]">
+              <p className="text-xl lg:text-2xl font-bold mt-3 text-[#4b3f2f]">
                 {paidOrders.length}
               </p>
             </div>
