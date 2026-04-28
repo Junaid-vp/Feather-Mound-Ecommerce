@@ -87,81 +87,82 @@ export default function DashboardHome() {
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
 
           {/* Paid Revenue */}
-          <div className="p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition">
-            <h3 className="text-[#7a6a55] text-xs lg:text-sm">
+          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
+            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
               Paid Revenue
             </h3>
-            <p className="text-xl lg:text-2xl font-bold mt-2 text-green-700">
+            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-green-700 truncate">
               ₹{amount?.Paid?.toLocaleString()}
             </p>
-            <div className="text-xs text-green-600 mt-1">
+            <div className="text-[10px] sm:text-xs text-green-600 mt-1 truncate">
               Completed Payments
             </div>
           </div>
 
           {/* Pending Revenue */}
-          <div className="p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition">
-            <h3 className="text-[#7a6a55] text-xs lg:text-sm">
+          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
+            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
               Pending Amount
             </h3>
-            <p className="text-xl lg:text-2xl font-bold mt-2 text-amber-600">
+            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-amber-600 truncate">
               ₹{amount?.Pending?.toLocaleString()}
             </p>
-            <div className="text-xs text-amber-600 mt-1">
+            <div className="text-[10px] sm:text-xs text-amber-600 mt-1 truncate">
               Awaiting Payment
             </div>
           </div>
 
           {/* Total Users */}
-          <div className="p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition">
-            <h3 className="text-[#7a6a55] text-xs lg:text-sm">
+          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
+            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
               Total Users
             </h3>
-            <p className="text-xl lg:text-2xl font-bold mt-2 text-[#4b3f2f]">
+            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-[#4b3f2f] truncate">
               {totalUsers}
             </p>
-            <div className="text-xs text-[#7a6a55] mt-1">
+            <div className="text-[10px] sm:text-xs text-[#7a6a55] mt-1 truncate">
               Registered
             </div>
           </div>
 
           {/* Total Products */}
-          <div className="p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition">
-            <h3 className="text-[#7a6a55] text-xs lg:text-sm">
+          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
+            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
               Total Products
             </h3>
-            <p className="text-xl lg:text-2xl font-bold mt-2 text-[#4b3f2f]">
+            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-[#4b3f2f] truncate">
               {products.length}
             </p>
-            <div className="text-xs text-[#7a6a55] mt-1">
+            <div className="text-[10px] sm:text-xs text-[#7a6a55] mt-1 truncate">
               In Catalog
             </div>
           </div>
 
           {/* Active Users */}
-          <div className="p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition">
-            <h3 className="text-[#7a6a55] text-xs lg:text-sm">
+          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
+            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
               Active Users
             </h3>
-            <p className="text-xl lg:text-2xl font-bold mt-2 text-[#4b3f2f]">
+            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-[#4b3f2f] truncate">
               {activeUsers}
             </p>
-            <div className="text-xs text-green-600 mt-1">
+            <div className="text-[10px] sm:text-xs text-green-600 mt-1 truncate">
               Currently Active
             </div>
           </div>
-            <div className="p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition">
-            <h3 className="text-[#7a6a55] text-xs lg:text-sm">
-              Orders
+
+          {/* Paid Orders Count */}
+          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
+            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
+              Paid Orders
             </h3>
-            <p className="text-xl lg:text-2xl font-bold mt-2 text-[#4b3f2f]">
+            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-[#4b3f2f] truncate">
               {paidOrders.length}
             </p>
-            <div className="text-xs text-green-600 mt-1">
-              Paid Order
+            <div className="text-[10px] sm:text-xs text-green-600 mt-1 truncate">
+              Success Orders
             </div>
           </div>
-
         </div>
 
         {/* ================= CHARTS ================= */}
