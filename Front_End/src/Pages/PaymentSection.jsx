@@ -11,6 +11,26 @@ export default function PaymentSection() {
   const quantity = Number(searchParams.get("quantity"));
   const { fetchCart } = useContext(CartContext);
   const navigate = useNavigate();
+  
+  // ------------------------------------------------------------------------
+  // 💳 DYNAMIC RAZORPAY SCRIPT LOADER
+  // Loads the script only when user enters the payment section
+  // ------------------------------------------------------------------------
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    
+    // Check if script is already loaded to avoid duplicates
+    if (!window.Razorpay) {
+      document.body.appendChild(script);
+    }
+
+    return () => {
+      // Optional: Cleanup script if you want to be very strict, 
+      // but usually keeping it cached is better for UX.
+    };
+  }, []);
 
   const HandlePlaceOrder = async () => {
     try {
