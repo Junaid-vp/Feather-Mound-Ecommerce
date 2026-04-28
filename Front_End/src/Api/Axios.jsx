@@ -27,9 +27,9 @@ const applyAuthToRequest = (config, token) => {
 let accessTokenMemory = window.ACCESS_TOKEN_MEMORY || readStoredToken("AccessToken");
 let refreshTokenMemory = window.REFRESH_TOKEN_MEMORY || readStoredToken("RefreshToken");
 const DEFAULT_API_BASE_URL =
-  typeof window !== "undefined" && window.location.hostname === "localhost"
+  typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
     ? "http://localhost:3000/api"
-    : "https://feather-mound-ecommerce-1.onrender.com/api";
+    : "https://feathermound.skillforge-ai.com/api";
 const API_BASE_URL =
   import.meta.env.VITE_API_URL?.trim() || DEFAULT_API_BASE_URL;
 

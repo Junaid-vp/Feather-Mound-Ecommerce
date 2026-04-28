@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 
 const navigation = [
   { name: "Best Sellers", to: "Tote Bag" },
-  { name: "Shop by Category", to: "/catagory" },
   { name: "Featured Collections", to: "Micro Bag" },
   { name: "Shop by Video", to: "/videoslide" },
 ];
