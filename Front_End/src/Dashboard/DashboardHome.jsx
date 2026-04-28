@@ -84,7 +84,7 @@ export default function DashboardHome() {
       <div className="max-w-screen-2xl mx-auto">
 
         {/* ================= SUMMARY CARDS ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-4 lg:gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4 lg:gap-6 mb-8">
 
           {/* Paid Revenue */}
           <div className="flex flex-col justify-between p-5 bg-white rounded-2xl border border-[#e9e0d4] shadow-sm hover:shadow-md transition-all duration-300 min-h-[140px]">
@@ -96,7 +96,7 @@ export default function DashboardHome() {
                 ₹{amount?.Paid?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
-            <div className="text-[11px] font-medium text-green-600 bg-green-50 px-2 py-1 rounded-md self-start mt-2">
+            <div className="text-[11px] font-medium text-green-600 bg-green-50 px-3 py-1 rounded-md self-start mt-2 whitespace-nowrap">
               Completed Payments
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function DashboardHome() {
                 ₹{amount?.Pending?.toLocaleString()}
               </p>
             </div>
-            <div className="text-[11px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-md self-start mt-2">
+            <div className="text-[11px] font-medium text-amber-600 bg-amber-50 px-3 py-1 rounded-md self-start mt-2 whitespace-nowrap">
               Awaiting Payment
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function DashboardHome() {
                 {totalUsers}
               </p>
             </div>
-            <div className="text-[11px] font-medium text-[#7a6a55] bg-gray-50 px-2 py-1 rounded-md self-start mt-2">
+            <div className="text-[11px] font-medium text-[#7a6a55] bg-gray-50 px-3 py-1 rounded-md self-start mt-2 whitespace-nowrap">
               Registered Accounts
             </div>
           </div>
@@ -141,7 +141,7 @@ export default function DashboardHome() {
                 {products.length}
               </p>
             </div>
-            <div className="text-[11px] font-medium text-[#7a6a55] bg-gray-50 px-2 py-1 rounded-md self-start mt-2">
+            <div className="text-[11px] font-medium text-[#7a6a55] bg-gray-50 px-3 py-1 rounded-md self-start mt-2 whitespace-nowrap">
               Items in Catalog
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function DashboardHome() {
                 {activeUsers}
               </p>
             </div>
-            <div className="text-[11px] font-medium text-green-600 bg-green-50 px-2 py-1 rounded-md self-start mt-2">
+            <div className="text-[11px] font-medium text-green-600 bg-green-50 px-3 py-1 rounded-md self-start mt-2 whitespace-nowrap">
               Currently Active
             </div>
           </div>
@@ -171,7 +171,7 @@ export default function DashboardHome() {
                 {paidOrders.length}
               </p>
             </div>
-            <div className="text-[11px] font-medium text-green-600 bg-green-50 px-2 py-1 rounded-md self-start mt-2">
+            <div className="text-[11px] font-medium text-green-600 bg-green-50 px-3 py-1 rounded-md self-start mt-2 whitespace-nowrap">
               Successful Sales
             </div>
           </div>
