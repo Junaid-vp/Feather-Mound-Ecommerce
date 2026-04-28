@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
@@ -36,7 +36,7 @@ import UserRouter from "./Router/UserRouter.jsx";
 import AdminRouter from "./Router/AdminRouter.jsx";
 import DashboardLayout from "./Dashboard/DashnboardLayout.jsx";
 import VideoSlide from "./Pages/VideoSlide.jsx";
-import PaymentSection from "./Pages/PaymentSection.jsx";
+const PaymentSection = lazy(() => import("./Pages/PaymentSection.jsx"));
 import MainBagComponent from "./Bag-Components/MainBagComponent.jsx";
 import PolicyAccordion from "./Footer-Section/WebDetailsSection.jsx";
 import MiniNav from "./Bag-Components/MiniNav.jsx";
@@ -76,7 +76,14 @@ const Router = createBrowserRouter([
           { path: "order-success/:orderId", element: <OrderSuccess /> },
           { path: "vieworder", element: <ViewOrder /> },
           { path: "buyproduct/:product_id", element: <BuyProduct /> },
-          { path: "paymentSection", element: <PaymentSection /> },
+          { 
+            path: "paymentSection", 
+            element: (
+              <Suspense fallback={<div>Loading Payment...</div>}>
+                <PaymentSection />
+              </Suspense>
+            ) 
+          },
         ],
       },
 
