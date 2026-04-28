@@ -84,83 +84,95 @@ export default function DashboardHome() {
       <div className="max-w-screen-2xl mx-auto">
 
         {/* ================= SUMMARY CARDS ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 lg:gap-6 mb-8">
 
           {/* Paid Revenue */}
-          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
-            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
-              Paid Revenue
-            </h3>
-            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-green-700 truncate">
-              ₹{amount?.Paid?.toLocaleString()}
-            </p>
-            <div className="text-[10px] sm:text-xs text-green-600 mt-1 truncate">
+          <div className="flex flex-col justify-between p-5 bg-white rounded-2xl border border-[#e9e0d4] shadow-sm hover:shadow-md transition-all duration-300 min-h-[140px]">
+            <div>
+              <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
+                Paid Revenue
+              </h3>
+              <p className="text-2xl font-bold mt-3 text-green-700">
+                ₹{amount?.Paid?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </p>
+            </div>
+            <div className="text-[11px] font-medium text-green-600 bg-green-50 px-2 py-1 rounded-md self-start mt-2">
               Completed Payments
             </div>
           </div>
 
-          {/* Pending Revenue */}
-          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
-            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
-              Pending Amount
-            </h3>
-            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-amber-600 truncate">
-              ₹{amount?.Pending?.toLocaleString()}
-            </p>
-            <div className="text-[10px] sm:text-xs text-amber-600 mt-1 truncate">
+          {/* Pending Amount */}
+          <div className="flex flex-col justify-between p-5 bg-white rounded-2xl border border-[#e9e0d4] shadow-sm hover:shadow-md transition-all duration-300 min-h-[140px]">
+            <div>
+              <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
+                Pending Amount
+              </h3>
+              <p className="text-2xl font-bold mt-3 text-amber-600">
+                ₹{amount?.Pending?.toLocaleString()}
+              </p>
+            </div>
+            <div className="text-[11px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-md self-start mt-2">
               Awaiting Payment
             </div>
           </div>
 
           {/* Total Users */}
-          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
-            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
-              Total Users
-            </h3>
-            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-[#4b3f2f] truncate">
-              {totalUsers}
-            </p>
-            <div className="text-[10px] sm:text-xs text-[#7a6a55] mt-1 truncate">
-              Registered
+          <div className="flex flex-col justify-between p-5 bg-white rounded-2xl border border-[#e9e0d4] shadow-sm hover:shadow-md transition-all duration-300 min-h-[140px]">
+            <div>
+              <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
+                Total Users
+              </h3>
+              <p className="text-2xl font-bold mt-3 text-[#4b3f2f]">
+                {totalUsers}
+              </p>
+            </div>
+            <div className="text-[11px] font-medium text-[#7a6a55] bg-gray-50 px-2 py-1 rounded-md self-start mt-2">
+              Registered Accounts
             </div>
           </div>
 
           {/* Total Products */}
-          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
-            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
-              Total Products
-            </h3>
-            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-[#4b3f2f] truncate">
-              {products.length}
-            </p>
-            <div className="text-[10px] sm:text-xs text-[#7a6a55] mt-1 truncate">
-              In Catalog
+          <div className="flex flex-col justify-between p-5 bg-white rounded-2xl border border-[#e9e0d4] shadow-sm hover:shadow-md transition-all duration-300 min-h-[140px]">
+            <div>
+              <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
+                Total Products
+              </h3>
+              <p className="text-2xl font-bold mt-3 text-[#4b3f2f]">
+                {products.length}
+              </p>
+            </div>
+            <div className="text-[11px] font-medium text-[#7a6a55] bg-gray-50 px-2 py-1 rounded-md self-start mt-2">
+              Items in Catalog
             </div>
           </div>
 
           {/* Active Users */}
-          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
-            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
-              Active Users
-            </h3>
-            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-[#4b3f2f] truncate">
-              {activeUsers}
-            </p>
-            <div className="text-[10px] sm:text-xs text-green-600 mt-1 truncate">
+          <div className="flex flex-col justify-between p-5 bg-white rounded-2xl border border-[#e9e0d4] shadow-sm hover:shadow-md transition-all duration-300 min-h-[140px]">
+            <div>
+              <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
+                Active Users
+              </h3>
+              <p className="text-2xl font-bold mt-3 text-[#4b3f2f]">
+                {activeUsers}
+              </p>
+            </div>
+            <div className="text-[11px] font-medium text-green-600 bg-green-50 px-2 py-1 rounded-md self-start mt-2">
               Currently Active
             </div>
           </div>
 
-          {/* Paid Orders Count */}
-          <div className="p-3 sm:p-4 lg:p-6 bg-white/90 rounded-xl lg:rounded-2xl border border-[#e9e0d4] shadow-lg hover:shadow-xl transition overflow-hidden">
-            <h3 className="text-[#7a6a55] text-[10px] sm:text-xs lg:text-sm truncate">
-              Paid Orders
-            </h3>
-            <p className="text-lg sm:text-xl lg:text-2xl font-bold mt-1 sm:mt-2 text-[#4b3f2f] truncate">
-              {paidOrders.length}
-            </p>
-            <div className="text-[10px] sm:text-xs text-green-600 mt-1 truncate">
-              Success Orders
+          {/* Paid Orders */}
+          <div className="flex flex-col justify-between p-5 bg-white rounded-2xl border border-[#e9e0d4] shadow-sm hover:shadow-md transition-all duration-300 min-h-[140px]">
+            <div>
+              <h3 className="text-[#7a6a55] text-xs font-medium uppercase tracking-wider">
+                Paid Orders
+              </h3>
+              <p className="text-2xl font-bold mt-3 text-[#4b3f2f]">
+                {paidOrders.length}
+              </p>
+            </div>
+            <div className="text-[11px] font-medium text-green-600 bg-green-50 px-2 py-1 rounded-md self-start mt-2">
+              Successful Sales
             </div>
           </div>
         </div>
